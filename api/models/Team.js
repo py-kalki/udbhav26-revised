@@ -61,5 +61,17 @@ const TeamSchema = new mongoose.Schema(
   }
 );
 
+// ── Indexes ──────────────────────────────────────────────────────────────────
+// code already has unique+index declared inline above.
+
+// Filter teams by payment status (admin payments view, PS drop guard)
+TeamSchema.index({ paymentStatus: 1 });
+
+// Lookup which teams selected a given PS (admin PS stats, slot queries)
+TeamSchema.index({ psSelectionId: 1 }, { sparse: true });
+
+// Combined: paid teams that haven't selected a PS yet (PS drop eligibility)
+TeamSchema.index({ paymentStatus: 1, psSelectionId: 1 });
+
 export const Team =
   mongoose.models.Team || mongoose.model('Team', TeamSchema);

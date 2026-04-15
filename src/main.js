@@ -22,30 +22,44 @@ import './analytics.js'; // Initialize Vercel Analytics and Speed Insights
 gsap.registerPlugin(ScrollTrigger);
 
 // ─────────────────────────────────────────────────────────────────
-// Hero background shader (ring-wave GLSL, behind all hero content)
+// Touch / mobile detection — gate heavy GPU features
+// IS_TOUCH: true on phones/tablets (no hover capability)
+// IS_MOBILE: true also on ≤768px desktop windows
 // ─────────────────────────────────────────────────────────────────
-initHeroBgShader(document.getElementById('heroShaderBg'));
+const IS_TOUCH  = window.matchMedia('(hover: none)').matches;
+const IS_MOBILE = IS_TOUCH || window.innerWidth <= 768;
 
 // ─────────────────────────────────────────────────────────────────
-// Mobile nav pill — tap anywhere (except menu btn) → go home
+// Hero background shader (ring-wave GLSL, behind all hero content)
+// Skip on touch devices — WebGL is expensive on mobile GPUs.
+// ─────────────────────────────────────────────────────────────────
+if (!IS_TOUCH) {
+  initHeroBgShader(document.getElementById('heroShaderBg'));
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Mobile nav pill — tap on logo area → go home
+// Excludes: hamburger button, register CTA, any link/button inside
 // ─────────────────────────────────────────────────────────────────
 (function initMobileNavPillHome() {
   const pill    = document.getElementById('mobileNavPill');
-  const menuBtn = document.getElementById('menuBtnMobile');
   if (!pill) return;
 
-  pill.style.cursor = 'pointer';
   pill.addEventListener('click', (e) => {
-    // Don't intercept clicks on the menu toggle button
-    if (menuBtn && (e.target === menuBtn || menuBtn.contains(e.target))) return;
+    // Let any real link/button inside handle itself
+    const interactive = e.target.closest('a, button');
+    if (interactive) return;
+    // Clicking blank space on the pill → go home
     window.location.href = '/';
   });
 })();
 
 // ─────────────────────────────────────────────────────────────────
 // Custom cursor — arrow-shaped, auto black/white via mix-blend-mode
+// Disabled on touch devices (CSS hides it; JS skips listeners too).
 // ─────────────────────────────────────────────────────────────────
 (function initCursor() {
+  if (IS_TOUCH) return; // no mouse on touch devices
   const arrow = document.getElementById('cursorArrow');
   if (!arrow) return;
 
@@ -84,12 +98,12 @@ initHeroBgShader(document.getElementById('heroShaderBg'));
 
 
 // ─────────────────────────────────────────────────────────────────
-// Lenis smooth scroll
+// Lenis smooth scroll — skip on touch (native momentum scroll is better)
 // ─────────────────────────────────────────────────────────────────
-const lenis = new Lenis({ autoRaf: false });
+const lenis = IS_TOUCH ? null : new Lenis({ autoRaf: false });
 
 // Keep ScrollTrigger in sync with Lenis
-lenis.on('scroll', ScrollTrigger.update);
+if (lenis) lenis.on('scroll', ScrollTrigger.update);
 
 // ─────────────────────────────────────────────────────────────────
 // Utility
@@ -99,7 +113,8 @@ function clamp01(v) {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// Three.js — original dissolve shader (preserved exactly)
+// Three.js — original dissolve shader
+// Skipped on touch devices — heavy GPU cost, not needed on mobile.
 // ─────────────────────────────────────────────────────────────────
 const vertexShader = `
   varying vec2 vUv;
@@ -162,55 +177,65 @@ const fragmentShader = `
   }
 `;
 
-// ── Three.js setup ─────────────────────────────────────────────────────────────
-const container = document.querySelector('.canvas1');
+// ── Three.js setup (desktop only) ──────────────────────────────────────────────
+let renderer = null, material = null, scene = null, camera = null;
 
-const scene    = new THREE.Scene();
-const camera   = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-camera.position.z = 1;
+if (!IS_TOUCH) {
+  const container = document.querySelector('.canvas1');
 
-const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
-renderer.setClearColor(0x000000, 0);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.setSize(window.innerWidth, window.innerHeight);
-container.appendChild(renderer.domElement);
+  scene    = new THREE.Scene();
+  camera   = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+  camera.position.z = 1;
 
-const material = new THREE.ShaderMaterial({
-  uniforms: {
-    uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-    uDissolve:   { value: 1.0 }, // 1 = fully transparent (hero visible on load)
-    uCenter:     { value: new THREE.Vector2(0.5, 0.5) },
-  },
-  vertexShader,
-  fragmentShader,
-  transparent: true,
-});
-
-scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
-
-// ── Resize handler ──────────────────────────────────────────────────────────────
-window.addEventListener('resize', () => {
+  renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+  renderer.setClearColor(0x000000, 0);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
-  material.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
-  ScrollTrigger.refresh();
-});
+  container.appendChild(renderer.domElement);
+
+  material = new THREE.ShaderMaterial({
+    uniforms: {
+      uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+      uDissolve:   { value: 1.0 },
+      uCenter:     { value: new THREE.Vector2(0.5, 0.5) },
+    },
+    vertexShader,
+    fragmentShader,
+    transparent: true,
+  });
+
+  scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
+
+  // ── Resize handler ────────────────────────────────────────────────────────────
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    material.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+    ScrollTrigger.refresh();
+  });
+} else {
+  // Mobile resize only needs to refresh ScrollTrigger
+  window.addEventListener('resize', () => ScrollTrigger.refresh());
+}
 
 // ─────────────────────────────────────────────────────────────────
-// Mouse glow — lerped radial gradient
+// Mouse glow — lerped radial gradient (desktop only)
 // ─────────────────────────────────────────────────────────────────
-const glow   = document.getElementById('mouseGlow');
-let mouseX   = window.innerWidth  / 2;
-let mouseY   = window.innerHeight / 2;
-let glowX    = mouseX;
-let glowY    = mouseY;
+const glow = document.getElementById('mouseGlow');
+let mouseX = window.innerWidth  / 2;
+let mouseY = window.innerHeight / 2;
+let glowX  = mouseX;
+let glowY  = mouseY;
 
-document.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-});
+if (!IS_TOUCH && glow) {
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+}
 
-// Smooth glow follow runs inside the RAF below
+// Smooth glow follow — only runs on desktop
 function tickGlow() {
+  if (IS_TOUCH || !glow) return;
   glowX += (mouseX - glowX) * 0.08;
   glowY += (mouseY - glowY) * 0.08;
   glow.style.left = `${glowX}px`;
@@ -221,8 +246,8 @@ function tickGlow() {
 // Unified RAF — Lenis + Three.js renderer + glow lerp
 // ─────────────────────────────────────────────────────────────────
 function raf(time) {
-  lenis.raf(time);
-  renderer.render(scene, camera);
+  if (lenis) lenis.raf(time);
+  if (renderer && scene && camera) renderer.render(scene, camera);
   tickGlow();
   requestAnimationFrame(raf);
 }
@@ -283,25 +308,32 @@ function revealElBlur(el, delay = 0, yStart = 32) {
   }, delay);
 }
 
-// Cat wrap — pops up first, before VEDANSH letters ────────────────
+// Cat wrap — on desktop: blur-in entrance; on mobile: instant show
 const heroCatWrap = document.getElementById('heroCatWrap');
 if (heroCatWrap) {
-  heroCatWrap.style.opacity    = '0';
-  heroCatWrap.style.transform  = 'translateY(40px)';
-  heroCatWrap.style.filter     = 'blur(12px)';
-  heroCatWrap.style.transition = 'none';
-
-  setTimeout(() => {
-    heroCatWrap.style.transition =
-      'opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 1s ease';
+  if (IS_MOBILE) {
     heroCatWrap.style.opacity   = '1';
-    heroCatWrap.style.transform = 'translateY(0)';
-    heroCatWrap.style.filter    = 'blur(0px)';
-  }, 100);
+    heroCatWrap.style.transform = '';
+    heroCatWrap.style.filter    = '';
+  } else {
+    heroCatWrap.style.opacity    = '0';
+    heroCatWrap.style.transform  = 'translateY(40px)';
+    heroCatWrap.style.filter     = 'blur(12px)';
+    heroCatWrap.style.transition = 'none';
+
+    setTimeout(() => {
+      heroCatWrap.style.transition =
+        'opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 1s ease';
+      heroCatWrap.style.opacity   = '1';
+      heroCatWrap.style.transform = 'translateY(0)';
+      heroCatWrap.style.filter    = 'blur(0px)';
+    }, 100);
+  }
 }
 
-// ── Cat eye tracking + blinking ──────────────────────────────────────────────
+// ── Cat eye tracking + blinking (desktop only — no mouse on touch) ─────────────
 (function initCatEyes() {
+  if (IS_TOUCH) return; // skip mouse-tracking on touch devices
   const eyeLeft   = document.getElementById('eyeLeft');
   const eyeRight  = document.getElementById('eyeRight');
   const pupilLeft = document.getElementById('pupilLeft');
@@ -340,38 +372,55 @@ if (heroCatWrap) {
 })();
 
 
-// Letters (staggered) ───────────────────────────────────────────────
+// Letters — staggered entrance on desktop, instant fade on mobile ──────────────
 const LETTER_DUR   = 800;   // ms transition per letter
 const LETTER_STAG  = 55;    // ms stagger offset
 const LETTERS_START= 400;   // ms — cat appears at 100ms, letters follow at 400ms
 
-letters.forEach((letter, i) => {
-  letter.style.opacity    = '0';
-  letter.style.transform  = 'translateY(80px) rotate(2deg)';
-  letter.style.filter     = 'blur(4px)';
-  letter.style.transition = 'none';
-
-  const delay = LETTERS_START + i * LETTER_STAG;
+if (IS_MOBILE) {
+  // Mobile: skip complex stagger — show all letters immediately
+  // CSS !important in mobile-perf.css Section F handles this via opacity:1 on .hero-name .letter
+  letters.forEach(l => {
+    l.style.opacity   = '1';
+    l.style.transform = '';
+    l.style.filter    = '';
+  });
+  // Simple fade for subtitle and eyebrow
   setTimeout(() => {
-    letter.style.transition = `opacity ${LETTER_DUR}ms cubic-bezier(0.16,1,0.3,1),
-                               transform ${LETTER_DUR}ms cubic-bezier(0.16,1,0.3,1),
-                               filter ${LETTER_DUR}ms ease`;
-    letter.style.opacity    = '1';
-    letter.style.transform  = 'translateY(0) rotate(0deg)';
-    letter.style.filter     = 'blur(0px)';
-  }, delay);
-});
+    if (heroEyebrow) { heroEyebrow.style.opacity = '1'; heroEyebrow.style.transform = ''; }
+    if (subtitleSans)  { subtitleSans.style.opacity  = '1'; subtitleSans.style.transform  = ''; }
+    if (subtitleSerif) { subtitleSerif.style.opacity = '1'; subtitleSerif.style.transform = ''; }
+  }, 100);
+} else {
+  // Desktop: full staggered letter entrance
+  letters.forEach((letter, i) => {
+    letter.style.opacity    = '0';
+    letter.style.transform  = 'translateY(80px) rotate(2deg)';
+    letter.style.filter     = 'blur(4px)';
+    letter.style.transition = 'none';
 
-// Subtitle lines (blur-in, 500ms after last letter) ─────────────────
-const subtitleStart = LETTERS_START + letters.length * LETTER_STAG + 500;
-if (heroEyebrow) revealElBlur(heroEyebrow,   subtitleStart - 200,  14);
-revealElBlur(subtitleSans,  subtitleStart,       32);
-revealElBlur(subtitleSerif, subtitleStart + 160, 32);
+    const delay = LETTERS_START + i * LETTER_STAG;
+    setTimeout(() => {
+      letter.style.transition = `opacity ${LETTER_DUR}ms cubic-bezier(0.16,1,0.3,1),
+                                 transform ${LETTER_DUR}ms cubic-bezier(0.16,1,0.3,1),
+                                 filter ${LETTER_DUR}ms ease`;
+      letter.style.opacity    = '1';
+      letter.style.transform  = 'translateY(0) rotate(0deg)';
+      letter.style.filter     = 'blur(0px)';
+    }, delay);
+  });
 
-// Corner labels (last) ──────────────────────────────────────────────
-const cornersStart = subtitleStart + 600;
-revealEl(cornerLeft,  cornersStart,      18);
-revealEl(cornerRight, cornersStart + 90, 18);
+  // Subtitle lines (blur-in, 500ms after last letter)
+  const subtitleStart = LETTERS_START + letters.length * LETTER_STAG + 500;
+  if (heroEyebrow) revealElBlur(heroEyebrow,   subtitleStart - 200,  14);
+  revealElBlur(subtitleSans,  subtitleStart,       32);
+  revealElBlur(subtitleSerif, subtitleStart + 160, 32);
+
+  // Corner labels (last)
+  const cornersStart = subtitleStart + 600;
+  revealEl(cornerLeft,  cornersStart,      18);
+  revealEl(cornerRight, cornersStart + 90, 18);
+}
 
 // ─────────────────────────────────────────────────────────────────
 // GSAP ScrollTrigger — PINNED dissolve + bento reveal
@@ -382,30 +431,32 @@ revealEl(cornerRight, cornersStart + 90, 18);
 // canvas1 opacity is NEVER changed — section2 sits on top of it,
 // so there is zero hero bleed-through / flicker at any browser.
 // ─────────────────────────────────────────────────────────────────
-const canvas1El = document.querySelector('.canvas1');
-
-const dissolveST = gsap.fromTo(
-  material.uniforms.uDissolve,
-  { value: 1 },         // canvas transparent — dark hero bg shows
-  {
-    value: 0,           // canvas fully opaque white — hero is gone
-    ease: 'none',
-    scrollTrigger: {
-      trigger:    '.hero',
-      start:      'top top',
-      end:        '+=70%',
-      pin:        true,
-      scrub:      0.6,
-      pinSpacing: true,
-      anticipatePin: 1
+// GSAP dissolve pin — desktop only (Three.js + pin ScrollTrigger are skipped on mobile)
+if (!IS_MOBILE && material) {
+  gsap.fromTo(
+    material.uniforms.uDissolve,
+    { value: 1 },
+    {
+      value: 0,
+      ease: 'none',
+      scrollTrigger: {
+        trigger:    '.hero',
+        start:      'top top',
+        end:        '+=70%',
+        pin:        true,
+        scrub:      0.6,
+        pinSpacing: true,
+        anticipatePin: 1
+      }
     }
-  }
-);
+  );
+}
 
 // ─────────────────────────────────────────────────────────────────
 // Micro-interaction: letter parallax on mouse hover over name
+// Desktop only — no hover on touch devices.
 // ─────────────────────────────────────────────────────────────────
-heroName.addEventListener('mousemove', (e) => {
+if (!IS_TOUCH) heroName.addEventListener('mousemove', (e) => {
   const rect  = heroName.getBoundingClientRect();
   const dx    = (e.clientX - rect.left - rect.width  / 2) / (rect.width  / 2); // -1 to +1
   const dy    = (e.clientY - rect.top  - rect.height / 2) / (rect.height / 2);
@@ -419,7 +470,7 @@ heroName.addEventListener('mousemove', (e) => {
   });
 });
 
-heroName.addEventListener('mouseleave', () => {
+if (!IS_TOUCH) heroName.addEventListener('mouseleave', () => {
   letters.forEach(letter => {
     letter.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
     letter.style.transform  = 'translate(0, 0)';

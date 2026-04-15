@@ -15,6 +15,12 @@ const ProblemStatementSchema = new mongoose.Schema(
     // Title — NOT served before drop is active
     title: { type: String, required: true, trim: true },
 
+    // Full problem statement body (plain text / markdown)
+    description: { type: String, default: '', trim: true },
+
+    // Domain / category tag (e.g. "FinTech", "HealthTech")
+    domain: { type: String, default: '', trim: true },
+
     // Slot tracking
     slotsTotal: { type: Number, required: true, default: 5 },
     slotsTaken: { type: Number, required: true, default: 0, min: 0 },

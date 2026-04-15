@@ -13,6 +13,10 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+// ── Validate required env vars before anything else ──────────────────────────
+import { validateEnv } from './api/lib/env.js';
+validateEnv();
+
 import express from 'express';
 import path    from 'path';
 import { fileURLToPath } from 'url';
@@ -36,11 +40,22 @@ import psSelectHandler     from './api/ps/select.js';
 import {
   configHandler,
   addPsHandler,
+  updatePsHandler,
+  deletePsHandler,
   startDropHandler,
   stopDropHandler,
   statsHandler,
 } from './api/admin/ps.js';
 import adminLoginHandler from './api/admin/login.js';
+import { paymentsHandler } from './api/admin/payments.js';
+import { psStatsHandler }  from './api/admin/ps-stats.js';
+import {
+  getWinnersHandler,
+  saveWinnersHandler,
+  publishWinnersHandler,
+  unpublishWinnersHandler,
+  publicWinnersHandler,
+} from './api/admin/winners.js';
 
 // ── App setup ────────────────────────────────────────────────────────────────
 const app  = express();
@@ -63,7 +78,11 @@ const cleanRoutes = {
   '/register':          'register.html',
   '/admin/login':       'admin/login.html',
   '/admin/dashboard':   'admin/dashboard.html',
-  '/admin/registrations': 'admin/registrations.html',
+  '/admin/registrations':      'admin/registrations.html',
+  '/admin/problem-statements': 'admin/problem-statements.html',
+  '/admin/payments':           'admin/payments.html',
+  '/admin/ps-stats':           'admin/ps-stats.html',
+  '/admin/winners':            'admin/winners.html',
 };
 
 // ── Vercel-handler adapter ────────────────────────────────────────────────────
@@ -95,11 +114,24 @@ app.post('/api/ps/select',      mountHandler(psSelectHandler));
 
 // ── PS Drop Admin API ─────────────────────────────────────────────────────────
 app.post('/api/admin/login',      mountHandler(adminLoginHandler));
-app.post('/api/admin/ps/config',     mountHandler(configHandler));
-app.post('/api/admin/ps/add-ps',     mountHandler(addPsHandler));
-app.post('/api/admin/ps/start-drop', mountHandler(startDropHandler));
-app.post('/api/admin/ps/stop-drop',  mountHandler(stopDropHandler));
-app.get ('/api/admin/ps/stats',      mountHandler(statsHandler));
+app.post  ('/api/admin/ps/config',     mountHandler(configHandler));
+app.post  ('/api/admin/ps/add-ps',     mountHandler(addPsHandler));
+app.patch ('/api/admin/ps/update-ps',  mountHandler(updatePsHandler));
+app.delete('/api/admin/ps/delete-ps',  mountHandler(deletePsHandler));
+app.post  ('/api/admin/ps/start-drop', mountHandler(startDropHandler));
+app.post  ('/api/admin/ps/stop-drop',  mountHandler(stopDropHandler));
+app.get   ('/api/admin/ps/stats',      mountHandler(statsHandler));
+app.get   ('/api/admin/payments',      mountHandler(paymentsHandler));
+app.get   ('/api/admin/ps-stats',         mountHandler(psStatsHandler));
+
+// ── Winners Admin API ─────────────────────────────────────────────────────────
+app.get ('/api/admin/winners',            mountHandler(getWinnersHandler));
+app.post('/api/admin/winners/save',       mountHandler(saveWinnersHandler));
+app.post('/api/admin/winners/publish',    mountHandler(publishWinnersHandler));
+app.post('/api/admin/winners/unpublish',  mountHandler(unpublishWinnersHandler));
+
+// ── Winners Public API ────────────────────────────────────────────────────────
+app.get('/api/winners', mountHandler(publicWinnersHandler));
 
 // ── Clean URL Routes ──────────────────────────────────────────────────────────
 for (const [route, file] of Object.entries(cleanRoutes)) {

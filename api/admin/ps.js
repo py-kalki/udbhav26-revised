@@ -3,11 +3,13 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * All admin routes require ADMIN_SECRET header to match process.env.ADMIN_SECRET.
  *
- * POST /api/admin/ps/config       — Update drop window times / manual status
- * POST /api/admin/ps/add-ps       — Add a problem statement
- * POST /api/admin/ps/start-drop   — Force-start the drop now
- * POST /api/admin/ps/stop-drop    — Force-close the drop
- * GET  /api/admin/ps/stats        — Current slot stats for all PS
+ * POST  /api/admin/ps/config       — Update drop window times / manual status
+ * POST  /api/admin/ps/add-ps       — Add a problem statement
+ * PATCH /api/admin/ps/update-ps    — Update an existing problem statement
+ * DELETE/api/admin/ps/delete-ps    — Delete a problem statement
+ * POST  /api/admin/ps/start-drop   — Force-start the drop now
+ * POST  /api/admin/ps/stop-drop    — Force-close the drop
+ * GET   /api/admin/ps/stats        — Current slot stats for all PS
  */
 
 import { connectDB }         from '../lib/mongodb.js';
@@ -64,13 +66,13 @@ export async function configHandler(req, res) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // POST /api/admin/ps/add-ps
-// Body: { title: string, order: number, slotsTotal?: number }
+// Body: { title, order, slotsTotal?, description?, domain? }
 // ─────────────────────────────────────────────────────────────────────────────
 export async function addPsHandler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'method_not_allowed' });
   if (!requireAdmin(req, res)) return;
 
-  const { title, order, slotsTotal = 5 } = req.body || {};
+  const { title, order, slotsTotal = 5, description = '', domain = '' } = req.body || {};
 
   if (!title || !order) {
     return res.status(400).json({ error: 'title and order are required' });
@@ -79,15 +81,114 @@ export async function addPsHandler(req, res) {
   try {
     await connectDB();
 
-    const ps = await ProblemStatement.create({ title, order: parseInt(order), slotsTotal });
+    const ps = await ProblemStatement.create({
+      title,
+      order: parseInt(order),
+      slotsTotal,
+      description,
+      domain,
+    });
     psLog(req, { event: 'admin_add_ps', order, title });
 
-    return res.status(201).json({ success: true, ps: { id: ps.order, order: ps.order, title: ps.title, slotsTotal: ps.slotsTotal } });
+    return res.status(201).json({
+      success: true,
+      ps: {
+        id:          ps._id,
+        order:       ps.order,
+        title:       ps.title,
+        description: ps.description,
+        domain:      ps.domain,
+        slotsTotal:  ps.slotsTotal,
+        slotsTaken:  ps.slotsTaken,
+      },
+    });
   } catch (err) {
     if (err.code === 11000) {
       return res.status(409).json({ error: 'duplicate_order', message: `PS with order ${order} already exists.` });
     }
     console.error('[admin/ps/add-ps] error:', err);
+    return res.status(500).json({ error: 'server_error' });
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PATCH /api/admin/ps/update-ps
+// Body: { order, title?, description?, domain?, slotsTotal? }
+// ─────────────────────────────────────────────────────────────────────────────
+export async function updatePsHandler(req, res) {
+  if (req.method !== 'PATCH') return res.status(405).json({ error: 'method_not_allowed' });
+  if (!requireAdmin(req, res)) return;
+
+  const { order, title, description, domain, slotsTotal } = req.body || {};
+
+  if (!order) {
+    return res.status(400).json({ error: 'order is required to identify the PS' });
+  }
+
+  try {
+    await connectDB();
+
+    const update = {};
+    if (title       !== undefined) update.title       = title;
+    if (description !== undefined) update.description = description;
+    if (domain      !== undefined) update.domain      = domain;
+    if (slotsTotal  !== undefined) update.slotsTotal  = parseInt(slotsTotal);
+
+    const ps = await ProblemStatement.findOneAndUpdate(
+      { order: parseInt(order) },
+      { $set: update },
+      { new: true }
+    );
+
+    if (!ps) return res.status(404).json({ error: 'ps_not_found' });
+
+    invalidatePSCache();
+    psLog(req, { event: 'admin_update_ps', order, update });
+
+    return res.status(200).json({
+      success: true,
+      ps: {
+        id:          ps._id,
+        order:       ps.order,
+        title:       ps.title,
+        description: ps.description,
+        domain:      ps.domain,
+        slotsTotal:  ps.slotsTotal,
+        slotsTaken:  ps.slotsTaken,
+      },
+    });
+  } catch (err) {
+    console.error('[admin/ps/update-ps] error:', err);
+    return res.status(500).json({ error: 'server_error' });
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DELETE /api/admin/ps/delete-ps
+// Body: { order }
+// ─────────────────────────────────────────────────────────────────────────────
+export async function deletePsHandler(req, res) {
+  if (req.method !== 'DELETE') return res.status(405).json({ error: 'method_not_allowed' });
+  if (!requireAdmin(req, res)) return;
+
+  const { order } = req.body || {};
+
+  if (!order) {
+    return res.status(400).json({ error: 'order is required' });
+  }
+
+  try {
+    await connectDB();
+
+    const ps = await ProblemStatement.findOneAndDelete({ order: parseInt(order) });
+    if (!ps) return res.status(404).json({ error: 'ps_not_found' });
+
+    invalidatePSCache();
+    psLog(req, { event: 'admin_delete_ps', order });
+
+    return res.status(200).json({ success: true, deleted: { order: ps.order, title: ps.title } });
+  } catch (err) {
+    console.error('[admin/ps/delete-ps] error:', err);
     return res.status(500).json({ error: 'server_error' });
   }
 }
@@ -169,11 +270,14 @@ export async function statsHandler(req, res) {
     return res.status(200).json({
       config: cfg,
       psList: psList.map(ps => ({
-        order:      ps.order,
-        title:      ps.title,
-        slotsTaken: ps.slotsTaken,
-        slotsTotal: ps.slotsTotal,
-        isFull:     ps.slotsTaken >= ps.slotsTotal,
+        id:          ps._id,
+        order:       ps.order,
+        title:       ps.title,
+        description: ps.description || '',
+        domain:      ps.domain || '',
+        slotsTaken:  ps.slotsTaken,
+        slotsTotal:  ps.slotsTotal,
+        isFull:      ps.slotsTaken >= ps.slotsTotal,
       })),
     });
   } catch (err) {
