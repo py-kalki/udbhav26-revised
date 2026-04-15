@@ -12,59 +12,10 @@
   box-sizing: border-box;
 }
 
-/* ── Custom cursor \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */
-/*
-  Arrow-shaped cursor with rounded edges.
-  mix-blend-mode: difference = white on dark bg, black on light bg. Auto.
-*/
-
-/* Kill native OS cursor */
-html,
-body,
-* {
-  cursor: none !important;
-}
-
+/* ── Custom cursor removed — default browser cursor restored ───── */
 .cursor-arrow {
-  position: fixed;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #ffffff;
-  pointer-events: none;
-  z-index: 99999;
-  left: -100px;
-  top: -100px;
-  /* Center the dot on the pointer */
-  transform: translate(-50%, -50%) scale(1);
-  mix-blend-mode: difference;
-  will-change: left, top, transform;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s;
+  display: none !important;
 }
-
-/* Grow + keep centered when hovering clickable elements */
-.cursor-arrow.is-hovering {
-  transform: translate(-50%, -50%) scale(2);
-}
-
-/* Large invert circle over the hero name */
-.cursor-arrow.is-name-hover {
-  transform: translate(-50%, -50%) scale(8);
-}
-
-/* Mobile / touch — no mouse needed, restore normal cursor */
-@media (hover: none) {
-  .cursor-arrow {
-    display: none;
-  }
-
-  html,
-  body,
-  * {
-    cursor: auto !important;
-  }
-}
-
 
 
 :root {
@@ -139,13 +90,16 @@ body {
   pointer-events: none;
   z-index: 6;
   /* just above canvas1, below hero content */
-  transform: translate(-50%, -50%);
+  left: 0;
+  top: 0;
+  margin-left: -280px;
+  margin-top: -280px;
   background: radial-gradient(circle,
       rgba(255, 255, 255, 0.05) 0%,
       rgba(255, 255, 255, 0.018) 35%,
       transparent 70%);
-  will-change: left, top;
-  /* position is set by JS */
+  will-change: transform;
+  /* position is set by JS via translate3d */
 }
 
 /* ── Navbar ────────────────────────────────────────────────────────────────── */
