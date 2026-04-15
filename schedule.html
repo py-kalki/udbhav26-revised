@@ -1,0 +1,1222 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="UDBHAV'26 Schedule — Full event timeline for the 24-hour national-level hackathon at Sage University, Indore." />
+  <title>Schedule — UDBHAV'26</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,wght@0,400;0,700;1,400;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,900;1,300;1,400;1,500;1,600;1,900&family=Montserrat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="stylesheet" href="/mobile-perf.css" />
+
+  <style>
+    /* ── Schedule Page — Supplemental Styles ──────────────────────── */
+
+    /* ── HERO ─────────────────────────────────────────────────────── */
+    .sc-hero {
+      position: relative; z-index: 10;
+      min-height: 88vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 140px 2rem 80px;
+      overflow: hidden;
+    }
+    .sc-hero__glow {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 60%, rgba(168,85,247,0.1) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 50% 40%, rgba(192,132,252,0.06) 0%, transparent 70%);
+      animation: sc-glow-pulse 6s ease-in-out infinite alternate;
+    }
+    @keyframes sc-glow-pulse {
+      from { opacity: 0.6; transform: scale(1); }
+      to   { opacity: 1;   transform: scale(1.08); }
+    }
+
+    .sc-hero__eyebrow {
+      position: relative; z-index: 1;
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      padding: 0.38rem 1rem; border-radius: 999px;
+      margin-bottom: 2.2rem;
+      opacity: 0; transform: translateY(20px);
+      animation: scFadeUp 0.7s 0.05s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .sc-hero__eyebrow svg { color: #a855f7; }
+
+    .sc-hero__title {
+      position: relative; z-index: 1;
+      font-family: 'Inter', sans-serif; font-weight: 900;
+      font-size: clamp(3.8rem, 12vw, 11rem);
+      line-height: 0.9; letter-spacing: -0.05em;
+      color: #fff; text-transform: uppercase;
+      margin-bottom: 1.8rem;
+      opacity: 0; transform: translateY(40px);
+      animation: scFadeUp 0.9s 0.15s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .sc-hero__title em {
+      font-style: italic; font-family: 'Fraunces', serif;
+      font-weight: 700; color: rgba(255,255,255,0.38);
+      font-size: 0.88em; display: block;
+    }
+    .sc-hero__sub {
+      position: relative; z-index: 1;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 400; color: rgba(255,255,255,0.45);
+      max-width: 560px; line-height: 1.7;
+      margin-bottom: 2.8rem;
+      opacity: 0; transform: translateY(30px);
+      animation: scFadeUp 0.85s 0.28s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .sc-hero__cta-row {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      opacity: 0; transform: translateY(20px);
+      animation: scFadeUp 0.8s 0.42s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .sc-hero__btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.9rem 2.2rem; border-radius: 999px;
+      font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 700;
+      text-decoration: none; letter-spacing: 0.01em;
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s;
+    }
+    .sc-hero__btn--primary {
+      background: #fff; color: #080808; border: 2px solid #fff;
+    }
+    .sc-hero__btn--primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 45px rgba(255,255,255,0.2), 0 0 0 4px rgba(255,255,255,0.06);
+    }
+    .sc-hero__btn--ghost {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.7);
+    }
+    .sc-hero__btn--ghost:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(255,255,255,0.25);
+      color: #fff; transform: translateY(-2px);
+    }
+    .sc-hero__scroll {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%); z-index: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      font-family: 'Inter', sans-serif; font-size: 0.6rem;
+      font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+      opacity: 0; animation: scFadeUp 0.8s 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .sc-hero__scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent);
+      animation: sc-scroll-line 2s ease-in-out infinite;
+    }
+    @keyframes sc-scroll-line {
+      0%, 100% { transform: scaleY(1); opacity: 1; }
+      50% { transform: scaleY(0.4); opacity: 0.3; }
+    }
+
+    /* ── DAY TABS ─────────────────────────────────────────────────── */
+    .sc-tabs {
+      position: relative; z-index: 10;
+      padding: 0 clamp(1.5rem, 5vw, 6rem);
+      margin-bottom: 0;
+    }
+    .sc-tabs__inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; gap: 0.6rem;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(20px);
+      padding: 0.35rem; width: fit-content;
+    }
+    .sc-tab {
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600;
+      letter-spacing: 0.04em; padding: 0.6rem 1.6rem; border-radius: 999px;
+      cursor: pointer; transition: background 0.25s, color 0.25s;
+      color: rgba(255,255,255,0.4); background: transparent; border: none;
+      outline: none;
+    }
+    .sc-tab.active {
+      background: rgba(168,85,247,0.15);
+      color: #c084fc;
+      border: 1px solid rgba(168,85,247,0.25);
+    }
+    .sc-tab:not(.active):hover {
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.75);
+    }
+
+    /* ── TIMELINE SECTION ─────────────────────────────────────────── */
+    .sc-timeline {
+      position: relative; z-index: 10;
+      padding: 6rem clamp(1.5rem, 5vw, 6rem) 8rem;
+      max-width: 1200px; margin: 0 auto;
+    }
+
+    /* Vertical center line */
+    .sc-timeline__line {
+      position: absolute;
+      left: calc(clamp(1.5rem, 5vw, 6rem) + 28px);
+      top: 6rem; bottom: 8rem;
+      width: 1px;
+      background: linear-gradient(to bottom,
+        transparent,
+        rgba(168,85,247,0.3) 10%,
+        rgba(168,85,247,0.3) 90%,
+        transparent
+      );
+    }
+
+    .sc-day-panel { display: none; }
+    .sc-day-panel.active { display: block; }
+
+    .sc-day-header {
+      display: flex; align-items: baseline; gap: 1rem;
+      margin-bottom: 3.5rem; padding-left: 72px;
+    }
+    .sc-day-header__date {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6vw, 5rem); line-height: 0.9;
+      background: linear-gradient(135deg, #fff 30%, rgba(255,255,255,0.4));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .sc-day-header__label {
+      font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* Timeline entries */
+    .sc-entry {
+      display: grid; grid-template-columns: 56px 1fr;
+      gap: 1.5rem; margin-bottom: 1.8rem; align-items: start;
+      opacity: 0; transform: translateX(-20px);
+    }
+    .sc-entry.revealed {
+      animation: scSlideRight 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    @keyframes scSlideRight { to { opacity: 1; transform: translateX(0); } }
+
+    .sc-entry__dot-col {
+      display: flex; flex-direction: column; align-items: center;
+      padding-top: 1.4rem;
+    }
+    .sc-entry__dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: rgba(168,85,247,0.5);
+      border: 2px solid rgba(168,85,247,0.8);
+      flex-shrink: 0; position: relative; z-index: 1;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .sc-entry:hover .sc-entry__dot {
+      background: #a855f7;
+      box-shadow: 0 0 14px rgba(168,85,247,0.7);
+    }
+    .sc-entry__dot--key {
+      width: 14px; height: 14px;
+      background: #a855f7;
+      border-color: #c084fc;
+      box-shadow: 0 0 12px rgba(168,85,247,0.5);
+    }
+    .sc-entry__dot--break { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+
+    .sc-entry__card {
+      padding: 1.5rem 1.8rem; border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.025);
+      display: flex; align-items: flex-start; gap: 1.5rem;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .sc-entry:hover .sc-entry__card {
+      background: rgba(255,255,255,0.045);
+      border-color: rgba(255,255,255,0.12);
+    }
+    .sc-entry__card--key {
+      border-color: rgba(168,85,247,0.2);
+      background: rgba(168,85,247,0.04);
+    }
+    .sc-entry:hover .sc-entry__card--key {
+      border-color: rgba(168,85,247,0.35);
+      background: rgba(168,85,247,0.08);
+    }
+    .sc-entry__card--break {
+      border-style: dashed;
+      border-color: rgba(255,255,255,0.06);
+      background: transparent;
+    }
+
+    .sc-entry__time-col { flex-shrink: 0; min-width: 80px; }
+    .sc-entry__time {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem; line-height: 1; color: #fff;
+      letter-spacing: 0.02em;
+    }
+    .sc-entry__card--break .sc-entry__time { color: rgba(255,255,255,0.3); }
+    .sc-entry__ampm {
+      font-family: 'Inter', sans-serif; font-size: 0.6rem; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); display: block; margin-top: -2px;
+    }
+
+    .sc-entry__info { flex: 1; }
+    .sc-entry__phase {
+      font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: #a855f7; margin-bottom: 0.4rem; display: block;
+    }
+    .sc-entry__card--break .sc-entry__phase { color: rgba(255,255,255,0.25); }
+    .sc-entry__title {
+      font-family: 'Inter', sans-serif; font-weight: 700;
+      font-size: 1.05rem; color: #fff; margin-bottom: 0.35rem; line-height: 1.2;
+    }
+    .sc-entry__card--break .sc-entry__title { color: rgba(255,255,255,0.4); font-weight: 500; }
+    .sc-entry__desc {
+      font-family: 'Inter', sans-serif; font-size: 0.84rem;
+      font-weight: 300; line-height: 1.6;
+      color: rgba(255,255,255,0.45);
+    }
+    .sc-entry__badge {
+      flex-shrink: 0; align-self: flex-start;
+      font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 0.28rem 0.75rem; border-radius: 999px;
+    }
+    .sc-entry__badge--key {
+      background: rgba(168,85,247,0.15);
+      border: 1px solid rgba(168,85,247,0.3);
+      color: #c084fc;
+    }
+    .sc-entry__badge--announce {
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.25);
+      color: #93c5fd;
+    }
+    .sc-entry__badge--food {
+      background: rgba(249,115,22,0.1);
+      border: 1px solid rgba(249,115,22,0.2);
+      color: #fdba74;
+    }
+
+    @media (max-width: 768px) {
+      .sc-timeline { padding: 4rem 1.5rem 6rem; }
+      .sc-timeline__line { left: calc(1.5rem + 28px); top: 4rem; bottom: 6rem; }
+      .sc-day-header { padding-left: 52px; }
+      .sc-entry { grid-template-columns: 40px 1fr; gap: 1rem; }
+      .sc-entry__card { flex-direction: column; gap: 0.8rem; }
+    }
+
+    /* ── INFO STRIP ───────────────────────────────────────────────── */
+    .sc-info {
+      position: relative; z-index: 10;
+      padding: 0 clamp(1.5rem, 5vw, 6rem) 8rem;
+    }
+    .sc-info__inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    }
+    .sc-info-card {
+      padding: 2rem 1.8rem; border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.025);
+      display: flex; flex-direction: column; gap: 1rem;
+      opacity: 0; transform: translateY(24px);
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .sc-info-card.revealed {
+      animation: scFadeUp 0.75s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .sc-info-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.12); }
+    .sc-info-card__icon {
+      width: 44px; height: 44px; border-radius: 13px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(168,85,247,0.12); flex-shrink: 0;
+    }
+    .sc-info-card__title {
+      font-family: 'Inter', sans-serif; font-weight: 700;
+      font-size: 0.95rem; color: #fff;
+    }
+    .sc-info-card__desc {
+      font-family: 'Inter', sans-serif; font-size: 0.84rem;
+      font-weight: 300; line-height: 1.65; color: rgba(255,255,255,0.45);
+    }
+    @media (max-width: 768px) {
+      .sc-info__inner { grid-template-columns: 1fr; }
+      .sc-info { padding: 0 1.5rem 5rem; }
+    }
+
+    /* ── DIVIDERS ─────────────────────────────────────────────────── */
+    .sc-divider {
+      position: relative; z-index: 10; height: 1px; max-width: 1200px;
+      margin: 0 auto;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent);
+    }
+
+    /* ── KEYFRAMES ────────────────────────────────────────────────── */
+    @keyframes scFadeUp  { to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 768px) {
+      .sc-hero { padding: 120px 1.5rem 60px; }
+      .sc-tabs { padding: 0 1.5rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Custom cursor -->
+  <div class="cursor-arrow" id="cursorArrow" aria-hidden="true"></div>
+
+  <!-- Three.js dissolve overlay -->
+  <div class="canvas1" id="canvas1"></div>
+
+  <!-- Grain / noise texture overlay -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- Cursor radial glow -->
+  <div class="mouse-glow" id="mouseGlow" aria-hidden="true"></div>
+
+  <!-- ── Navbar ─────────────────────────────────────────────────────── -->
+  <nav class="navbar" id="navbar">
+
+    <div class="nav-logo">
+      <img src="/logo.png" alt="Vedansh logo" class="nav-logo-img" id="logoImg" />
+      <div class="logo-divider" aria-hidden="true"></div>
+      <span class="tagline-dot" aria-hidden="true"></span>
+      <div class="logo-tagline">
+        <span class="tagline-role">Creative engineer</span>
+        <span class="tagline-motto">building the future</span>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <div class="nav-pill" id="navPill">
+        <ul class="nav-links" role="navigation" aria-label="Main navigation">
+          <li><a href="/" class="nav-link" id="nav-home"><span class="link-text" data-text="Home">Home</span></a></li>
+          <li><a href="/about.html" class="nav-link" id="nav-about"><span class="link-text" data-text="About">About</span></a></li>
+          <li><a href="/schedule.html" class="nav-link active" id="nav-work"><span class="link-text" data-text="Schedule">Schedule</span></a></li>
+          <li><a href="/problem-statement.html" class="nav-link" id="nav-blogs"><span class="link-text" data-text="Problem Statement">Problem Statement</span></a></li>
+          <li class="nav-more-wrap" id="navMoreWrap">
+            <a href="#" class="nav-link nav-more" id="nav-more" role="button" aria-haspopup="menu" aria-expanded="false">
+              <span class="link-text" data-text="More">More</span>
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <div class="more-dropdown" id="moreDropdown" role="menu">
+              <div class="md-grid">
+                <a href="/winners.html" class="md-feature" role="menuitem" tabindex="-1">
+                  <div class="md-feature__bg-icon" aria-hidden="true">
+                    <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg>
+                  </div>
+                  <span class="md-feature__title">Winner</span>
+                  <span class="md-feature__desc">Hackathon winners &amp; achievements</span>
+                </a>
+                <div class="md-items">
+                  <a href="/code-of-conduct.html" class="md-item" role="menuitem" tabindex="-1">
+                    <div class="md-item__icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    </div>
+                    <div class="md-item__body">
+                      <span class="md-item__title">Code of Conduct</span>
+                      <span class="md-item__desc">Rules &amp; Guidelines</span>
+                    </div>
+                  </a>
+                  <a href="/our-team.html" class="md-item" role="menuitem" tabindex="-1">
+                    <div class="md-item__icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    </div>
+                    <div class="md-item__body">
+                      <span class="md-item__title">Our Team</span>
+                      <span class="md-item__desc">Meet the builders</span>
+                    </div>
+                  </a>
+                  <a href="/sponsors.html" class="md-item" role="menuitem" tabindex="-1">
+                    <div class="md-item__icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="15.5" r="2.5"/><path d="M8 17V5l12-2v12"/></svg>
+                    </div>
+                    <div class="md-item__body">
+                      <span class="md-item__title">Sponsors</span>
+                      <span class="md-item__desc">Our partners &amp; supporters</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div class="nav-pill-sep" aria-hidden="true"></div>
+        <a href="/register.html" class="btn-cta" id="bookCallBtn">Register</a>
+      </div>
+      <button class="nav-menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+        <svg class="menu-toggle-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
+          <path class="mti-path1" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"/>
+          <path d="M7 16 27 16"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="mobile-nav-pill" id="mobileNavPill">
+      <img src="/logo.png" alt="Logo" class="mobile-logo-img" />
+      <div class="mobile-nav-sep" aria-hidden="true"></div>
+      <span class="mobile-nav-name">VEDANSH DANOT</span>
+      <div class="mobile-nav-sep" aria-hidden="true"></div>
+      <button class="nav-menu-btn" id="menuBtnMobile" aria-label="Open menu" aria-expanded="false" style="padding:0;background:transparent;border:none;box-shadow:none;backdrop-filter:none;">
+        <svg class="menu-toggle-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true">
+          <path class="mti-path1" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"/>
+          <path d="M7 16 27 16"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Action Search Overlay -->
+  <div id="menuOverlay" class="menu-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="menu-overlay__panel">
+      <p class="action-search__label">Search Commands</p>
+      <div class="action-search__input-wrap">
+        <input type="text" id="actionSearchInput" class="action-search__input" placeholder="What's up?" autocomplete="off" spellcheck="false" aria-label="Search commands" />
+        <div class="action-search__icon" id="actionSearchIcon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+      </div>
+      <div class="action-search__results" id="actionSearchResults" role="listbox"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       MAIN CONTENT — Schedule
+       ══════════════════════════════════════════════════════════════════ -->
+  <main>
+
+    <!-- ── HERO ──────────────────────────────────────────────────────── -->
+    <section class="sc-hero" aria-labelledby="scHeroHeading">
+      <div class="sc-hero__glow" aria-hidden="true"></div>
+
+      <p class="sc-hero__eyebrow">
+        <svg width="7" height="7" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><circle cx="4" cy="4" r="4"/></svg>
+        25–26 APRIL 2026 &nbsp;·&nbsp; SAGE UNIVERSITY INDORE
+      </p>
+
+      <h1 class="sc-hero__title" id="scHeroHeading">
+        Event<br><em>Schedule</em>
+      </h1>
+
+      <p class="sc-hero__sub">
+        24 hours. 4 phases. Every minute is accounted for. Here's the complete timeline for UDBHAV'26.
+      </p>
+
+      <div class="sc-hero__cta-row">
+        <a href="/register.html" class="sc-hero__btn sc-hero__btn--primary" id="scHeroCta">Register Now</a>
+        <a href="/about.html" class="sc-hero__btn sc-hero__btn--ghost" id="scHeroAbout">Learn More</a>
+      </div>
+
+      <div class="sc-hero__scroll" aria-hidden="true">
+        <div class="sc-hero__scroll-line"></div>
+        <span>Scroll</span>
+      </div>
+    </section>
+
+    <!-- ── DAY TABS ────────────────────────────────────────────────── -->
+    <div class="sc-tabs" aria-label="Day selector">
+      <div class="sc-tabs__inner">
+        <button class="sc-tab active" data-day="1" id="tabDay1">Day 1 — 25 Apr</button>
+        <button class="sc-tab" data-day="2" id="tabDay2">Day 2 — 26 Apr</button>
+      </div>
+    </div>
+
+    <!-- ── TIMELINE ────────────────────────────────────────────────── -->
+    <div class="sc-timeline" aria-label="Event timeline">
+      <div class="sc-timeline__line" aria-hidden="true"></div>
+
+      <!-- ── DAY 1 ──────────────────────────────────────────────── -->
+      <div class="sc-day-panel active" id="day1Panel" role="tabpanel">
+        <div class="sc-day-header">
+          <div class="sc-day-header__date">25 APR</div>
+          <div class="sc-day-header__label">Day 1 · Arrival to Midnight</div>
+        </div>
+
+        <!-- Entry 1 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--key"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--key">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">09:00</div>
+              <span class="sc-entry__ampm">AM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Phase 0</span>
+              <div class="sc-entry__title">Registration &amp; Check-In</div>
+              <div class="sc-entry__desc">Participants arrive at Sage University. Team verification, ID check, and welcome kit distribution. Network with fellow hackers before the chaos begins.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--key">Kickoff</span>
+          </div>
+        </div>
+
+        <!-- Entry 2 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.06s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--key"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--key">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">10:00</div>
+              <span class="sc-entry__ampm">AM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Phase 0</span>
+              <div class="sc-entry__title">Opening Ceremony</div>
+              <div class="sc-entry__desc">Welcome address by Alt School of Technology &amp; Sunstone leadership. Rules, judging criteria, and event overview. The stage is officially set.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--announce">Ceremony</span>
+          </div>
+        </div>
+
+        <!-- Entry 3 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.12s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--key"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--key">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">11:00</div>
+              <span class="sc-entry__ampm">AM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Phase 1 — PS Drop</span>
+              <div class="sc-entry__title">Problem Statement Reveal</div>
+              <div class="sc-entry__desc">All 10 problem statements release simultaneously across 10 domains. Teams have exactly 15 minutes to lock in their choice — no switching allowed after the window closes.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--key">⚡ Critical</span>
+          </div>
+        </div>
+
+        <!-- Entry 4 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.18s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--key"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--key">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">11:15</div>
+              <span class="sc-entry__ampm">AM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Phase 2 — Build</span>
+              <div class="sc-entry__title">Hacking Begins</div>
+              <div class="sc-entry__desc">The clock starts. Teams begin building their solutions. Mentors are available across all domains for guidance and pivots.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--key">Build</span>
+          </div>
+        </div>
+
+        <!-- Break -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.22s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--break"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--break">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">13:30</div>
+              <span class="sc-entry__ampm">PM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Break</span>
+              <div class="sc-entry__title">Lunch</div>
+              <div class="sc-entry__desc">Catered lunch provided on-site. Keep building — teams may continue working.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--food">Food</span>
+          </div>
+        </div>
+
+        <!-- Entry 5 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.26s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot"></div>
+          </div>
+          <div class="sc-entry__card">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">14:30</div>
+              <span class="sc-entry__ampm">PM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Phase 2 — Build</span>
+              <div class="sc-entry__title">Mentor Rotations — Round 1</div>
+              <div class="sc-entry__desc">Industry mentors make their first round across all teams. Opportunity to get early directional feedback, validate your approach, and course-correct if needed.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Entry 6 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.3s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--key"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--key">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">17:00</div>
+              <span class="sc-entry__ampm">PM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Phase 2 — Build</span>
+              <div class="sc-entry__title">Mid-Check Evaluation</div>
+              <div class="sc-entry__desc">Judges visit each team for a 5-minute mid-point check-in. Not scored — purely directional. Teams receive written feedback slips.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--announce">Evaluation</span>
+          </div>
+        </div>
+
+        <!-- Break -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.34s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--break"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--break">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">20:00</div>
+              <span class="sc-entry__ampm">PM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Break</span>
+              <div class="sc-entry__title">Dinner</div>
+              <div class="sc-entry__desc">Hot dinner served. Night-owl mode activates soon.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--food">Food</span>
+          </div>
+        </div>
+
+        <!-- Entry 7 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.38s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot"></div>
+          </div>
+          <div class="sc-entry__card">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">21:00</div>
+              <span class="sc-entry__ampm">PM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Phase 2 — Build</span>
+              <div class="sc-entry__title">Mentor Rotations — Round 2</div>
+              <div class="sc-entry__desc">Second mentor sweep. Focus shifts to demo-readiness — does your solution actually work? Are you solving the right problem? Final nudges before the pitch.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Entry 8 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.42s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot"></div>
+          </div>
+          <div class="sc-entry__card">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">00:00</div>
+              <span class="sc-entry__ampm">MN</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Phase 2 — Build</span>
+              <div class="sc-entry__title">Midnight: 12 Hours Down</div>
+              <div class="sc-entry__desc">Halfway through. Energy drinks, snacks, and ambient music throughout the night. Volunteers on-site 24/7 for support.</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /day1Panel -->
+
+      <!-- ── DAY 2 ──────────────────────────────────────────────── -->
+      <div class="sc-day-panel" id="day2Panel" role="tabpanel">
+        <div class="sc-day-header">
+          <div class="sc-day-header__date">26 APR</div>
+          <div class="sc-day-header__label">Day 2 · Early Hours to Grand Finale</div>
+        </div>
+
+        <!-- Entry 1 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--break"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--break">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">04:00</div>
+              <span class="sc-entry__ampm">AM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Break</span>
+              <div class="sc-entry__title">Night Snacks — Chai &amp; Energy</div>
+              <div class="sc-entry__desc">Late-night fuel distribution. Tea, coffee, and snacks for all participants. The grind continues.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--food">Food</span>
+          </div>
+        </div>
+
+        <!-- Entry 2 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.06s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--key"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--key">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">09:00</div>
+              <span class="sc-entry__ampm">AM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Phase 3 — Submit</span>
+              <div class="sc-entry__title">Code Freeze &amp; Submission</div>
+              <div class="sc-entry__desc">All development stops. Teams submit their final solution — code repository, presentation deck, and demo video. No changes allowed after this point.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--key">⚡ Critical</span>
+          </div>
+        </div>
+
+        <!-- Break -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.1s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--break"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--break">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">09:30</div>
+              <span class="sc-entry__ampm">AM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Break</span>
+              <div class="sc-entry__title">Breakfast &amp; Freshen Up</div>
+              <div class="sc-entry__desc">Hot breakfast served. Teams prepare their final presentations and rest before pitching begins.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--food">Food</span>
+          </div>
+        </div>
+
+        <!-- Entry 3 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.14s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--key"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--key">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">10:30</div>
+              <span class="sc-entry__ampm">AM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Phase 4 — Pitch</span>
+              <div class="sc-entry__title">Judging Rounds Begin</div>
+              <div class="sc-entry__desc">Teams present to a panel of judges in 7-minute slots — 5 minutes demo + 2 minutes Q&amp;A. Judged on innovation, technical depth, feasibility, and impact.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--announce">Presentations</span>
+          </div>
+        </div>
+
+        <!-- Entry 4 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.18s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot"></div>
+          </div>
+          <div class="sc-entry__card">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">13:00</div>
+              <span class="sc-entry__ampm">PM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Phase 4 — Pitch</span>
+              <div class="sc-entry__title">Top 10 Shortlisting</div>
+              <div class="sc-entry__desc">Judges deliberate. Top 10 finalists are announced. Shortlisted teams prepare their grand finale presentations while others network with mentors and sponsors.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Break -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.22s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--break"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--break">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">14:00</div>
+              <span class="sc-entry__ampm">PM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Break</span>
+              <div class="sc-entry__title">Lunch</div>
+              <div class="sc-entry__desc">Final lunch before the grand finale. Networking with judges, sponsors, and fellow hackers.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--food">Food</span>
+          </div>
+        </div>
+
+        <!-- Entry 5 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.26s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--key"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--key">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">15:00</div>
+              <span class="sc-entry__ampm">PM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Phase 4 — Grand Finale</span>
+              <div class="sc-entry__title">Final Presentations — Top 10</div>
+              <div class="sc-entry__desc">The top 10 teams present to the full audience and judge panel. 10 minutes per team — this is the moment everything was built for.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--key">Grand Finale</span>
+          </div>
+        </div>
+
+        <!-- Entry 6 -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.3s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot"></div>
+          </div>
+          <div class="sc-entry__card">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">17:00</div>
+              <span class="sc-entry__ampm">PM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Deliberation</span>
+              <div class="sc-entry__title">Judges' Deliberation</div>
+              <div class="sc-entry__desc">Final closed-room deliberation by the judge panel. Cultural program and networking session for all participants during wait.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Entry 7 — Final -->
+        <div class="sc-entry js-scroll-reveal" style="animation-delay:0.34s">
+          <div class="sc-entry__dot-col">
+            <div class="sc-entry__dot sc-entry__dot--key"></div>
+          </div>
+          <div class="sc-entry__card sc-entry__card--key">
+            <div class="sc-entry__time-col">
+              <div class="sc-entry__time">18:00</div>
+              <span class="sc-entry__ampm">PM</span>
+            </div>
+            <div class="sc-entry__info">
+              <span class="sc-entry__phase">Results &amp; Ceremony</span>
+              <div class="sc-entry__title">Prize Distribution &amp; Closing</div>
+              <div class="sc-entry__desc">Winners announced. ₹45,000 prize pool distributed. Certificate distribution for all participants. Closing remarks and group photo. UDBHAV'26 — done.</div>
+            </div>
+            <span class="sc-entry__badge sc-entry__badge--key">Winners</span>
+          </div>
+        </div>
+
+      </div><!-- /day2Panel -->
+
+    </div><!-- /sc-timeline -->
+
+    <div class="sc-divider"></div>
+
+    <!-- ── INFO STRIP ──────────────────────────────────────────────── -->
+    <section class="sc-info" aria-label="Event information">
+      <div class="sc-info__inner">
+
+        <div class="sc-info-card js-scroll-reveal" data-anim="up">
+          <div class="sc-info-card__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#a855f7" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="sc-info-card__title">Duration</div>
+          <div class="sc-info-card__desc">24 hours of continuous building from 11:15 AM on 25 April to 9:00 AM on 26 April. The clock does not stop.</div>
+        </div>
+
+        <div class="sc-info-card js-scroll-reveal" data-anim="up" style="animation-delay:0.1s">
+          <div class="sc-info-card__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#a855f7" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="sc-info-card__title">Mentors On-Site</div>
+          <div class="sc-info-card__desc">Industry mentors rotate through the venue during Rounds 1 &amp; 2. Request a mentor visit anytime through the event volunteers.</div>
+        </div>
+
+        <div class="sc-info-card js-scroll-reveal" data-anim="up" style="animation-delay:0.2s">
+          <div class="sc-info-card__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#a855f7" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+          </div>
+          <div class="sc-info-card__title">Food &amp; Refreshments</div>
+          <div class="sc-info-card__desc">Lunch, dinner, midnight snacks, and breakfast included for all registered participants throughout the event.</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── CINEMATIC FOOTER ────────────────────────────────────────── -->
+    <div class="cf-wrapper" id="cinematicFooterWrapper">
+      <footer class="cf-footer" id="cinematicFooter" aria-label="Site footer">
+        <div class="cf-aurora" aria-hidden="true"></div>
+        <div class="cf-grid-bg" aria-hidden="true"></div>
+        <div class="cf-giant-text" id="cfGiantText" aria-hidden="true">UDBHAV'26</div>
+
+        <div class="cf-marquee-wrap" aria-hidden="true">
+          <div class="cf-marquee-track">
+            <div class="cf-marquee-item">
+              <span>Creative Engineer</span> <span class="cf-star">✦</span>
+              <span>Full Stack Dev</span> <span class="cf-star cf-star--sec">✦</span>
+              <span>UI / UX Design</span> <span class="cf-star">✦</span>
+              <span>Open to Work</span> <span class="cf-star cf-star--sec">✦</span>
+              <span>Based in India</span> <span class="cf-star">✦</span>
+            </div>
+            <div class="cf-marquee-item" aria-hidden="true">
+              <span>Creative Engineer</span> <span class="cf-star">✦</span>
+              <span>Full Stack Dev</span> <span class="cf-star cf-star--sec">✦</span>
+              <span>UI / UX Design</span> <span class="cf-star">✦</span>
+              <span>Open to Work</span> <span class="cf-star cf-star--sec">✦</span>
+              <span>Based in India</span> <span class="cf-star">✦</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cf-center" id="cfCenter">
+          <h2 class="cf-heading" id="cfHeading">Ready to begin?</h2>
+          <div class="cf-links" id="cfLinks">
+            <div class="cf-primary-pills">
+              <a href="/register.html" class="cf-pill cf-pill--primary js-magnetic" id="cfBtnRegister">Register</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="cf-bottom-bar">
+          <p class="cf-copyright">© 2026 UDBHAV'26. All rights reserved.</p>
+          <div class="cf-badge">
+            <span class="cf-badge-text">Crafted with</span>
+            <span class="cf-heart" aria-hidden="true">❤</span>
+            <span class="cf-badge-text">by</span>
+            <span class="cf-badge-name">UDBHAV'26</span>
+          </div>
+          <button class="cf-pill cf-pill--icon js-magnetic" id="cfBackToTop" aria-label="Back to top">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+          </button>
+        </div>
+      </footer>
+    </div>
+
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
+  <script src="/mobile-perf.js" defer></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ── Lenis smooth scroll ──────────────────────────────────────────
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true, smoothTouch: false,
+    });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+
+    // ── Custom cursor ────────────────────────────────────────────────
+    const cursor = document.getElementById('cursorArrow');
+    if (cursor) {
+      document.addEventListener('mousemove', e => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top  = e.clientY + 'px';
+      });
+      document.querySelectorAll('a, button, [role="button"], .js-magnetic').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('is-hovering'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('is-hovering'));
+      });
+      document.addEventListener('mouseleave', () => cursor.style.opacity = '0');
+      document.addEventListener('mouseenter', () => cursor.style.opacity = '1');
+    }
+
+    // ── Day tabs ─────────────────────────────────────────────────────
+    document.querySelectorAll('.sc-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.sc-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.sc-day-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('day' + tab.dataset.day + 'Panel').classList.add('active');
+        // Re-trigger reveals for new panel
+        document.querySelectorAll('.sc-day-panel.active .sc-entry').forEach(el => {
+          if (ScrollTrigger) {
+            ScrollTrigger.refresh();
+          }
+        });
+      });
+    });
+
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Scroll reveals
+      document.querySelectorAll('.js-scroll-reveal').forEach(el => {
+        ScrollTrigger.create({
+          trigger: el, start: 'top 90%',
+          onEnter: () => el.classList.add('revealed'),
+          once: true,
+        });
+      });
+
+      // Cinematic footer
+      const wrapper  = document.getElementById('cinematicFooterWrapper');
+      const giantTxt = document.getElementById('cfGiantText');
+      const center   = document.getElementById('cfCenter');
+      if (wrapper && giantTxt && center) {
+        gsap.fromTo(giantTxt,
+          { y: '15vh', scale: 0.85, opacity: 0 },
+          { y: '0vh', scale: 1, opacity: 1, ease: 'power1.out',
+            scrollTrigger: { trigger: wrapper, start: 'top bottom', end: 'top 0%', scrub: 1.5 } }
+        );
+        gsap.fromTo(center,
+          { y: 70, opacity: 0 },
+          { y: 0, opacity: 1, ease: 'power3.out',
+            scrollTrigger: { trigger: wrapper, start: 'top 60%', end: 'top -20%', scrub: 1 } }
+        );
+      }
+
+      document.getElementById('cfBackToTop')?.addEventListener('click', () => lenis.scrollTo(0, { duration: 1.2 }));
+
+      document.querySelectorAll('#cinematicFooter .js-magnetic').forEach(el => {
+        el.addEventListener('mousemove', e => {
+          const r = el.getBoundingClientRect();
+          const x = e.clientX - r.left - r.width / 2;
+          const y = e.clientY - r.top  - r.height / 2;
+          gsap.to(el, { x: x * 0.38, y: y * 0.38, rotationX: -y * 0.14, rotationY: x * 0.14,
+            scale: 1.06, ease: 'power2.out', duration: 0.4, overwrite: 'auto' });
+        });
+        el.addEventListener('mouseleave', () => {
+          gsap.to(el, { x: 0, y: 0, rotationX: 0, rotationY: 0, scale: 1,
+            ease: 'elastic.out(1,0.3)', duration: 1.2, overwrite: 'auto' });
+        });
+      });
+
+      // Navbar scroll transform
+      const navPill    = document.getElementById('navPill');
+      const navbar     = document.getElementById('navbar');
+      const navDivider = document.querySelector('.logo-divider');
+      const taglineDot = document.querySelector('.tagline-dot');
+      const logoTagline= document.querySelector('.logo-tagline');
+      if (navbar && navPill && window.innerWidth > 768) {
+        const wipeEls = [logoTagline, taglineDot, navDivider].filter(Boolean);
+        gsap.set(wipeEls, { clipPath: 'inset(0 0% 0 0 round 2px)' });
+        let transformed = false;
+        function transformIn() {
+          if (transformed) return; transformed = true;
+          gsap.to(wipeEls, { clipPath: 'inset(0 100% 0 0 round 2px)', duration: 0.22, ease: 'power3.in', stagger: { each: 0.06, from: 'start' } });
+          const navRect  = navbar.getBoundingClientRect();
+          const pillRect = navPill.getBoundingClientRect();
+          const targetX  = (navRect.left + navRect.width / 2) - (pillRect.left + pillRect.width / 2);
+          gsap.to(navPill, { x: targetX, duration: 0.7, ease: 'power3.out', delay: 0.1 });
+        }
+        function transformOut() {
+          if (!transformed) return; transformed = false;
+          gsap.to(navPill, { x: 0, duration: 0.6, ease: 'power3.inOut' });
+          gsap.to(wipeEls, { clipPath: 'inset(0 0% 0 0 round 2px)', duration: 0.3, ease: 'power2.out', stagger: { each: 0.07, from: 'end' }, delay: 0.25 });
+        }
+        ScrollTrigger.create({ trigger: document.body, start: 'top top-=80', onEnter: transformIn, onLeaveBack: transformOut });
+      }
+    }
+
+    // ── More dropdown ────────────────────────────────────────────────
+    (function() {
+      const trigger  = document.getElementById('nav-more');
+      const dropdown = document.getElementById('moreDropdown');
+      const wrap     = document.getElementById('navMoreWrap');
+      if (!trigger || !dropdown) return;
+      let closeTimer = null;
+      function openDropdown() { clearTimeout(closeTimer); dropdown.classList.remove('closing'); dropdown.classList.add('open'); trigger.setAttribute('aria-expanded', 'true'); }
+      function closeDropdown() { if (!dropdown.classList.contains('open')) return; dropdown.classList.add('closing'); trigger.setAttribute('aria-expanded', 'false'); closeTimer = setTimeout(() => dropdown.classList.remove('open', 'closing'), 160); }
+      trigger.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); dropdown.classList.contains('open') ? closeDropdown() : openDropdown(); });
+      document.addEventListener('click', e => { if (wrap && !wrap.contains(e.target)) closeDropdown(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && dropdown.classList.contains('open')) { closeDropdown(); trigger.focus(); } });
+    })();
+
+    // ── Menu overlay ─────────────────────────────────────────────────
+    (function() {
+      const btn     = document.getElementById('menuBtn');
+      const overlay = document.getElementById('menuOverlay');
+      const input   = document.getElementById('actionSearchInput');
+      const results = document.getElementById('actionSearchResults');
+      const iconEl  = document.getElementById('actionSearchIcon');
+      const svg     = btn?.querySelector('.menu-toggle-icon');
+      if (!btn || !overlay) return;
+
+      const ACTIONS = [
+        { id:'1', label:'Home',              icon:'home',      description:'Back to start',          end:'Page', href:'/',              color:'#60a5fa', external:false },
+        { id:'2', label:'About',             icon:'user',      description:'About UDBHAV\'26',        end:'Page', href:'/about.html',    color:'#fb923c', external:false },
+        { id:'3', label:'Schedule',          icon:'calendar',  description:'Event timeline',          end:'Page', href:'/schedule.html',     color:'#a78bfa', external:false },
+        { id:'4', label:'Problem Statement', icon:'file',      description:'Domain challenges',       end:'Page', href:'/problem-statement.html',     color:'#34d399', external:false },
+        { id:'5', label:'Register',          icon:'briefcase', description:'Join UDBHAV\'26',         end:'Page', href:'/register.html', color:'#a855f7', external:false },
+      ];
+      const SVGS = {
+        home:      c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+        user:      c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+        calendar:  c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+        file:      c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
+        briefcase: c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
+      };
+      const ICON_SEARCH = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
+
+      function renderActions(list, query) {
+        if (!results) return;
+        if (!list.length) { results.innerHTML = `<div class="action-search__empty">No results for "<em>${query}</em>"</div>`; return; }
+        results.innerHTML = `<ul class="action-search__list">${list.map(a => `
+          <li class="action-item" data-href="${a.href}" data-ext="${a.external}">
+            <div class="action-item__left">
+              <div class="action-item__icon">${SVGS[a.icon]?.(a.color) ?? ''}</div>
+              <div><div class="action-item__name">${a.label}</div><div class="action-item__desc">${a.description}</div></div>
+            </div>
+            <div class="action-item__right"><span class="action-item__end">${a.end}</span></div>
+          </li>`).join('')}</ul>
+          <div class="action-search__footer"><span>Press ⌘K to open</span><span>ESC to close</span></div>`;
+        results.querySelectorAll('.action-item').forEach(item => {
+          item.addEventListener('click', () => {
+            closeOverlay();
+            if (item.dataset.ext === 'true') window.open(item.dataset.href, '_blank', 'noopener');
+            else window.location.href = item.dataset.href;
+          });
+        });
+      }
+      function filterAndRender(query) {
+        const q = query.toLowerCase().trim();
+        renderActions(q ? ACTIONS.filter(a => a.label.toLowerCase().includes(q) || a.description.toLowerCase().includes(q)) : ACTIONS, query);
+      }
+      function openOverlay() {
+        overlay.classList.add('open'); overlay.removeAttribute('aria-hidden');
+        btn.setAttribute('aria-expanded','true'); svg?.classList.add('open');
+        if (iconEl) iconEl.innerHTML = ICON_SEARCH;
+        filterAndRender(''); setTimeout(() => input?.focus(), 250);
+      }
+      function closeOverlay() {
+        overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true');
+        btn.setAttribute('aria-expanded','false'); svg?.classList.remove('open');
+        if (input) input.value = '';
+        if (results) results.innerHTML = '';
+      }
+      btn.addEventListener('click', () => overlay.classList.contains('open') ? closeOverlay() : openOverlay());
+      document.getElementById('menuBtnMobile')?.addEventListener('click', () => overlay.classList.contains('open') ? closeOverlay() : openOverlay());
+      input?.addEventListener('input', () => filterAndRender(input.value));
+      document.addEventListener('click', e => {
+        if (overlay.classList.contains('open') && !overlay.contains(e.target) && !btn.contains(e.target)) closeOverlay();
+      });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && overlay.classList.contains('open')) { closeOverlay(); return; }
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); overlay.classList.contains('open') ? closeOverlay() : openOverlay(); }
+      });
+    })();
+
+  })();
+  </script>
+
+</body>
+</html>
