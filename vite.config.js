@@ -18,6 +18,7 @@ export default defineConfig({
         playground: resolve(__dirname, 'playground.html'),
         jamify:     resolve(__dirname, 'jamify.html'),
         bookACall:  resolve(__dirname, 'book-a-call.html'),
+        register:   resolve(__dirname, 'register.html'),
         notFound:         resolve(__dirname, '404.html'),
         adminLogin:       resolve(__dirname, 'admin/login.html'),
         adminDashboard:   resolve(__dirname, 'admin/dashboard.html'),
