@@ -50,6 +50,7 @@ const cleanRoutes = {
   '/jamify':             'jamify.html',
   '/book-a-call':        'book-a-call.html',
   '/register':           'register.html',
+  '/legal':              'legal.html',
   '/admin/login':        'admin/login.html',
   '/admin/dashboard':    'admin/dashboard.html',
   '/admin/registrations':'admin/registrations.html',
