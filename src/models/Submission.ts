@@ -22,7 +22,7 @@ const SubmissionSchema: Schema = new Schema({
   type: { 
     type: String, 
     required: [true, "Submission type is required"],
-    enum: ["ppt-submission", "project-submission"]
+    enum: ["ppt-submission", "project-submission", "mentorship", "other"]
   },
   description: { 
     type: String 

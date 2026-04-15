@@ -16,18 +16,36 @@ export default function DashboardPage() {
   const [activeSubmission, setActiveSubmission] = useState<string | null>(null);
   const [isMentorModalOpen, setIsMentorModalOpen] = useState(false);
 
+  const [stats, setStats] = useState({ points: 1250, rank: 42 });
+
   useEffect(() => {
     // Check for team ID in localStorage
     const savedTeamId = localStorage.getItem("udbhav_team_id");
     if (savedTeamId) {
       setTeamId(savedTeamId);
+      fetchStats(savedTeamId);
     }
     setIsLoading(false);
   }, []);
 
+  const fetchStats = async (id: string) => {
+    try {
+      const res = await fetch(`/api/submissions?teamId=${id}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.stats) {
+          setStats(data.stats);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to fetch stats:", err);
+    }
+  };
+
   const handleJoin = (id: string) => {
     localStorage.setItem("udbhav_team_id", id);
     setTeamId(id);
+    fetchStats(id);
   };
 
   const handleLogout = () => {
@@ -126,11 +144,11 @@ export default function DashboardPage() {
                     <div className="space-y-4 relative z-10">
                       <div className="flex justify-between items-end">
                         <span className="text-xs text-white/60">Rank</span>
-                        <span className="text-2xl font-black font-heading text-gradient">#42</span>
+                        <span className="text-2xl font-black font-heading text-gradient">#{stats.rank}</span>
                       </div>
                       <div className="flex justify-between items-end">
                         <span className="text-xs text-white/60">Points</span>
-                        <span className="text-2xl font-black font-heading">1,250</span>
+                        <span className="text-2xl font-black font-heading">{stats.points.toLocaleString()}</span>
                       </div>
                     </div>
                   </div>

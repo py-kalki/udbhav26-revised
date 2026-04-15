@@ -18,14 +18,31 @@ export const MentorModal = ({ isOpen, onClose, teamId }: MentorModalProps) => {
   const [hasOptedIn, setHasOptedIn] = useState(mockMentorStatus[teamId] || false);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleOptIn = () => {
+  const handleOptIn = async () => {
     setIsProcessing(true);
-    // Simulate API call
-    setTimeout(() => {
-      mockMentorStatus[teamId] = true;
+    try {
+      const response = await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "mentorship",
+          teamId,
+          submissionLink: "opt-in", // Placeholder for opt-in
+          description: "Mentorship program opt-in request",
+          isLeader: true,
+          submittedAt: new Date().toISOString(),
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to opt-in");
+      
       setHasOptedIn(true);
+    } catch (error) {
+      console.error("Mentorship Opt-in Error:", error);
+      alert("Failed to connect to mentorship systems. Please try again.");
+    } finally {
       setIsProcessing(false);
-    }, 1500);
+    }
   };
 
   const mentorDetails = {

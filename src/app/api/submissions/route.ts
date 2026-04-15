@@ -79,12 +79,48 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  console.log(`\n--- DEBUG: GET RECEIVED ON SUBMISSIONS API ---`);
-  console.log(`URL: ${request.url}`);
-  console.log(`----------------------------------------------\n`);
-  
-  return NextResponse.json(
-    { message: "Submissions API is active. Use POST to submit data." },
-    { status: 200 }
-  );
+  try {
+    const { searchParams } = new URL(request.url);
+    const teamId = searchParams.get("teamId");
+
+    if (!teamId) {
+      return NextResponse.json({ error: "Team ID is required" }, { status: 400 });
+    }
+
+    if (process.env.MONGODB_URI) {
+      await connectDB();
+      const submissions = await Submission.find({ teamId });
+      
+      // Calculate basic stats for now
+      const points = submissions.length * 250; // 250 points per submission/action
+      const rank = Math.max(1, 100 - submissions.length * 10); // Mock rank calculation
+
+      return NextResponse.json({
+        teamId,
+        submissions: submissions.map(s => ({
+          type: s.type,
+          submittedAt: s.submittedAt,
+          id: s._id
+        })),
+        stats: {
+          points,
+          rank,
+          status: "active"
+        }
+      });
+    } else {
+      // Mock data for local testing
+      return NextResponse.json({
+        teamId,
+        submissions: [],
+        stats: {
+          points: 1250,
+          rank: 42,
+          status: "mock-active"
+        }
+      });
+    }
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
+  }
 }
