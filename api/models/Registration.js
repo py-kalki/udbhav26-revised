@@ -46,6 +46,16 @@ const RegistrationSchema = new mongoose.Schema(
     razorpayOrderId:   { type: String, default: null },
     razorpayPaymentId: { type: String, default: null },
 
+    // ── Team Code (generated after payment confirmation) ─────────────────
+    teamCode: {
+      type:   String,
+      default: null,
+      unique:  true,
+      sparse:  true,   // allows multiple null values
+      uppercase: true,
+      trim:   true,
+    },
+
     // ── Meta ────────────────────────────────────────────────────────────
     ipAddress:   { type: String, default: null },
     userAgent:   { type: String, default: null },

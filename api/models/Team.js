@@ -39,13 +39,21 @@ const TeamSchema = new mongoose.Schema(
     mentorSession: { type: Boolean, default: false },
     totalAmount:   { type: Number, required: true },   // ₹800 or ₹1100
 
-    // ── Status ────────────────────────────────────────────────────────────
+    // ── Payment Status ────────────────────────────────────────────────────
     paymentStatus: {
       type: String,
       enum: ['pending', 'paid'],
       default: 'pending',
     },
     registrationId: { type: String, default: null }, // MongoDB _id from Registration collection after payment
+
+    // ── PS Drop Selection ─────────────────────────────────────────────────
+    psSelectionId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref:  'ProblemStatement',
+      default: null,
+    },
+    psSelectedAt: { type: Date, default: null },
   },
   {
     timestamps: true,

@@ -14,50 +14,59 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express from 'express';
-import path from 'path';
+import path    from 'path';
 import { fileURLToPath } from 'url';
-import { createRequire } from 'module';
 
 // ── Polyfills for ESM ────────────────────────────────────────────────────────
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
 
-// ── Import API handlers ──────────────────────────────────────────────────────
+// ── Import existing API handlers ─────────────────────────────────────────────
 import createOrderHandler  from './api/create-order.js';
 import verifyPaymentHandler from './api/verify-payment.js';
 import registerHandler      from './api/register.js';
 import teamHandler          from './api/team.js';
 import spotifyHandler       from './api/spotify.js';
 
+// ── Import PS Drop handlers ──────────────────────────────────────────────────
+import psStatusHandler     from './api/ps/status.js';
+import psVerifyHandler     from './api/ps/verify-code.js';
+import psListHandler       from './api/ps/list.js';
+import psSelectHandler     from './api/ps/select.js';
+import {
+  configHandler,
+  addPsHandler,
+  startDropHandler,
+  stopDropHandler,
+  statsHandler,
+} from './api/admin/ps.js';
+import adminLoginHandler from './api/admin/login.js';
+
 // ── App setup ────────────────────────────────────────────────────────────────
 const app  = express();
 const PORT = process.env.PORT || 8080;
 const DIST = path.join(__dirname, 'dist');
 
-// Parse JSON bodies (required for API handlers)
+// Parse JSON bodies
 app.use(express.json());
 
 // ── Clean-URL mapping ─────────────────────────────────────────────────────────
-// Map /pagename → dist/pagename.html (mirrors vercel.json rewrites)
 const cleanRoutes = {
-  '/about':              'about.html',
-  '/work':               'work.html',
-  '/blog':               'blog.html',
-  '/blog-post':          'blog-post.html',
-  '/links':              'links.html',
-  '/uses':               'uses.html',
-  '/playground':         'playground.html',
-  '/jamify':             'jamify.html',
-  '/book-a-call':        'book-a-call.html',
-  '/register':           'register.html',
-  '/admin/login':        'admin/login.html',
-  '/admin/dashboard':    'admin/dashboard.html',
-  '/admin/registrations':'admin/registrations.html',
+  '/about':             'about.html',
+  '/schedule':          'schedule.html',
+  '/problem-statement': 'problem-statement.html',
+  '/ps':                'problem-statement.html',
+  '/winners':           'winners.html',
+  '/sponsors':          'sponsors.html',
+  '/code-of-conduct':   'code-of-conduct.html',
+  '/our-team':          'our-team.html',
+  '/register':          'register.html',
+  '/admin/login':       'admin/login.html',
+  '/admin/dashboard':   'admin/dashboard.html',
+  '/admin/registrations': 'admin/registrations.html',
 };
 
 // ── Vercel-handler adapter ────────────────────────────────────────────────────
-// Our API handlers use Vercel's (req, res) interface.
-// Express req/res is compatible — just pass through directly.
 function mountHandler(handler) {
   return async (req, res) => {
     try {
@@ -71,12 +80,26 @@ function mountHandler(handler) {
   };
 }
 
-// ── API Routes ────────────────────────────────────────────────────────────────
+// ── Existing API Routes ───────────────────────────────────────────────────────
 app.all('/api/create-order',   mountHandler(createOrderHandler));
 app.all('/api/verify-payment', mountHandler(verifyPaymentHandler));
 app.all('/api/register',       mountHandler(registerHandler));
 app.all('/api/team',           mountHandler(teamHandler));
 app.all('/api/spotify',        mountHandler(spotifyHandler));
+
+// ── PS Drop Public API ────────────────────────────────────────────────────────
+app.get ('/api/ps/status',      mountHandler(psStatusHandler));
+app.post('/api/ps/verify-code', mountHandler(psVerifyHandler));
+app.get ('/api/ps/list',        mountHandler(psListHandler));
+app.post('/api/ps/select',      mountHandler(psSelectHandler));
+
+// ── PS Drop Admin API ─────────────────────────────────────────────────────────
+app.post('/api/admin/login',      mountHandler(adminLoginHandler));
+app.post('/api/admin/ps/config',     mountHandler(configHandler));
+app.post('/api/admin/ps/add-ps',     mountHandler(addPsHandler));
+app.post('/api/admin/ps/start-drop', mountHandler(startDropHandler));
+app.post('/api/admin/ps/stop-drop',  mountHandler(stopDropHandler));
+app.get ('/api/admin/ps/stats',      mountHandler(statsHandler));
 
 // ── Clean URL Routes ──────────────────────────────────────────────────────────
 for (const [route, file] of Object.entries(cleanRoutes)) {
@@ -105,7 +128,11 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ UDBHAV'26 server running on port ${PORT}`);
   console.log(`📦 Environment check:`);
-  console.log(`   - MONGODB_URI: ${process.env.MONGODB_URI ? '✓ Set' : '✗ Missing'}`);
-  console.log(`   - RAZORPAY_KEY_ID: ${process.env.RAZORPAY_KEY_ID ? '✓ Set' : '✗ Missing'}`);
-  console.log(`   - RAZORPAY_KEY_SECRET: ${process.env.RAZORPAY_KEY_SECRET ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - MONGODB_URI:      ${process.env.MONGODB_URI      ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - RAZORPAY_KEY_ID:  ${process.env.RAZORPAY_KEY_ID  ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - PUSHER_APP_ID:    ${process.env.PUSHER_APP_ID    ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - RESEND_API_KEY:   ${process.env.RESEND_API_KEY   ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - ADMIN_SECRET:     ${process.env.ADMIN_SECRET     ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - ADMIN_USER:       ${process.env.ADMIN_USER       ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - ADMIN_PASS:       ${process.env.ADMIN_PASS       ? '✓ Set' : '✗ Missing'}`);
 });
