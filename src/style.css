@@ -4039,7 +4039,52 @@ body {
    SCHEDULE — Full Open Timeline (GSAP scroll-driven)
    ============================================================================ */
 
-.sch-timeline-full { display: flex; flex-direction: column; gap: 0; }
+.sch-timeline-full { display: flex; flex-direction: column; gap: 0; position: relative; }
+
+/* ── Glowing scroll progress line ── */
+.sch-progress-track {
+  position: absolute;
+  left: 230px; /* aligns with the dot column in the grid */
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  z-index: 5;
+  pointer-events: none;
+}
+.sch-progress-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%; /* JS drives this via scroll */
+  background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+  border-radius: 2px;
+  box-shadow: 0 0 12px rgba(249,115,22,0.6), 0 0 30px rgba(249,115,22,0.25);
+  transition: height 0.05s linear;
+}
+.sch-progress-glow {
+  position: absolute;
+  left: 50%;
+  top: 0%; /* JS drives this via scroll */
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #f97316;
+  box-shadow:
+    0 0 16px rgba(249,115,22,0.9),
+    0 0 40px rgba(249,115,22,0.5),
+    0 0 80px rgba(249,115,22,0.2);
+  transition: top 0.05s linear;
+  opacity: 0;
+}
+.sch-progress-glow.active { opacity: 1; }
+
+@media (max-width: 768px) {
+  .sch-progress-track {
+    left: 90px; /* aligns with mobile timeline dot column */
+  }
+}
 
 .sch-phase-block {
   display: grid;
@@ -4096,7 +4141,7 @@ body {
   grid-template-columns: 130px 20px 1fr;
   gap: 0 1rem;
   align-items: flex-start;
-  padding: 1.1rem 0;
+  padding: 1.3rem 0;
   opacity: 0;
   transform: translateX(-24px);
   will-change: opacity, transform;
@@ -4105,46 +4150,48 @@ body {
 
 .sch-item-time {
   font-family: var(--font-ui);
-  font-size: 0.68rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.3);
-  padding-top: 0.22rem;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.45);
+  padding-top: 0.18rem;
   white-space: nowrap;
 }
 
-.sch-item-track { display: flex; flex-direction: column; align-items: center; padding-top: 0.28rem; }
+.sch-item-track { display: flex; flex-direction: column; align-items: center; padding-top: 0.28rem; position: relative; z-index: 6; }
 
 .sch-item-dot {
-  width: 8px; height: 8px;
+  width: 10px; height: 10px;
   border-radius: 50%;
   background: rgba(255,255,255,0.25);
-  border: 1.5px solid rgba(255,255,255,0.4);
+  border: 2px solid rgba(255,255,255,0.4);
   flex-shrink: 0;
+  position: relative;
+  z-index: 7;
 }
-.sch-item-dot--critical { background: #ef4444; border-color: #ef4444; box-shadow: 0 0 10px rgba(239,68,68,0.7); }
+.sch-item-dot--critical { background: #ef4444; border-color: #ef4444; box-shadow: 0 0 10px rgba(239,68,68,0.7); width: 12px; height: 12px; }
 .sch-item-dot--break    { background: rgba(251,191,36,0.4); border-color: rgba(251,191,36,0.8); }
 .sch-item-dot--fun      { background: rgba(167,139,250,0.4); border-color: rgba(167,139,250,0.8); }
 .sch-item-dot--submit   { background: rgba(52,211,153,0.4); border-color: rgba(52,211,153,0.8); }
-.sch-item-dot--finale   { background: #f59e0b; border-color: #f59e0b; box-shadow: 0 0 10px rgba(245,158,11,0.7); }
+.sch-item-dot--finale   { background: #f59e0b; border-color: #f59e0b; box-shadow: 0 0 14px rgba(245,158,11,0.7); width: 12px; height: 12px; }
 
 .sch-item-line { width: 1px; flex-grow: 1; min-height: 22px; background: rgba(255,255,255,0.07); margin-top: 4px; }
 
-.sch-item-content { display: flex; flex-direction: column; gap: 0.3rem; padding-bottom: 0.8rem; }
+.sch-item-content { display: flex; flex-direction: column; gap: 0.35rem; padding-bottom: 1rem; }
 .sch-item-top { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
 
 .sch-item-name {
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  color: rgba(255,255,255,0.88);
+  color: rgba(255,255,255,0.92);
   letter-spacing: -0.01em;
 }
 .sch-item-desc {
   font-family: var(--font-ui);
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.35);
-  line-height: 1.5;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.6;
   margin: 0;
 }
 
@@ -4152,8 +4199,10 @@ body {
   .sch-phase-block { grid-template-columns: 1fr; gap: 1rem 0; padding: 2rem 0; }
   .sch-phase-label { position: static; }
   .sch-phase-label .sch-phase-num { font-size: 2.4rem; }
-  .sch-item { grid-template-columns: 80px 18px 1fr; gap: 0 0.7rem; }
-  .sch-item-time { font-size: 0.6rem; }
+  .sch-item { grid-template-columns: 72px 18px 1fr; gap: 0 0.7rem; }
+  .sch-item-time { font-size: 0.72rem; }
+  .sch-item-name { font-size: 0.95rem; }
+  .sch-item-desc { font-size: 0.82rem; }
 }
 
 

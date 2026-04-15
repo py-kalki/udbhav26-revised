@@ -1420,6 +1420,30 @@ document.querySelectorAll('.nav-link').forEach(link => {
       }
     );
   });
+
+  // ── Scroll-driven glowing progress line ───────────────────────────
+  const progressLine = document.getElementById('schProgressLine');
+  const progressGlow = document.getElementById('schProgressGlow');
+  const timeline     = document.getElementById('schTimelineFull');
+
+  if (progressLine && progressGlow && timeline) {
+    ScrollTrigger.create({
+      trigger: timeline,
+      start: 'top 80%',
+      end: 'bottom 20%',
+      scrub: 0,
+      onUpdate: (self) => {
+        const pct = self.progress * 100;
+        progressLine.style.height = pct + '%';
+        progressGlow.style.top = pct + '%';
+        if (pct > 0.5 && !progressGlow.classList.contains('active')) {
+          progressGlow.classList.add('active');
+        } else if (pct <= 0.5 && progressGlow.classList.contains('active')) {
+          progressGlow.classList.remove('active');
+        }
+      }
+    });
+  }
 })();
 
 // ─────────────────────────────────────────────────────────────────
