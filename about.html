@@ -1,0 +1,1316 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="About UDBHAV'26 — A 24-hour national-level hackathon at Sage University, Indore. Organized by Alta School of Technology in collaboration with Sunstone." />
+  <title>About — UDBHAV'26</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,wght@0,400;0,700;1,400;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,900;1,300;1,400;1,500;1,600;1,900&family=Montserrat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="stylesheet" href="/mobile-perf.css" />
+
+  <style>
+    /* ── About Page — Supplemental Styles ──────────────────────────── */
+
+    /* ── HERO ─────────────────────────────────────────────────────── */
+    .ab-hero {
+      position: relative; z-index: 10;
+      min-height: 88vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 140px 2rem 80px;
+      overflow: hidden;
+    }
+
+    /* Animated radial glow behind hero text */
+    .ab-hero__glow {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse 70% 55% at 50% 60%,
+        rgba(168,85,247,0.1) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 50% 40%,
+        rgba(192,132,252,0.06) 0%, transparent 70%);
+      animation: ab-glow-pulse 6s ease-in-out infinite alternate;
+    }
+    @keyframes ab-glow-pulse {
+      from { opacity: 0.6; transform: scale(1); }
+      to   { opacity: 1;   transform: scale(1.08); }
+    }
+
+    .ab-hero__eyebrow {
+      position: relative; z-index: 1;
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      padding: 0.38rem 1rem; border-radius: 999px;
+      margin-bottom: 2.2rem;
+      opacity: 0; transform: translateY(20px);
+      animation: abFadeUp 0.7s 0.05s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .ab-hero__eyebrow svg { color: #a855f7; }
+
+    .ab-hero__title {
+      position: relative; z-index: 1;
+      font-family: 'Inter', sans-serif; font-weight: 900;
+      font-size: clamp(3.8rem, 12vw, 11rem);
+      line-height: 0.9; letter-spacing: -0.05em;
+      color: #fff; text-transform: uppercase;
+      margin-bottom: 1.8rem;
+      opacity: 0; transform: translateY(40px);
+      animation: abFadeUp 0.9s 0.15s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .ab-hero__title em {
+      font-style: italic; font-family: 'Fraunces', serif;
+      font-weight: 700; color: rgba(255,255,255,0.38);
+      font-size: 0.88em; display: block;
+    }
+
+    .ab-hero__sub {
+      position: relative; z-index: 1;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 400; color: rgba(255,255,255,0.45);
+      max-width: 560px; line-height: 1.7;
+      margin-bottom: 2.8rem;
+      opacity: 0; transform: translateY(30px);
+      animation: abFadeUp 0.85s 0.28s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .ab-hero__cta-row {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      opacity: 0; transform: translateY(20px);
+      animation: abFadeUp 0.8s 0.42s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .ab-hero__btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.9rem 2.2rem; border-radius: 999px;
+      font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 700;
+      text-decoration: none; letter-spacing: 0.01em;
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s;
+    }
+    .ab-hero__btn--primary {
+      background: #fff; color: #080808;
+      border: 2px solid #fff;
+    }
+    .ab-hero__btn--primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 45px rgba(255,255,255,0.2), 0 0 0 4px rgba(255,255,255,0.06);
+    }
+    .ab-hero__btn--ghost {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.7);
+    }
+    .ab-hero__btn--ghost:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(255,255,255,0.25);
+      color: #fff; transform: translateY(-2px);
+    }
+
+    /* Scroll indicator */
+    .ab-hero__scroll {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%); z-index: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      font-family: 'Inter', sans-serif; font-size: 0.6rem;
+      font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+      opacity: 0; animation: abFadeUp 0.8s 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .ab-hero__scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent);
+      animation: ab-scroll-line 2s ease-in-out infinite;
+    }
+    @keyframes ab-scroll-line {
+      0%, 100% { transform: scaleY(1); opacity: 1; }
+      50% { transform: scaleY(0.4); opacity: 0.3; }
+    }
+
+    /* ── STATS STRIP ──────────────────────────────────────────────── */
+    .ab-stats {
+      position: relative; z-index: 10;
+      padding: 0 clamp(1.5rem, 5vw, 6rem);
+      margin-bottom: 0;
+    }
+    .ab-stats__inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 24px;
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+    }
+    .ab-stat-item {
+      padding: 2.5rem 2rem; text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.07);
+      position: relative; overflow: hidden;
+      transition: background 0.3s;
+    }
+    .ab-stat-item:last-child { border-right: none; }
+    .ab-stat-item:hover { background: rgba(255,255,255,0.04); }
+    .ab-stat-item::before {
+      content: ''; position: absolute;
+      inset: 0; opacity: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%,
+        rgba(168,85,247,0.14) 0%, transparent 70%);
+      transition: opacity 0.4s;
+    }
+    .ab-stat-item:hover::before { opacity: 1; }
+    .ab-stat__num {
+      display: block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      line-height: 1;
+      color: #fff; margin-bottom: 0.4rem;
+      background: linear-gradient(135deg, #fff 40%, rgba(255,255,255,0.55) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .ab-stat__lbl {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+    @media (max-width: 768px) {
+      .ab-stats__inner { grid-template-columns: 1fr 1fr; }
+      .ab-stat-item:nth-child(2) { border-right: none; }
+      .ab-stat-item:nth-child(3) { border-top: 1px solid rgba(255,255,255,0.07); }
+      .ab-stat-item:nth-child(4) { border-top: 1px solid rgba(255,255,255,0.07); border-right: none; }
+    }
+    @media (max-width: 480px) {
+      .ab-stats__inner { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── STORY SECTION ────────────────────────────────────────────── */
+    .ab-story {
+      position: relative; z-index: 10;
+      padding: 8rem clamp(1.5rem, 5vw, 6rem);
+      max-width: 1400px; margin: 0 auto;
+    }
+
+    .ab-story__grid {
+      display: grid; grid-template-columns: 1fr 1.1fr;
+      gap: 7rem; align-items: start;
+    }
+
+    .ab-story__label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: #a855f7; margin-bottom: 1.2rem; display: block;
+    }
+
+    .ab-story__heading {
+      font-family: 'Inter', sans-serif; font-weight: 900;
+      font-size: clamp(2.2rem, 4.5vw, 4rem);
+      line-height: 1.05; letter-spacing: -0.04em;
+      color: #fff; margin-bottom: 2rem;
+    }
+    .ab-story__heading em {
+      font-style: italic; font-family: 'Fraunces', serif;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .ab-story__body {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(1rem, 1.4vw, 1.15rem);
+      font-weight: 300; line-height: 1.75;
+      color: rgba(255,255,255,0.65);
+    }
+    .ab-story__body + .ab-story__body { margin-top: 1.4rem; }
+    .ab-story__body strong { color: #fff; font-weight: 600; }
+
+    .ab-story__divider {
+      width: 60px; height: 1px;
+      background: linear-gradient(to right, rgba(168,85,247,0.7), transparent);
+      margin: 2.2rem 0;
+    }
+
+    .ab-story__right { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    /* Feature cards on the right */
+    .ab-feat-card {
+      padding: 1.8rem 2rem; border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.025);
+      display: grid; grid-template-columns: 42px 1fr; gap: 1.2rem;
+      align-items: start;
+      opacity: 0; transform: translateX(30px);
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .ab-feat-card.revealed {
+      animation: abSlideLeft 0.75s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .ab-feat-card:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.12);
+    }
+    .ab-feat-card__icon {
+      width: 42px; height: 42px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ab-feat-card__icon--green { background: rgba(168,85,247,0.14); }
+    .ab-feat-card__icon--purple{ background: rgba(168,85,247,0.12); }
+    .ab-feat-card__icon--blue  { background: rgba(59,130,246,0.12); }
+    .ab-feat-card__icon--orange{ background: rgba(249,115,22,0.12); }
+    .ab-feat-card__title {
+      font-family: 'Inter', sans-serif; font-weight: 700;
+      font-size: 0.95rem; color: #fff; margin-bottom: 0.35rem;
+    }
+    .ab-feat-card__desc {
+      font-family: 'Inter', sans-serif; font-weight: 400;
+      font-size: 0.82rem; color: rgba(255,255,255,0.42);
+      line-height: 1.55;
+    }
+
+    @media (max-width: 968px) {
+      .ab-story__grid { grid-template-columns: 1fr; gap: 4rem; }
+    }
+
+    /* ── ORGANISER SECTION ────────────────────────────────────────── */
+    .ab-org {
+      position: relative; z-index: 10;
+      padding: 5rem clamp(1.5rem, 5vw, 6rem) 8rem;
+      overflow: hidden;
+    }
+
+    /* Ethereal bg */
+    .ab-org__bg {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%,
+        rgba(168,85,247,0.06) 0%, transparent 70%);
+    }
+    .ab-org__bg-grid {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background-size: 55px 55px;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
+      -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
+    }
+
+    .ab-org__inner {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .ab-org__header {
+      text-align: center; margin-bottom: 5rem;
+    }
+    .ab-org__pre {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+    .ab-org__title {
+      font-family: 'Inter', sans-serif; font-weight: 900;
+      font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+      line-height: 1.05; letter-spacing: -0.04em; color: #fff;
+    }
+    .ab-org__title em {
+      font-style: italic; font-family: 'Fraunces', serif;
+      color: rgba(255,255,255,0.38);
+    }
+
+    .ab-org__cards {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    }
+
+    .ab-org-card {
+      padding: 2.5rem 2rem; border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.025);
+      display: flex; flex-direction: column; gap: 1.5rem;
+      position: relative; overflow: hidden;
+      opacity: 0; transform: translateY(30px);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .ab-org-card.revealed {
+      animation: abFadeUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .ab-org-card:hover {
+      background: rgba(255,255,255,0.045);
+      border-color: rgba(255,255,255,0.15);
+    }
+    /* subtle color accent top-border */
+    .ab-org-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      border-radius: 22px 22px 0 0;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .ab-org-card:hover::before { opacity: 1; }
+    .ab-org-card--enclope::before { background: linear-gradient(90deg, #a855f7, #c084fc); }
+    .ab-org-card--sage::before    { background: linear-gradient(90deg, #a855f7, #ec4899); }
+    .ab-org-card--sunstone::before{ background: linear-gradient(90deg, #f59e0b, #f97316); }
+
+    .ab-org-card__logo {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ab-org-card__logo--enclope { background: rgba(168,85,247,0.14); }
+    .ab-org-card__logo--sage    { background: rgba(168,85,247,0.12); }
+    .ab-org-card__logo--sunstone{ background: rgba(245,158,11,0.12); }
+
+    .ab-org-card__name {
+      font-family: 'Inter', sans-serif; font-weight: 800;
+      font-size: 1.05rem; color: #fff; margin-bottom: 0.35rem;
+    }
+    .ab-org-card__role {
+      font-family: 'Inter', sans-serif; font-weight: 500;
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); margin-bottom: 0.8rem;
+    }
+    .ab-org-card__desc {
+      font-family: 'Inter', sans-serif; font-size: 0.88rem;
+      font-weight: 300; line-height: 1.65;
+      color: rgba(255,255,255,0.5); flex: 1;
+    }
+
+    @media (max-width: 860px) {
+      .ab-org__cards { grid-template-columns: 1fr; }
+    }
+
+    /* ── VENUE / TIMELINE STRIP ───────────────────────────────────── */
+    .ab-venue {
+      position: relative; z-index: 10;
+      padding: 0 clamp(1.5rem, 5vw, 6rem) 8rem;
+    }
+    .ab-venue__inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+      align-items: center;
+    }
+
+    .ab-venue__label {
+      font-family: 'Inter', sans-serif; font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); margin-bottom: 1rem; display: block;
+    }
+    .ab-venue__heading {
+      font-family: 'Inter', sans-serif; font-weight: 900;
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      line-height: 1.1; letter-spacing: -0.04em; color: #fff;
+      margin-bottom: 1.6rem;
+    }
+    .ab-venue__heading em {
+      font-style: italic; font-family: 'Fraunces', serif;
+      color: rgba(255,255,255,0.4);
+    }
+    .ab-venue__body {
+      font-family: 'Inter', sans-serif; font-size: 0.95rem;
+      font-weight: 300; line-height: 1.75;
+      color: rgba(255,255,255,0.55); margin-bottom: 2rem;
+    }
+
+    .ab-venue__meta {
+      display: flex; flex-direction: column; gap: 0.9rem;
+    }
+    .ab-venue__row {
+      display: flex; align-items: center; gap: 0.85rem;
+      font-family: 'Inter', sans-serif; font-size: 0.88rem;
+      color: rgba(255,255,255,0.6);
+    }
+    .ab-venue__row svg { color: #a855f7; flex-shrink: 0; }
+
+    /* Right: visual card */
+    .ab-venue__card {
+      border-radius: 24px; border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.025);
+      padding: 2.5rem; min-height: 380px;
+      display: flex; flex-direction: column; gap: 2rem;
+      position: relative; overflow: hidden;
+    }
+    .ab-venue__card::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%,
+        rgba(168,85,247,0.1) 0%, transparent 70%);
+    }
+    .ab-venue__card-label {
+      position: relative; z-index: 1;
+      font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(255,255,255,0.25); margin-bottom: -1rem;
+    }
+    .ab-venue__date-giant {
+      position: relative; z-index: 1;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 9vw, 7rem);
+      line-height: 0.9; color: #fff;
+      background: linear-gradient(135deg, #fff 30%, rgba(255,255,255,0.4));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .ab-venue__tags {
+      position: relative; z-index: 1;
+      display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: auto;
+    }
+    .ab-venue__tag {
+      font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.04em;
+      padding: 0.38rem 0.9rem; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.55);
+      display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    .ab-venue__prize {
+      position: relative; z-index: 1;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem;
+      color: #a855f7; letter-spacing: 0.02em;
+    }
+    .ab-venue__prize span {
+      font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.18em; color: rgba(255,255,255,0.3);
+      text-transform: uppercase; align-self: flex-end; padding-bottom: 0.25rem;
+    }
+
+    @media (max-width: 860px) {
+      .ab-venue__inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
+    /* ── REGISTER CTA ─────────────────────────────────────────────── */
+    .ab-cta {
+      position: relative; z-index: 10;
+      padding: 4rem 2rem 6rem;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center;
+    }
+    .ab-cta::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 60% 55% at 50% 50%,
+        rgba(168,85,247,0.08) 0%, transparent 70%);
+    }
+    .ab-cta__eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: 'Inter', sans-serif; font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: #a855f7; border: 1px solid rgba(168,85,247,0.25);
+      background: rgba(168,85,247,0.07); padding: 0.35rem 0.9rem;
+      border-radius: 999px; margin-bottom: 1.8rem;
+    }
+    .ab-cta__heading {
+      font-family: 'Inter', sans-serif; font-size: clamp(2.4rem, 6vw, 5.5rem);
+      font-weight: 900; letter-spacing: -0.04em; color: #fff;
+      line-height: 1.0; margin-bottom: 1.2rem;
+    }
+    .ab-cta__heading em {
+      display: block; font-style: italic; font-family: 'Fraunces', serif;
+      color: rgba(255,255,255,0.38);
+    }
+    .ab-cta__sub {
+      font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 400;
+      color: rgba(255,255,255,0.38); line-height: 1.65;
+      max-width: 520px; margin-bottom: 2.5rem;
+    }
+    .ab-cta__btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700;
+      text-decoration: none; padding: 1rem 2.6rem; border-radius: 999px;
+      background: #fff; color: #080808;
+      border: 2px solid #fff; letter-spacing: 0.01em;
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s;
+    }
+    .ab-cta__btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 22px 55px rgba(255,255,255,0.2), 0 0 0 4px rgba(255,255,255,0.06);
+    }
+
+    /* ── KEYFRAMES ────────────────────────────────────────────────── */
+    @keyframes abFadeUp  { to { opacity: 1; transform: translateY(0); } }
+    @keyframes abSlideLeft { to { opacity: 1; transform: translateX(0); } }
+
+    /* Section divider */
+    .ab-divider {
+      position: relative; z-index: 10; height: 1px; max-width: 1200px;
+      margin: 0 auto;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .ab-hero { padding: 120px 1.5rem 60px; }
+      .ab-story { padding: 5rem 1.5rem; }
+      .ab-org { padding: 5rem 1.5rem 6rem; }
+      .ab-venue { padding: 0 1.5rem 6rem; }
+      .ab-cta { padding: 3rem 1.5rem 5rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Custom cursor ────────────────────────────────────────────────────── -->
+  <div class="cursor-arrow" id="cursorArrow" aria-hidden="true"></div>
+
+  <!-- ── Three.js dissolve overlay (fixed, above body bg) ─────────────────── -->
+  <div class="canvas1" id="canvas1"></div>
+
+  <!-- ── Grain / noise texture overlay ────────────────────────────────────── -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- ── Cursor radial glow ────────────────────────────────────────────────── -->
+  <div class="mouse-glow" id="mouseGlow" aria-hidden="true"></div>
+
+  <!-- ── Navbar ─────────────────────────────────────────────────────────────── -->
+  <nav class="navbar" id="navbar">
+
+    <!-- Left: Logo group only -->
+    <div class="nav-logo">
+      <img src="/logo.png" alt="Vedansh logo" class="nav-logo-img" id="logoImg" />
+      <div class="logo-divider" aria-hidden="true"></div>
+      <span class="tagline-dot" aria-hidden="true"></span>
+      <div class="logo-tagline">
+        <span class="tagline-role">Creative engineer</span>
+        <span class="tagline-motto">building the future</span>
+      </div>
+    </div>
+
+    <!-- Right: pill + standalone menu button -->
+    <div class="nav-right">
+
+      <!-- Floating pill — links + moon + book a call -->
+      <div class="nav-pill" id="navPill">
+
+        <ul class="nav-links" role="navigation" aria-label="Main navigation">
+          <li><a href="/" class="nav-link" id="nav-home"><span class="link-text" data-text="Home">Home</span></a></li>
+          <li><a href="/about.html" class="nav-link active" id="nav-about"><span class="link-text" data-text="About">About</span></a></li>
+          <li><a href="/schedule.html" class="nav-link" id="nav-work"><span class="link-text" data-text="Schedule">Schedule</span></a></li>
+          <li><a href="/problem-statement.html" class="nav-link" id="nav-blogs"><span class="link-text" data-text="Problem Statement">Problem Statement</span></a></li>
+          <li class="nav-more-wrap" id="navMoreWrap">
+            <a href="#" class="nav-link nav-more" id="nav-more"
+               role="button" aria-haspopup="menu" aria-expanded="false">
+              <span class="link-text" data-text="More">More</span>
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <div class="more-dropdown" id="moreDropdown" role="menu">
+              <div class="md-grid">
+                <a href="/winners.html" class="md-feature" role="menuitem" tabindex="-1">
+                  <div class="md-feature__bg-icon" aria-hidden="true">
+                    <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg>
+                  </div>
+                  <span class="md-feature__title">Winner</span>
+                  <span class="md-feature__desc">Hackathon winners &amp; achievements</span>
+                </a>
+                <div class="md-items">
+                  <a href="/code-of-conduct.html" class="md-item" role="menuitem" tabindex="-1">
+                    <div class="md-item__icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    </div>
+                    <div class="md-item__body">
+                      <span class="md-item__title">Code of Conduct</span>
+                      <span class="md-item__desc">Rules &amp; Guidelines</span>
+                    </div>
+                  </a>
+                  <a href="/our-team.html" class="md-item" role="menuitem" tabindex="-1">
+                    <div class="md-item__icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    </div>
+                    <div class="md-item__body">
+                      <span class="md-item__title">Our Team</span>
+                      <span class="md-item__desc">Meet the builders</span>
+                    </div>
+                  </a>
+                  <a href="/sponsors.html" class="md-item" role="menuitem" tabindex="-1">
+                    <div class="md-item__icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="15.5" r="2.5"/><path d="M8 17V5l12-2v12"/></svg>
+                    </div>
+                    <div class="md-item__body">
+                      <span class="md-item__title">Sponsors</span>
+                      <span class="md-item__desc">Our partners &amp; supporters</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Separator -->
+        <div class="nav-pill-sep" aria-hidden="true"></div>
+
+        <!-- Register button -->
+        <a href="/register.html" class="btn-cta" id="bookCallBtn">Register</a>
+
+      </div>
+
+      <!-- Standalone circle menu button (outside the pill) -->
+      <button class="nav-menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+        <svg class="menu-toggle-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor"
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+             width="18" height="18" aria-hidden="true">
+          <path class="mti-path1" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"/>
+          <path d="M7 16 27 16"/>
+        </svg>
+      </button>
+
+    </div>
+
+    <!-- Mobile-only navbar pill (hidden on desktop) -->
+    <div class="mobile-nav-pill" id="mobileNavPill">
+      <a href="/" class="mobile-nav-logo" aria-label="UDBHAV'26 Home">
+        <img src="/logo.png" alt="UDBHAV'26" class="mobile-logo-img" />
+      </a>
+      <div class="mobile-nav-right">
+        <a href="/register.html" class="mobile-nav-cta" id="mobileRegisterBtn">Register</a>
+        <button class="mobile-hamburger" id="mobileMenuBtn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenuDrawer">
+          <span class="mhb-line"></span>
+          <span class="mhb-line"></span>
+          <span class="mhb-line"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile navigation drawer -->
+    <div class="mobile-menu-drawer" id="mobileMenuDrawer" aria-hidden="true">
+      <nav class="mmd-nav" aria-label="Mobile navigation">
+        <a href="/" class="mmd-link">
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+          <span class="mmd-link-text">Home</span>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="/about.html" class="mmd-link mmd-link--active">
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+          <span class="mmd-link-text">About</span>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="/schedule.html" class="mmd-link">
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+          <span class="mmd-link-text">Schedule</span>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="/problem-statement.html" class="mmd-link">
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+          <span class="mmd-link-text">Problem Statement</span>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="/winners.html" class="mmd-link">
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></span>
+          <span class="mmd-link-text">Winners</span>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="/code-of-conduct.html" class="mmd-link">
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>
+          <span class="mmd-link-text">Code of Conduct</span>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="/our-team.html" class="mmd-link">
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <span class="mmd-link-text">Our Team</span>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="/sponsors.html" class="mmd-link">
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="15.5" r="2.5"/><path d="M8 17V5l12-2v12"/></svg></span>
+          <span class="mmd-link-text">Sponsors</span>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </nav>
+      <div class="mmd-footer">
+        <a href="/register.html" class="mmd-cta-btn">Register Now →</a>
+      </div>
+    </div>
+
+  </nav>
+
+  <!-- Mobile nav hamburger controller -->
+  <script>
+    (function() {
+      var btn = document.getElementById('mobileMenuBtn');
+      var drawer = document.getElementById('mobileMenuDrawer');
+      var pill = document.getElementById('mobileNavPill');
+      if (!btn || !drawer) return;
+      function openMenu() { btn.classList.add('is-open'); btn.setAttribute('aria-expanded','true'); drawer.classList.add('is-open'); drawer.setAttribute('aria-hidden','false'); document.body.classList.add('mobile-menu-open'); }
+      function closeMenu() { btn.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); drawer.classList.remove('is-open'); drawer.setAttribute('aria-hidden','true'); document.body.classList.remove('mobile-menu-open'); }
+      btn.addEventListener('click', function() { drawer.classList.contains('is-open') ? closeMenu() : openMenu(); });
+      drawer.querySelectorAll('.mmd-link').forEach(function(l) { l.addEventListener('click', closeMenu); });
+      window.addEventListener('resize', function() { if (window.innerWidth > 768) closeMenu(); });
+      if (pill) { pill.addEventListener('click', function(e) { if (e.target.closest('a, button')) return; window.location.href = '/'; }); }
+    })();
+  </script>
+
+  <!-- ── Action Search Overlay (opened by menu button) ─────────────────────── -->
+  <div id="menuOverlay" class="menu-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="menu-overlay__panel">
+      <p class="action-search__label">Search Commands</p>
+      <div class="action-search__input-wrap">
+        <input type="text" id="actionSearchInput" class="action-search__input"
+               placeholder="What's up?" autocomplete="off" spellcheck="false" aria-label="Search commands" />
+        <div class="action-search__icon" id="actionSearchIcon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </div>
+      </div>
+      <div class="action-search__results" id="actionSearchResults" role="listbox"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       MAIN CONTENT — About UDBHAV'26
+       ══════════════════════════════════════════════════════════════════ -->
+  <main>
+
+    <!-- ── HERO ──────────────────────────────────────────────────────── -->
+    <section class="ab-hero" aria-labelledby="abHeroHeading">
+      <div class="ab-hero__glow" aria-hidden="true"></div>
+
+      <p class="ab-hero__eyebrow">
+        <svg width="7" height="7" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><circle cx="4" cy="4" r="4"/></svg>
+        ALTA SCHOOL OF TECHNOLOGY &nbsp;·&nbsp; SAGE UNIVERSITY INDORE
+      </p>
+
+      <h1 class="ab-hero__title" id="abHeroHeading">
+        About<br><em>UDBHAV'26</em>
+      </h1>
+
+      <p class="ab-hero__sub">
+        A national-level 24-hour hackathon where 50 shortlisted teams collide with 10 real-world problem statements. One event. One winner. Zero excuses.
+      </p>
+
+      <div class="ab-hero__cta-row">
+        <a href="/register.html" class="ab-hero__btn ab-hero__btn--primary" id="abHeroCta">Register Now</a>
+        <a href="/schedule.html" class="ab-hero__btn ab-hero__btn--ghost" id="abHeroSchedule">View Schedule</a>
+      </div>
+
+      <div class="ab-hero__scroll" aria-hidden="true">
+        <div class="ab-hero__scroll-line"></div>
+        <span>Scroll</span>
+      </div>
+    </section>
+
+    <!-- ── STATS STRIP ─────────────────────────────────────────────── -->
+    <div class="ab-stats js-reveal-section" aria-label="Event statistics">
+      <div class="ab-stats__inner">
+        <div class="ab-stat-item js-scroll-reveal" data-anim="up">
+          <span class="ab-stat__num" id="stat1">50</span>
+          <span class="ab-stat__lbl">Teams</span>
+        </div>
+        <div class="ab-stat-item js-scroll-reveal" data-anim="up" style="animation-delay: 0.08s">
+          <span class="ab-stat__num">200+</span>
+          <span class="ab-stat__lbl">Participants</span>
+        </div>
+        <div class="ab-stat-item js-scroll-reveal" data-anim="up" style="animation-delay: 0.16s">
+          <span class="ab-stat__num">24H</span>
+          <span class="ab-stat__lbl">Non-Stop</span>
+        </div>
+        <div class="ab-stat-item js-scroll-reveal" data-anim="up" style="animation-delay: 0.24s">
+          <span class="ab-stat__num">₹45K</span>
+          <span class="ab-stat__lbl">Prize Pool</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STORY SECTION ───────────────────────────────────────────── -->
+    <section class="ab-story" aria-label="Our story">
+      <div class="ab-story__grid">
+
+        <!-- Left: narrative -->
+        <div>
+          <span class="ab-story__label">THE STORY</span>
+          <h2 class="ab-story__heading">
+            Where <em>ideas</em><br>become products
+          </h2>
+          <p class="ab-story__body">
+            UDBHAV'26 was born from a simple belief — <strong>students deserve more than textbook problems.</strong> They deserve the pressure of real deadlines, real stakeholders, and real consequences. This hackathon strips away everything comfortable and asks one question: can you build something that matters in 24 hours?
+          </p>
+          <div class="ab-story__divider"></div>
+          <p class="ab-story__body">
+            Organized by <strong>Enclope (Alta School of Technology)</strong> in collaboration with <strong>Sunstone</strong>, and hosted at <strong>Sage University, Indore</strong>, UDBHAV'26 brings together the brightest minds across colleges and disciplines. 50 teams. 10 domains. 15 minutes to lock in your battlefield.
+          </p>
+        </div>
+
+        <!-- Right: feature cards -->
+        <div class="ab-story__right">
+          <div class="ab-feat-card js-scroll-reveal" data-anim="right">
+            <div class="ab-feat-card__icon ab-feat-card__icon--green">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#a855f7"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+            </div>
+            <div>
+              <div class="ab-feat-card__title">High-Intensity Format</div>
+              <div class="ab-feat-card__desc">24 hours of continuous building across 4 structured phases — from PS drop to grand finale.</div>
+            </div>
+          </div>
+          <div class="ab-feat-card js-scroll-reveal" data-anim="right" style="animation-delay: 0.1s">
+            <div class="ab-feat-card__icon ab-feat-card__icon--purple">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#a855f7"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <div>
+              <div class="ab-feat-card__title">15-Minute PS Drop</div>
+              <div class="ab-feat-card__desc">10 problem statements release simultaneously. Teams have 15 minutes to pick their battlefield — no going back.</div>
+            </div>
+          </div>
+          <div class="ab-feat-card js-scroll-reveal" data-anim="right" style="animation-delay: 0.2s">
+            <div class="ab-feat-card__icon ab-feat-card__icon--blue">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#3b82f6"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+            </div>
+            <div>
+              <div class="ab-feat-card__title">Expert Mentorship</div>
+              <div class="ab-feat-card__desc">Industry mentors and judges providing real-time guidance, direction pivots, and strategic feedback.</div>
+            </div>
+          </div>
+          <div class="ab-feat-card js-scroll-reveal" data-anim="right" style="animation-delay: 0.3s">
+            <div class="ab-feat-card__icon ab-feat-card__icon--orange">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#f97316"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+            </div>
+            <div>
+              <div class="ab-feat-card__title">₹45,000 Prize Pool</div>
+              <div class="ab-feat-card__desc">Significant rewards for the winners, runners-up, and domain-specific recognitions.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="ab-divider"></div>
+
+    <!-- ── ORGANISER SECTION ───────────────────────────────────────── -->
+    <section class="ab-org" aria-label="Organisers">
+      <div class="ab-org__bg" aria-hidden="true"></div>
+      <div class="ab-org__bg-grid" aria-hidden="true"></div>
+
+      <div class="ab-org__inner">
+        <div class="ab-org__header">
+          <p class="ab-org__pre">
+            <svg width="7" height="7" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><circle cx="4" cy="4" r="4"/></svg>
+            THE TEAM BEHIND IT
+          </p>
+          <h2 class="ab-org__title">Meet the <em>Organisers</em></h2>
+        </div>
+
+        <div class="ab-org__cards">
+
+          <!-- Card 1 — Enclope -->
+          <div class="ab-org-card ab-org-card--enclope js-scroll-reveal" data-anim="up">
+            <div class="ab-org-card__logo ab-org-card__logo--enclope">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#a855f7"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg>
+            </div>
+            <div>
+              <div class="ab-org-card__name">Enclope</div>
+              <div class="ab-org-card__role">Primary Organiser</div>
+              <p class="ab-org-card__desc">
+                The student-driven tech community at Alta School of Technology. Enclope fosters innovation through hackathons, workshops, and industry exposure — empowering the next generation of builders.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 2 — Sage University -->
+          <div class="ab-org-card ab-org-card--sage js-scroll-reveal" data-anim="up" style="animation-delay: 0.12s">
+            <div class="ab-org-card__logo ab-org-card__logo--sage">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#a855f7"><path d="M3 22V12"/><path d="M21 22V12"/><path d="M12 22V12"/><path d="M2 12h20"/><path d="m12 2-9 10h18z"/><path d="M7 12v10"/><path d="M17 12v10"/></svg>
+            </div>
+            <div>
+              <div class="ab-org-card__name">Sage University</div>
+              <div class="ab-org-card__role">Host Venue · Indore</div>
+              <p class="ab-org-card__desc">
+                One of Madhya Pradesh's premier universities, Sage University provides world-class infrastructure, high-speed internet, and dedicated hacking spaces — the perfect battleground for 200+ innovators.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 3 — Sunstone -->
+          <div class="ab-org-card ab-org-card--sunstone js-scroll-reveal" data-anim="up" style="animation-delay: 0.24s">
+            <div class="ab-org-card__logo ab-org-card__logo--sunstone">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#f59e0b"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+            </div>
+            <div>
+              <div class="ab-org-card__name">Sunstone</div>
+              <div class="ab-org-card__role">Collaboration Partner</div>
+              <p class="ab-org-card__desc">
+                India's leading higher education company, Sunstone bridges the gap between academia and industry — bringing mentors, opportunities, and real career pathways for every participant at UDBHAV'26.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <div class="ab-divider" style="max-width: 1200px; margin: 0 auto;"></div>
+
+    <!-- ── VENUE & DATE SECTION ────────────────────────────────────── -->
+    <section class="ab-venue" aria-label="Venue and date">
+      <div class="ab-venue__inner">
+
+        <!-- Left: text info -->
+        <div>
+          <span class="ab-venue__label">LOCATION &amp; TIMING</span>
+          <h2 class="ab-venue__heading">
+            Where it all<br><em>goes down.</em>
+          </h2>
+          <p class="ab-venue__body">
+            Sage University, Indore hosts UDBHAV'26 on <strong>25–26 April 2026</strong>. Over 24 hours, 50 teams will push the limits of what's buildable — fuelled by full on-site support, mentors, and a competitive prize pool.
+          </p>
+          <div class="ab-venue__meta">
+            <div class="ab-venue__row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>Sage University, Indore, Madhya Pradesh</span>
+            </div>
+            <div class="ab-venue__row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span>25–26 April 2026 · 24-hour non-stop</span>
+            </div>
+            <div class="ab-venue__row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Applications close 18 April 2026</span>
+            </div>
+            <div class="ab-venue__row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span>Team size: 2–4 members per team</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: visual card -->
+        <div class="ab-venue__card js-scroll-reveal" data-anim="up">
+          <span class="ab-venue__card-label">Event Date</span>
+          <div class="ab-venue__date-giant">25–26<br>APR '26</div>
+          <div class="ab-venue__prize">
+            ₹45,000
+            <span>Prize Pool</span>
+          </div>
+          <div class="ab-venue__tags">
+            <span class="ab-venue__tag">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 22V12"/><path d="M21 22V12"/><path d="M12 22V12"/><path d="M2 12h20"/><path d="m12 2-9 10h18z"/></svg>
+              Sage University
+            </span>
+            <span class="ab-venue__tag">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              24H Non-Stop
+            </span>
+            <span class="ab-venue__tag">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+              Food Provided
+            </span>
+            <span class="ab-venue__tag">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+              WiFi Included
+            </span>
+            <span class="ab-venue__tag">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Mentors
+            </span>
+            <span class="ab-venue__tag">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+              Prizes
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         CINEMATIC FOOTER — Same as home page
+         ══════════════════════════════════════════════════════════════════ -->
+    <div class="cf-wrapper" id="cinematicFooterWrapper">
+
+      <footer class="cf-footer" id="cinematicFooter" aria-label="Site footer">
+
+        <!-- Ambient aurora glow -->
+        <div class="cf-aurora" aria-hidden="true"></div>
+
+        <!-- Subtle grid background -->
+        <div class="cf-grid-bg" aria-hidden="true"></div>
+
+        <!-- Giant background text -->
+        <div class="cf-giant-text" id="cfGiantText" aria-hidden="true">UDBHAV'26</div>
+
+        <!-- ── 1. Diagonal Marquee (top of footer) ── -->
+        <div class="cf-marquee-wrap" aria-hidden="true">
+          <div class="cf-marquee-track">
+            <!-- Two copies for seamless loop -->
+            <div class="cf-marquee-item">
+              <span>Creative Engineer</span> <span class="cf-star">✦</span>
+              <span>Full Stack Dev</span> <span class="cf-star cf-star--sec">✦</span>
+              <span>UI / UX Design</span> <span class="cf-star">✦</span>
+              <span>Open to Work</span> <span class="cf-star cf-star--sec">✦</span>
+              <span>Based in India</span> <span class="cf-star">✦</span>
+            </div>
+            <div class="cf-marquee-item" aria-hidden="true">
+              <span>Creative Engineer</span> <span class="cf-star">✦</span>
+              <span>Full Stack Dev</span> <span class="cf-star cf-star--sec">✦</span>
+              <span>UI / UX Design</span> <span class="cf-star">✦</span>
+              <span>Open to Work</span> <span class="cf-star cf-star--sec">✦</span>
+              <span>Based in India</span> <span class="cf-star">✦</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 2. Main Centre Content ── -->
+        <div class="cf-center" id="cfCenter">
+
+          <h2 class="cf-heading" id="cfHeading">Ready to begin?</h2>
+
+          <div class="cf-links" id="cfLinks">
+
+            <!-- Single Register CTA -->
+            <div class="cf-primary-pills">
+              <a href="/register.html"
+                 class="cf-pill cf-pill--primary js-magnetic"
+                 id="cfBtnRegister">Register</a>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── 3. Bottom Bar ── -->
+        <div class="cf-bottom-bar">
+
+          <!-- Copyright -->
+          <p class="cf-copyright">© 2026 UDBHAV'26. All rights reserved.</p>
+
+          <!-- Crafted-with badge -->
+          <div class="cf-badge">
+            <span class="cf-badge-text">Crafted with</span>
+            <span class="cf-heart" aria-hidden="true">❤</span>
+            <span class="cf-badge-text">by</span>
+            <span class="cf-badge-name">UDBHAV'26</span>
+          </div>
+
+          <!-- Back to top -->
+          <button class="cf-pill cf-pill--icon js-magnetic" id="cfBackToTop" aria-label="Back to top">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
+                 stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+            </svg>
+          </button>
+
+        </div>
+
+      </footer>
+    </div><!-- /cf-wrapper -->
+
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
+  <script src="/mobile-perf.js" defer></script>
+
+  <!-- Extra page-level JS: scroll reveals + cinematic footer + navbar -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ── Lenis smooth scroll ────────────────────────────────────────
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true, smoothTouch: false,
+    });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+
+    // ── Custom cursor ──────────────────────────────────────────────
+    const cursor = document.getElementById('cursorArrow');
+    if (cursor) {
+      document.addEventListener('mousemove', e => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top  = e.clientY + 'px';
+      });
+      document.querySelectorAll('a, button, [role="button"], .js-magnetic').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('is-hovering'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('is-hovering'));
+      });
+      document.addEventListener('mouseleave', () => cursor.style.opacity = '0');
+      document.addEventListener('mouseenter', () => cursor.style.opacity = '1');
+    }
+
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+
+      // ── Scroll-reveal generic ──────────────────────────────────
+      document.querySelectorAll('.js-scroll-reveal').forEach(el => {
+        ScrollTrigger.create({
+          trigger: el, start: 'top 88%',
+          onEnter: () => el.classList.add('revealed'),
+          once: true,
+        });
+      });
+
+      // ── Cinematic footer ───────────────────────────────────────
+      const wrapper  = document.getElementById('cinematicFooterWrapper');
+      const giantTxt = document.getElementById('cfGiantText');
+      const center   = document.getElementById('cfCenter');
+
+      if (wrapper && giantTxt && center) {
+        gsap.fromTo(giantTxt,
+          { y: '15vh', scale: 0.85, opacity: 0 },
+          { y: '0vh', scale: 1, opacity: 1, ease: 'power1.out',
+            scrollTrigger: { trigger: wrapper, start: 'top bottom', end: 'top 0%', scrub: 1.5 } }
+        );
+        gsap.fromTo(center,
+          { y: 70, opacity: 0 },
+          { y: 0, opacity: 1, ease: 'power3.out',
+            scrollTrigger: { trigger: wrapper, start: 'top 60%', end: 'top -20%', scrub: 1 } }
+        );
+      }
+
+      // Back to top
+      const backToTopBtn = document.getElementById('cfBackToTop');
+      if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => lenis.scrollTo(0, { duration: 1.2 }));
+      }
+
+      // Magnetic pills
+      document.querySelectorAll('#cinematicFooter .js-magnetic').forEach(el => {
+        el.addEventListener('mousemove', e => {
+          const r = el.getBoundingClientRect();
+          const x = e.clientX - r.left - r.width / 2;
+          const y = e.clientY - r.top  - r.height / 2;
+          gsap.to(el, { x: x * 0.38, y: y * 0.38, rotationX: -y * 0.14, rotationY: x * 0.14,
+            scale: 1.06, ease: 'power2.out', duration: 0.4, overwrite: 'auto' });
+        });
+        el.addEventListener('mouseleave', () => {
+          gsap.to(el, { x: 0, y: 0, rotationX: 0, rotationY: 0, scale: 1,
+            ease: 'elastic.out(1,0.3)', duration: 1.2, overwrite: 'auto' });
+        });
+      });
+
+      // ── Navbar scroll transform ────────────────────────────────
+      const navPill    = document.getElementById('navPill');
+      const navbar     = document.getElementById('navbar');
+      const navDivider = document.querySelector('.logo-divider');
+      const taglineDot = document.querySelector('.tagline-dot');
+      const logoTagline= document.querySelector('.logo-tagline');
+      if (navbar && navPill && window.innerWidth > 768) {
+        const wipeEls = [logoTagline, taglineDot, navDivider].filter(Boolean);
+        gsap.set(wipeEls, { clipPath: 'inset(0 0% 0 0 round 2px)' });
+        let transformed = false;
+        function transformIn() {
+          if (transformed) return; transformed = true;
+          gsap.to(wipeEls, { clipPath: 'inset(0 100% 0 0 round 2px)', duration: 0.22, ease: 'power3.in', stagger: { each: 0.06, from: 'start' } });
+          const navRect  = navbar.getBoundingClientRect();
+          const pillRect = navPill.getBoundingClientRect();
+          const targetX  = (navRect.left + navRect.width / 2) - (pillRect.left + pillRect.width / 2);
+          gsap.to(navPill, { x: targetX, duration: 0.7, ease: 'power3.out', delay: 0.1 });
+        }
+        function transformOut() {
+          if (!transformed) return; transformed = false;
+          gsap.to(navPill, { x: 0, duration: 0.6, ease: 'power3.inOut' });
+          gsap.to(wipeEls, { clipPath: 'inset(0 0% 0 0 round 2px)', duration: 0.3, ease: 'power2.out', stagger: { each: 0.07, from: 'end' }, delay: 0.25 });
+        }
+        ScrollTrigger.create({ trigger: document.body, start: 'top top-=80', onEnter: transformIn, onLeaveBack: transformOut });
+      }
+    }
+
+    // ── More dropdown ──────────────────────────────────────────────
+    (function initMoreDropdown() {
+      const trigger  = document.getElementById('nav-more');
+      const dropdown = document.getElementById('moreDropdown');
+      const wrap     = document.getElementById('navMoreWrap');
+      if (!trigger || !dropdown) return;
+      let closeTimer = null;
+      function openDropdown() { clearTimeout(closeTimer); dropdown.classList.remove('closing'); dropdown.classList.add('open'); trigger.setAttribute('aria-expanded', 'true'); }
+      function closeDropdown() { if (!dropdown.classList.contains('open')) return; dropdown.classList.add('closing'); trigger.setAttribute('aria-expanded', 'false'); closeTimer = setTimeout(() => dropdown.classList.remove('open', 'closing'), 160); }
+      trigger.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); dropdown.classList.contains('open') ? closeDropdown() : openDropdown(); });
+      document.addEventListener('click', e => { if (wrap && !wrap.contains(e.target)) closeDropdown(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && dropdown.classList.contains('open')) { closeDropdown(); trigger.focus(); } });
+    })();
+
+    // ── Menu overlay ───────────────────────────────────────────────
+    (function initMenuOverlay() {
+      const btn     = document.getElementById('menuBtn');
+      const overlay = document.getElementById('menuOverlay');
+      const input   = document.getElementById('actionSearchInput');
+      const results = document.getElementById('actionSearchResults');
+      const iconEl  = document.getElementById('actionSearchIcon');
+      const svg     = btn?.querySelector('.menu-toggle-icon');
+      if (!btn || !overlay) return;
+
+      const ACTIONS = [
+        { id:'1', label:'Home',              icon:'home',      description:'Back to start',          end:'Page', href:'/',              color:'#60a5fa', external:false },
+        { id:'2', label:'About',             icon:'user',      description:'About UDBHAV\'26',        end:'Page', href:'/about.html',    color:'#fb923c', external:false },
+        { id:'3', label:'Schedule',          icon:'calendar',  description:'Event timeline',          end:'Page', href:'/schedule.html',     color:'#a78bfa', external:false },
+        { id:'4', label:'Problem Statement', icon:'file',      description:'Domain challenges',       end:'Page', href:'/problem-statement.html',     color:'#34d399', external:false },
+        { id:'5', label:'Register',          icon:'briefcase', description:'Join UDBHAV\'26',         end:'Page', href:'/register.html', color:'#4ade80', external:false },
+      ];
+      const SVGS = {
+        home:      c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+        user:      c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+        calendar:  c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+        file:      c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
+        briefcase: c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
+      };
+      const ICON_SEARCH = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
+
+      function renderActions(list, query) {
+        if (!results) return;
+        if (!list.length) { results.innerHTML = `<div class="action-search__empty">No results for "<em>${query}</em>"</div>`; return; }
+        results.innerHTML = `<ul class="action-search__list">${list.map(a => `
+          <li class="action-item" data-href="${a.href}" data-ext="${a.external}">
+            <div class="action-item__left">
+              <div class="action-item__icon">${SVGS[a.icon]?.(a.color) ?? ''}</div>
+              <div><div class="action-item__name">${a.label}</div><div class="action-item__desc">${a.description}</div></div>
+            </div>
+            <div class="action-item__right"><span class="action-item__end">${a.end}</span></div>
+          </li>`).join('')}</ul>
+          <div class="action-search__footer"><span>Press ⌘K to open</span><span>ESC to close</span></div>`;
+        results.querySelectorAll('.action-item').forEach(item => {
+          item.addEventListener('click', () => {
+            closeOverlay();
+            if (item.dataset.ext === 'true') window.open(item.dataset.href, '_blank', 'noopener');
+            else window.location.href = item.dataset.href;
+          });
+        });
+      }
+      function filterAndRender(query) {
+        const q = query.toLowerCase().trim();
+        renderActions(q ? ACTIONS.filter(a => a.label.toLowerCase().includes(q) || a.description.toLowerCase().includes(q)) : ACTIONS, query);
+      }
+      function openOverlay() {
+        overlay.classList.add('open'); overlay.removeAttribute('aria-hidden');
+        btn.setAttribute('aria-expanded','true'); svg?.classList.add('open');
+        if (iconEl) iconEl.innerHTML = ICON_SEARCH;
+        filterAndRender(''); setTimeout(() => input?.focus(), 250);
+      }
+      function closeOverlay() {
+        overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true');
+        btn.setAttribute('aria-expanded','false'); svg?.classList.remove('open');
+        if (input) input.value = '';
+        if (results) results.innerHTML = '';
+      }
+      btn.addEventListener('click', () => overlay.classList.contains('open') ? closeOverlay() : openOverlay());
+      document.getElementById('menuBtnMobile')?.addEventListener('click', () => overlay.classList.contains('open') ? closeOverlay() : openOverlay());
+      input?.addEventListener('input', () => filterAndRender(input.value));
+      document.addEventListener('click', e => {
+        if (overlay.classList.contains('open') && !overlay.contains(e.target) && !btn.contains(e.target)) closeOverlay();
+      });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && overlay.classList.contains('open')) { closeOverlay(); return; }
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); overlay.classList.contains('open') ? closeOverlay() : openOverlay(); }
+      });
+    })();
+
+  })();
+  </script>
+
+</body>
+
+</html>
