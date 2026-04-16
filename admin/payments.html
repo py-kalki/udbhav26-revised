@@ -580,13 +580,13 @@
 
   <script>
     // ── Helpers ───────────────────────────────────────────────────────────────
+    // ── Auth (reads same key as AdminAuth in src/admin.js) ──────────────────
     function getAdminToken() {
-      return sessionStorage.getItem('adminSecret')
-        || sessionStorage.getItem('adminToken')
-        || localStorage.getItem('adminSecret')
-        || localStorage.getItem('adminToken')
-        || '';
+      return localStorage.getItem('udbhav_admin_token') || '';
     }
+
+    // Auth guard
+    if (!getAdminToken()) { window.location.href = '/admin/login.html'; }
 
     function apiHeaders() {
       return { 'Content-Type': 'application/json', 'x-admin-secret': getAdminToken() };
@@ -643,9 +643,8 @@
       sidebarOverlay.classList.remove('is-visible');
     });
     document.getElementById('logoutBtn')?.addEventListener('click', () => {
-      sessionStorage.clear();
-      localStorage.removeItem('adminSecret');
-      localStorage.removeItem('adminToken');
+      localStorage.removeItem('udbhav_admin_token');
+      localStorage.removeItem('udbhav_admin_time');
       window.location.href = '/admin/login.html';
     });
 
