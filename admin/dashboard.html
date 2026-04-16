@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -815,9 +815,6 @@
     if (!AdminAuth.isAuthenticated()) {
       window.location.href = '/admin/login.html';
     }
-
-    // Seed demo data if empty
-    seedRegistrations(50);
 
     // Sidebar
     AdminUI.initSidebar();
