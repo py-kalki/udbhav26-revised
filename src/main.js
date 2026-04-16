@@ -1656,3 +1656,45 @@ document.querySelectorAll('.nav-link').forEach(link => {
     );
   });
 })();
+
+// ─────────────────────────────────────────────────────────────────
+// HERO — Countdown Timer (counts to 25 Apr 2026 11:00 AM IST)
+// IST = UTC+5:30  →  target UTC = 2026-04-25T05:30:00Z
+// When event is live / elapsed: shows "LIVE 🚀" in all digits.
+// ─────────────────────────────────────────────────────────────────
+(function initCountdown() {
+  const TARGET   = new Date('2026-04-25T05:30:00Z'); // 11:00 AM IST
+  const daysEl   = document.getElementById('hcdDays');
+  const hoursEl  = document.getElementById('hcdHours');
+  const minsEl   = document.getElementById('hcdMins');
+  const secsEl   = document.getElementById('hcdSecs');
+  const timerEl  = document.getElementById('hcdTimer');
+  if (!daysEl) return;
+
+  function pad(n) { return String(Math.floor(n)).padStart(2, '0'); }
+
+  function tick() {
+    const diff = TARGET - Date.now();
+    if (diff <= 0) {
+      // Event is live / over
+      daysEl.textContent = hoursEl.textContent = minsEl.textContent = secsEl.textContent = '00';
+      timerEl?.classList.add('is-live');
+      return; // stop ticking
+    }
+
+    const totalSecs = Math.floor(diff / 1000);
+    const days  = Math.floor(totalSecs / 86400);
+    const hours = Math.floor((totalSecs % 86400) / 3600);
+    const mins  = Math.floor((totalSecs % 3600)  / 60);
+    const secs  = totalSecs % 60;
+
+    daysEl.textContent  = pad(days);
+    hoursEl.textContent = pad(hours);
+    minsEl.textContent  = pad(mins);
+    secsEl.textContent  = pad(secs);
+
+    setTimeout(tick, 1000);
+  }
+
+  tick();
+})();

@@ -316,6 +316,19 @@
         <p class="subtitle-sans">50 TEAMS. 10 PROBLEMS. 24 HOURS. ONE WINNER.</p>
         <p class="subtitle-serif"><em>24-HOUR HACKATHON.</em></p>
       </div>
+      <!-- Countdown timer + register CTA -->
+      <div class="hero-countdown-wrap" id="heroCountdownWrap">
+        <div class="hcd-timer" id="hcdTimer">
+          <div class="hcd-unit"><span class="hcd-val" id="hcdDays">--</span><span class="hcd-lbl">Days</span></div>
+          <span class="hcd-sep">:</span>
+          <div class="hcd-unit"><span class="hcd-val" id="hcdHours">--</span><span class="hcd-lbl">Hours</span></div>
+          <span class="hcd-sep">:</span>
+          <div class="hcd-unit"><span class="hcd-val" id="hcdMins">--</span><span class="hcd-lbl">Mins</span></div>
+          <span class="hcd-sep">:</span>
+          <div class="hcd-unit"><span class="hcd-val" id="hcdSecs">--</span><span class="hcd-lbl">Secs</span></div>
+        </div>
+        <a href="/register.html" class="btn-cta hcd-reg-btn" id="heroRegBtn">Register &rsaquo;</a>
+      </div>
 
     </section>
 
@@ -442,6 +455,98 @@
       <span class="uab-cta-note">Applications open till 18th April 2026 &middot; Sage University, Indore</span>
     </div>
   </section>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       PRIZE POOL SECTION
+       ══════════════════════════════════════════════════════════════ -->
+  <section class="prz-section" id="prizeSection" aria-label="Prize Pool">
+
+    <!-- Ethereal background (reused pattern) -->
+    <div class="ua-ethereal-root" aria-hidden="true">
+      <svg class="ua-ethereal-svg" aria-hidden="true"><defs><filter id="przEtherFilter" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence numOctaves="2" baseFrequency="0.0005,0.002" seed="5" type="turbulence" result="undulation"/><feColorMatrix in="undulation" type="hueRotate" values="0"/><feColorMatrix in="dist" result="circulation" type="matrix" values="4 0 0 0 1 4 0 0 0 1 4 0 0 0 1 1 0 0 0 0"/><feDisplacementMap in="SourceGraphic" in2="circulation" scale="100" result="dist"/><feDisplacementMap in="dist" in2="undulation" scale="100" result="output"/></filter></defs></svg>
+      <div class="ua-ethereal-inner"><div class="ua-ethereal-shadow"></div></div>
+    </div>
+    <div class="ua-ethereal-noise" aria-hidden="true"></div>
+    <div class="ua-ethereal-vignette" aria-hidden="true"></div>
+
+    <div class="prz-container">
+
+      <!-- Header -->
+      <div class="prz-header">
+        <span class="prz-pre">PRIZES &amp; REWARDS</span>
+        <h2 class="prz-title">Win <em>Big.</em></h2>
+        <p class="prz-sub">&#8377;45,000 prize pool up for grabs across categories.</p>
+      </div>
+
+      <!-- Main prize podium cards -->
+      <div class="prz-podium">
+
+        <!-- 2nd Place -->
+        <div class="prz-card prz-card--2nd">
+          <div class="prz-rank-badge">2<sup>nd</sup></div>
+          <div class="prz-trophy" aria-hidden="true">🥈</div>
+          <div class="prz-amount">&#8377;12,000</div>
+          <div class="prz-label">Runner-Up</div>
+          <ul class="prz-perks">
+            <li>Cash Prize</li>
+            <li>Certificate of Excellence</li>
+            <li>Mentorship Session</li>
+          </ul>
+        </div>
+
+        <!-- 1st Place — champion, elevated -->
+        <div class="prz-card prz-card--1st">
+          <div class="prz-champion-tag">&#127942; CHAMPION</div>
+          <div class="prz-rank-badge">1<sup>st</sup></div>
+          <div class="prz-trophy" aria-hidden="true">🏆</div>
+          <div class="prz-amount">&#8377;25,000</div>
+          <div class="prz-label">Grand Winner</div>
+          <ul class="prz-perks">
+            <li>Cash Prize</li>
+            <li>Trophy &amp; Certificate</li>
+            <li>Industry Spotlight</li>
+            <li>Fast-track Internship Access</li>
+          </ul>
+        </div>
+
+        <!-- 3rd Place -->
+        <div class="prz-card prz-card--3rd">
+          <div class="prz-rank-badge">3<sup>rd</sup></div>
+          <div class="prz-trophy" aria-hidden="true">🥉</div>
+          <div class="prz-amount">&#8377;8,000</div>
+          <div class="prz-label">2nd Runner-Up</div>
+          <ul class="prz-perks">
+            <li>Cash Prize</li>
+            <li>Certificate of Merit</li>
+            <li>Networking Access</li>
+          </ul>
+        </div>
+
+      </div><!-- /.prz-podium -->
+
+      <!-- Extra perks strip -->
+      <div class="prz-extras">
+        <div class="prz-extra-item">
+          <span class="prz-extra-icon">📜</span>
+          <span class="prz-extra-text">All participants get certificates</span>
+        </div>
+        <div class="prz-extra-item">
+          <span class="prz-extra-icon">🤝</span>
+          <span class="prz-extra-text">Live mentor sessions for every team</span>
+        </div>
+        <div class="prz-extra-item">
+          <span class="prz-extra-icon">🌐</span>
+          <span class="prz-extra-text">Platform exposure &amp; industry network</span>
+        </div>
+        <div class="prz-extra-item">
+          <span class="prz-extra-icon">⚡</span>
+          <span class="prz-extra-text">Special domain winner recognition</span>
+        </div>
+      </div>
+
+    </div><!-- /.prz-container -->
+  </section>
+
 
   <!-- ══════════════════════════════════════════════════════════════════
        PROBLEM DOMAINS — 3D Tilted Carousel

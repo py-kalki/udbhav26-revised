@@ -6824,3 +6824,368 @@ body {
     color: inherit;
   }
 }
+
+/* ----------------------------------------------------------
+   HERO — Countdown Timer + Register CTA (hcd-*)
+   Monochrome glassmorphism. Numbers in a tinted pill row.
+   ---------------------------------------------------------- */
+.hero-countdown-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: 36px;
+  animation: heroFadeUp 0.9s cubic-bezier(0.16,1,0.3,1) both;
+  animation-delay: 1.6s;
+}
+
+/* Timer row */
+.hcd-timer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 18px;
+  padding: 14px 24px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* Each unit block */
+.hcd-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 52px;
+}
+
+.hcd-val {
+  font-family: 'Inter', monospace;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #fff;
+  line-height: 1;
+  /* Subtle tabular feel */
+  font-variant-numeric: tabular-nums;
+}
+
+.hcd-lbl {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+}
+
+/* Colon separator */
+.hcd-sep {
+  font-family: 'Inter', monospace;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 300;
+  color: rgba(255,255,255,0.2);
+  line-height: 1;
+  padding-bottom: 16px; /* nudge up so it aligns with digits not labels */
+  user-select: none;
+}
+
+/* Register button — inherits .btn-cta, just sized up */
+.hcd-reg-btn {
+  padding: 0.7rem 2.2rem !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  margin-left: 0 !important;
+  border-radius: 999px !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+}
+
+/* Pulse ring when event is live (< 0 delta) */
+.hcd-timer.is-live .hcd-val {
+  animation: hcdPulse 1.4s ease-in-out infinite;
+}
+@keyframes hcdPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+
+/* Mobile */
+@media (max-width: 560px) {
+  .hcd-unit  { min-width: 40px; }
+  .hcd-val   { font-size: 1.5rem; }
+  .hcd-sep   { font-size: 1.3rem; }
+  .hcd-timer { padding: 12px 16px; gap: 4px; }
+  .hcd-reg-btn { padding: 0.65rem 1.8rem !important; font-size: 0.82rem !important; }
+}
+
+/* Allow countdown to be visible inside the hero */
+.hero {
+  overflow: visible !important;
+  justify-content: center !important;
+  padding-bottom: 80px !important;
+}
+
+/* Ensure countdown is above background layers */
+.hero-countdown-wrap {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-top: 32px;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------
+   PRIZE POOL SECTION  (prz-*)
+   Dark glassmorphism cards in a podium layout.
+   1st place elevated center card; 2nd & 3rd flanking.
+   Accent glow on each tier: gold · silver · bronze (monochrome variants).
+   -------------------------------------------------------------- */
+
+.prz-section {
+  position: relative;
+  z-index: 14;
+  background: #000;
+  overflow: hidden;
+  padding: 100px 0 80px;
+}
+
+.prz-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* -- Header --------------------------------------------------- */
+.prz-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+.prz-pre {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.32);
+  margin-bottom: 12px;
+}
+.prz-title {
+  font-family: var(--font-display, 'Inter', sans-serif);
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: #fff;
+  line-height: 1;
+  margin: 0 0 14px;
+}
+.prz-title em {
+  font-style: italic;
+  color: rgba(255,255,255,0.55);
+}
+.prz-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.35);
+  margin: 0;
+}
+
+/* -- Podium layout --------------------------------------------- */
+.prz-podium {
+  display: grid;
+  grid-template-columns: 1fr 1.18fr 1fr;
+  gap: 16px;
+  align-items: end;
+  margin-bottom: 48px;
+}
+
+/* -- Base card ------------------------------------------------- */
+.prz-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 32px 24px 28px;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  text-align: center;
+  transition: transform 0.35s cubic-bezier(0.16,1,0.3,1),
+              border-color 0.3s ease;
+}
+.prz-card:hover { transform: translateY(-6px); }
+
+/* -- 1st place — champion card --------------------------------- */
+.prz-card--1st {
+  border-color: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.07);
+  box-shadow: 0 0 60px rgba(255,255,255,0.06),
+              0 24px 64px rgba(0,0,0,0.55),
+              inset 0 1px 0 rgba(255,255,255,0.12);
+  padding-top: 44px;
+  padding-bottom: 36px;
+}
+.prz-card--1st:hover { border-color: rgba(255,255,255,0.28); }
+
+/* Champion tag ribbon */
+.prz-champion-tag {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #000;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  padding: 4px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* 2nd & 3rd — muted cards */
+.prz-card--2nd,
+.prz-card--3rd {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(255,255,255,0.07);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+/* -- Card content ---------------------------------------------- */
+.prz-rank-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.28);
+  text-transform: uppercase;
+}
+.prz-rank-badge sup { font-size: 0.55em; }
+
+.prz-trophy {
+  font-size: 2.4rem;
+  line-height: 1;
+  filter: saturate(0) brightness(1.6);   /* monochrome tint */
+}
+.prz-card--1st .prz-trophy { font-size: 3rem; filter: none; } /* trophy stays gold */
+
+.prz-amount {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: #fff;
+  line-height: 1;
+}
+.prz-card--2nd .prz-amount,
+.prz-card--3rd .prz-amount { color: rgba(255,255,255,0.7); }
+
+.prz-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+
+.prz-perks {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+.prz-perks li {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.42);
+  padding: 5px 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.prz-card--1st .prz-perks li { color: rgba(255,255,255,0.58); }
+
+/* -- Extra perks strip ----------------------------------------- */
+.prz-extras {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.prz-extra-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.prz-extra-icon { font-size: 1.1rem; flex-shrink: 0; filter: saturate(0) brightness(1.5); }
+.prz-extra-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.42);
+  line-height: 1.4;
+}
+
+/* -- Responsive ------------------------------------------------ */
+@media (max-width: 900px) {
+  .prz-podium {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+  .prz-card--1st {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    padding: 36px 28px;
+  }
+  .prz-champion-tag { top: -12px; }
+  .prz-extras { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 600px) {
+  .prz-section { padding: 64px 0 60px; }
+  .prz-container { padding: 0 16px; }
+  .prz-podium {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+  .prz-card--1st { grid-column: 1; flex-direction: column; }
+  .prz-card--2nd { order: 2; }
+  .prz-card--3rd { order: 3; }
+  .prz-extras { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .prz-extra-item { padding: 10px 12px; }
+  .prz-extra-text { font-size: 0.65rem; }
+  .prz-header { margin-bottom: 40px; }
+}
+
+/* -- Prize section fixes ----------------------------------------- */
+
+/* 1) Header ? top-left aligned */
+.prz-header {
+  text-align: left !important;
+  margin-bottom: 48px !important;
+}
+
+/* 2) Cards + extras above the ethereal bg layers */
+.prz-container {
+  position: relative;
+  z-index: 5;
+}
