@@ -60,6 +60,7 @@ import {
 // ── Import Submissions handlers ────────────────────────────────────────────────
 import submitHandler from './api/submissions/submit.js';
 import listHandler   from './api/submissions/list.js';
+import teamAuthHandler from './api/auth/team.js';
 
 // ── App setup ────────────────────────────────────────────────────────────────
 const app  = express();
@@ -156,6 +157,9 @@ app.get('/api/winners', mountHandler(publicWinnersHandler));
 // ── Submissions API ───────────────────────────────────────────────────────────
 app.post('/api/submissions/submit', mountHandler(submitHandler));
 app.get ('/api/submissions/list',   mountHandler(listHandler));
+
+// ── Team Auth API ─────────────────────────────────────────────────────────────
+app.post('/api/auth/team', mountHandler(teamAuthHandler));
 
 // ── Clean URL Routes ──────────────────────────────────────────────────────────
 for (const [route, file] of Object.entries(cleanRoutes)) {

@@ -30,10 +30,25 @@ const Dashboard = {
 
     init() {
         this.checkAuth();
-        this.renderTimeline(); // Dynamic rendering based on data
+        this.renderTimeline();
         this.setupEventListeners();
         this.startTimers();
         this.initializeIcons();
+        this.initEthereal();
+    },
+
+    initEthereal() {
+        const hueEl = document.getElementById('etherHueRotate');
+        if (!hueEl) return;
+        
+        let hue = 0;
+        const DEG = 360 / (5.84 * 60);
+        const anim = () => {
+            hue = (hue + DEG) % 360;
+            hueEl.setAttribute('values', hue.toFixed(2));
+            requestAnimationFrame(anim);
+        };
+        anim();
     },
 
     initializeIcons() {
@@ -43,26 +58,35 @@ const Dashboard = {
     },
 
     checkAuth() {
-        const savedTeamId = localStorage.getItem("udbhav_team_id");
-        if (savedTeamId) {
-            this.login(savedTeamId);
+        const savedTeam = localStorage.getItem("udbhav_team_data");
+        if (savedTeam) {
+            try {
+                const team = JSON.parse(savedTeam);
+                this.login(team, true); // true = skip persistence
+            } catch (e) {
+                localStorage.removeItem("udbhav_team_data");
+                this.showView('login-view');
+            }
         } else {
             this.showView('login-view');
         }
     },
 
-    login(id) {
-        this.teamId = id;
-        localStorage.setItem("udbhav_team_id", id);
+    async login(teamData, skipPersistence = false) {
+        this.teamId = teamData.id;
+        if (!skipPersistence) {
+            localStorage.setItem("udbhav_team_data", JSON.stringify(teamData));
+        }
 
-        document.querySelectorAll('.display-team-id').forEach(el => el.textContent = id);
+        document.querySelectorAll('.display-team-id').forEach(el => el.textContent = teamData.id);
+        
         this.showView('dashboard-view');
-        this.fetchStats(id);
+        this.fetchStats(teamData.id);
     },
 
     logout() {
         this.teamId = null;
-        localStorage.removeItem("udbhav_team_id");
+        localStorage.removeItem("udbhav_team_data");
         this.showView('login-view');
     },
 
@@ -70,9 +94,10 @@ const Dashboard = {
         document.querySelectorAll('[data-view]').forEach(view => {
             if (view.id === viewId) {
                 view.classList.remove('hidden');
-                view.style.opacity = '1';
+                setTimeout(() => view.style.opacity = '1', 10);
             } else {
                 view.classList.add('hidden');
+                view.style.opacity = '0';
             }
         });
     },
@@ -109,11 +134,45 @@ const Dashboard = {
 
     setupEventListeners() {
         const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('loginError');
+        const loginBtn = document.getElementById('loginBtn');
+
         if (loginForm) {
-            loginForm.addEventListener('submit', (e) => {
+            loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const idInput = document.getElementById('teamId-input');
-                if (idInput.value.trim()) this.login(idInput.value.trim());
+                const teamCode = idInput.value.trim();
+
+                if (!teamCode) return;
+
+                // UI Loading State
+                loginBtn.disabled = true;
+                const originalText = loginBtn.textContent;
+                loginBtn.textContent = 'Verifying...';
+                loginError.textContent = '';
+                loginError.style.opacity = '0';
+
+                try {
+                    const res = await fetch('/api/auth/team', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ teamCode })
+                    });
+
+                    const data = await res.json();
+
+                    if (data.success) {
+                        this.login(data.team);
+                    } else {
+                        throw new Error(data.message || data.error || 'Authentication failed');
+                    }
+                } catch (err) {
+                    loginError.textContent = err.message;
+                    loginError.style.opacity = '1';
+                } finally {
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = originalText;
+                }
             });
         }
 
