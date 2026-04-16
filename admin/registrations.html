@@ -951,81 +951,152 @@
         finally { genBtn.disabled = false; genBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Generate Team Codes'; }
       });
 
-      importBtn.addEventListener('click', () => showImportModal());
+      importBtn.addEventListener('click', showImportModal);
     }
 
-    // -- IMPORT MODAL
+    // -- IMPORT MODAL (file upload: .csv or .xlsx via SheetJS)
     function showImportModal() {
       const existing = document.getElementById('importModal');
       if (existing) { existing.style.display = 'flex'; return; }
 
+      // Load SheetJS on demand
+      if (!window.XLSX) {
+        const s = document.createElement('script');
+        s.src   = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+        document.head.appendChild(s);
+      }
+
       const el = document.createElement('div');
       el.id = 'importModal';
-      el.style.cssText = 'position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;padding:1rem;';
+      el.style.cssText = 'position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;padding:1rem;';
       el.innerHTML =
-        '<div style="background:#0f0f1a;border:1px solid rgba(168,85,247,0.2);border-radius:16px;padding:2rem;max-width:640px;width:100%;max-height:90vh;overflow-y:auto;">' +
+        '<div style="background:#0f0f1a;border:1px solid rgba(168,85,247,0.25);border-radius:16px;padding:2rem;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;">' +
         '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">' +
-        '<h3 style="color:#fff;font-size:1.1rem;font-weight:700;">Import Teams from CSV</h3>' +
-        '<button id="importModalClose" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:1.4rem;">&times;</button></div>' +
-        '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin-bottom:1rem;">Paste CSV data below. Required columns: <code style="color:#a855f7;">teamName, collegeName, branch, leaderName, leaderEmail, leaderPhone</code><br>Optional: <code style="color:#a855f7;">memberCount, mentorSession</code></p>' +
-        '<p style="color:rgba(255,255,255,0.35);font-size:0.75rem;margin-bottom:0.8rem;">Example row: <code>Code Warriors, Sage University, CSE, Vedansh Danot, v@sage.edu, 9876543210, 4, false</code></p>' +
-        '<textarea id="importCsvText" style="width:100%;height:200px;background:#080808;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.8rem;color:#fff;font-family:monospace;font-size:0.78rem;resize:vertical;" placeholder="teamName,collegeName,branch,leaderName,leaderEmail,leaderPhone,memberCount,mentorSession"></textarea>' +
-        '<div id="importMsg" style="margin-top:0.6rem;font-size:0.82rem;"></div>' +
-        '<div style="display:flex;gap:0.8rem;margin-top:1rem;">' +
-        '<button id="importSubmitBtn" style="background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.3);color:#a855f7;padding:0.7rem 1.4rem;border-radius:8px;cursor:pointer;font-weight:600;">Import</button>' +
+        '<h3 style="color:#fff;font-size:1.1rem;font-weight:700;">Import Teams</h3>' +
+        '<button id="importModalClose" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:1.5rem;">&times;</button></div>' +
+        '<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;line-height:1.6;margin-bottom:1rem;">' +
+        'Upload a <strong style="color:#fff;">.xlsx</strong> or <strong style="color:#fff;">.csv</strong> file.<br>' +
+        'Required columns: <code style="color:#a855f7;">Team Name, College Name, Branch, Leader Name, Leader Email, Leader Phone</code><br>' +
+        'Optional: <code style="color:#a855f7;">Member Count, Mentor Session (true/false)</code></p>' +
+        '<label style="display:flex;flex-direction:column;gap:0.5rem;">' +
+        '<span style="font-size:0.8rem;color:rgba(255,255,255,0.4);font-family:monospace;">SELECT FILE</span>' +
+        '<input type="file" id="importFileInput" accept=".csv,.xlsx,.xls" style="background:#080808;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:0.75rem;color:#fff;font-size:0.85rem;width:100%;cursor:pointer;" />' +
+        '</label>' +
+        '<div id="importPreview" style="margin-top:1rem;display:none;">' +
+        '<div id="importPreviewText" style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:0.4rem;"></div>' +
+        '<div id="importPreviewTable" style="overflow-x:auto;max-height:200px;"></div>' +
+        '</div>' +
+        '<div id="importMsg" style="margin-top:0.8rem;font-size:0.82rem;"></div>' +
+        '<div style="display:flex;gap:0.8rem;margin-top:1.2rem;">' +
+        '<button id="importSubmitBtn" disabled style="background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.3);color:#a855f7;padding:0.7rem 1.4rem;border-radius:8px;cursor:pointer;font-weight:600;opacity:0.5;">Import</button>' +
         '<button id="importCancelBtn" style="background:none;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);padding:0.7rem 1.2rem;border-radius:8px;cursor:pointer;">Cancel</button>' +
         '</div></div>';
-
       document.body.appendChild(el);
-      document.getElementById('importModalClose')?.addEventListener('click', () => el.style.display = 'none');
-      document.getElementById('importCancelBtn')?.addEventListener('click', () => el.style.display = 'none');
-      document.getElementById('importSubmitBtn')?.addEventListener('click', async () => {
-        const csv = document.getElementById('importCsvText')?.value.trim();
-        if (!csv) return;
-        const msg = document.getElementById('importMsg');
-        msg.style.color = '#fbbf24'; msg.textContent = 'Parsing...';
 
-        const lines  = csv.split('\n').filter(l => l.trim());
-        const header = lines[0].toLowerCase().replace(/\s/g,'').split(',');
+      const closeEl = () => el.style.display = 'none';
+      document.getElementById('importModalClose')?.addEventListener('click', closeEl);
+      document.getElementById('importCancelBtn')?.addEventListener('click', closeEl);
+
+      let parsedTeams = [];
+
+      const colMap = {
+        'teamname': 'teamName', 'team name': 'teamName',
+        'collegename': 'collegeName', 'college name': 'collegeName', 'college': 'collegeName',
+        'branch': 'branch',
+        'leadername': 'leaderName', 'leader name': 'leaderName', 'leader': 'leaderName',
+        'leaderemail': 'leaderEmail', 'leader email': 'leaderEmail', 'email': 'leaderEmail',
+        'leaderphone': 'leaderPhone', 'leader phone': 'leaderPhone', 'phone': 'leaderPhone',
+        'membercount': 'memberCount', 'member count': 'memberCount', 'members': 'memberCount',
+        'mentorsession': 'mentorSession', 'mentor session': 'mentorSession', 'mentor': 'mentorSession',
+      };
+
+      function parseRows(rows) {
+        if (rows.length < 2) return [];
+        const header = rows[0].map(h => String(h||'').toLowerCase().trim());
         const teams  = [];
-
-        for (let i = 1; i < lines.length; i++) {
-          const cols = lines[i].split(',').map(c => c.trim());
-          if (cols.length < 6) continue;
-          // Try header-based or positional parse
-          const get = key => {
-            const hi = header.indexOf(key.toLowerCase().replace(/\s/g,''));
-            return hi >= 0 ? (cols[hi]||'') : '';
-          };
-          const byPos = cols.length >= 6;
+        for (let i = 1; i < rows.length; i++) {
+          const row   = rows[i];
+          if (row.every(c => !c)) continue;
+          const obj   = {};
+          header.forEach((h, j) => {
+            const mapped = colMap[h];
+            if (mapped) obj[mapped] = String(row[j]||'').trim();
+          });
+          if (!obj.teamName || !obj.leaderEmail) continue;
           teams.push({
-            teamName:    get('teamname')    || (byPos ? cols[0] : ''),
-            collegeName: get('collegename') || (byPos ? cols[1] : ''),
-            branch:      get('branch')       || (byPos ? cols[2] : ''),
+            teamName:    obj.teamName,
+            collegeName: obj.collegeName || '',
+            branch:      obj.branch      || '',
+            memberCount: parseInt(obj.memberCount || '4') || 4,
+            mentorSession: (obj.mentorSession||'').toLowerCase() === 'true',
             leader: {
-              name:  get('leadername')  || (byPos ? cols[3] : ''),
-              email: get('leaderemail') || (byPos ? cols[4] : ''),
-              phone: get('leaderphone') || (byPos ? cols[5] : ''),
+              name:  obj.leaderName  || '',
+              email: obj.leaderEmail || '',
+              phone: obj.leaderPhone || '',
             },
-            memberCount: parseInt(get('membercount') || (byPos ? cols[6] : '') || '4') || 4,
-            mentorSession: (get('mentorsession') || (byPos ? cols[7] : '') || 'false').toLowerCase() === 'true',
           });
         }
+        return teams;
+      }
 
-        if (teams.length === 0) { msg.style.color='#f87171'; msg.textContent='No valid rows found.'; return; }
+      document.getElementById('importFileInput')?.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const msg = document.getElementById('importMsg');
+        msg.style.color = '#fbbf24'; msg.textContent = 'Parsing file...';
 
-        msg.textContent = 'Importing ' + teams.length + ' teams...';
+        const waitXLSX = () => new Promise(res => {
+          if (window.XLSX) return res();
+          const t = setInterval(() => { if (window.XLSX) { clearInterval(t); res(); } }, 100);
+        });
+        await waitXLSX();
+
+        const buf  = await file.arrayBuffer();
+        const wb   = XLSX.read(buf, { type: 'array' });
+        const ws   = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+
+        parsedTeams = parseRows(rows);
+        msg.textContent = '';
+
+        const preview = document.getElementById('importPreview');
+        const prevTxt = document.getElementById('importPreviewText');
+        const prevTbl = document.getElementById('importPreviewTable');
+        prevTxt.textContent = 'Preview: ' + parsedTeams.length + ' teams found (showing first 5)';
+        prevTbl.innerHTML =
+          '<table style="width:100%;border-collapse:collapse;font-size:0.75rem;">' +
+          '<tr style="color:rgba(255,255,255,0.3);">' +
+          ['Team Name','College','Branch','Leader','Email'].map(h => '<th style="padding:4px 8px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.06);">' + h + '</th>').join('') +
+          '</tr>' +
+          parsedTeams.slice(0, 5).map(t =>
+            '<tr>' +
+            [t.teamName, t.collegeName, t.branch, t.leader.name, t.leader.email]
+              .map(v => '<td style="padding:4px 8px;color:rgba(255,255,255,0.65);border-bottom:1px solid rgba(255,255,255,0.04);">' + (v||'—') + '</td>').join('') +
+            '</tr>'
+          ).join('') +
+          '</table>';
+        preview.style.display = 'block';
+
+        const btn = document.getElementById('importSubmitBtn');
+        btn.disabled = parsedTeams.length === 0;
+        btn.style.opacity = parsedTeams.length > 0 ? '1' : '0.5';
+        btn.textContent = 'Import ' + parsedTeams.length + ' Teams';
+      });
+
+      document.getElementById('importSubmitBtn')?.addEventListener('click', async () => {
+        if (!parsedTeams.length) return;
+        const msg = document.getElementById('importMsg');
+        msg.style.color = '#60a5fa'; msg.textContent = 'Uploading to database...';
         try {
-          const res  = await fetch('/api/admin/teams/import', { method: 'POST', headers: apiHeaders(), body: JSON.stringify({ teams }) });
+          const res  = await fetch('/api/admin/teams/import', { method: 'POST', headers: apiHeaders(), body: JSON.stringify({ teams: parsedTeams }) });
           const data = await res.json();
           if (!res.ok) throw new Error(data.error || 'Import failed');
           msg.style.color = '#4ade80';
           msg.textContent = 'Imported ' + data.imported + ' teams' + (data.skipped ? ', skipped ' + data.skipped : '') + '!';
-          setTimeout(() => { el.style.display = 'none'; render(); }, 1500);
-        } catch(err) { msg.style.color='#f87171'; msg.textContent='Error: ' + err.message; }
+          setTimeout(() => { closeEl(); render(); }, 1500);
+        } catch(err) { msg.style.color = '#f87171'; msg.textContent = 'Error: ' + err.message; }
       });
     }
-
     // -- SEARCH & FILTER
     let debounceTimer;
     searchInput?.addEventListener('input', () => {
