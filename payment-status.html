@@ -167,9 +167,11 @@
             body: JSON.stringify({ orderId: orderId }),
           });
           var data = await res.json();
-          // Normalize status field
-          var s = (data.status || data.paymentStatus || status || '').toUpperCase();
-          renderStatus({ status: s, teamName: data.teamName, teamCode: data.teamCode, amount: data.amount, leaderEmail: data.leaderEmail });
+          // If success:true from verify endpoint = payment confirmed as PAID
+          var s = data.success
+            ? 'PAID'
+            : (data.status || data.paymentStatus || status || '').toUpperCase();
+          renderStatus({ status: s, teamName: data.teamName, teamCode: data.teamCode, amount: data.amount || data.amountPaid, leaderEmail: data.leaderEmail });
         } catch(e) {
           renderStatus({ status: status || 'UNKNOWN', orderId: orderId });
         }

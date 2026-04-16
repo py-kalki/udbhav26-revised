@@ -93,10 +93,11 @@ export default async function handler(req, res) {
       console.log(`[verify-payment] Already paid: ${team.code}`);
       return res.status(200).json({
         success:     true,
+        status:      'PAID',
         teamCode:    team.code,
         teamName:    team.teamName,
         leaderEmail: team.leader.email,
-        amountPaid:  team.totalAmount,
+        amount:      team.totalAmount,
         wantsMentor: team.mentorSession,
         orderId,
       });
@@ -120,10 +121,11 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       success:     true,
+      status:      'PAID',
       teamCode:    team.code,
       teamName:    team.teamName,
       leaderEmail: team.leader.email,
-      amountPaid:  team.totalAmount,
+      amount:      team.totalAmount,
       wantsMentor: team.mentorSession,
       orderId,
     });
