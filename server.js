@@ -51,6 +51,14 @@ import adminLoginHandler from './api/admin/login.js';
 import { paymentsHandler } from './api/admin/payments.js';
 import { psStatsHandler }  from './api/admin/ps-stats.js';
 import {
+  teamsListHandler,
+  teamsAddHandler,
+  teamsImportHandler,
+  teamsUpdateHandler,
+  teamsDeleteHandler,
+  generateCodesHandler,
+} from './api/admin/teams.js';
+import {
   getWinnersHandler,
   saveWinnersHandler,
   publishWinnersHandler,
@@ -147,6 +155,14 @@ app.post  ('/api/admin/ps/stop-drop',  mountHandler(stopDropHandler));
 app.get   ('/api/admin/ps/stats',      mountHandler(statsHandler));
 app.get   ('/api/admin/payments',      mountHandler(paymentsHandler));
 app.get   ('/api/admin/ps-stats',         mountHandler(psStatsHandler));
+
+// ── Admin Teams API ───────────────────────────────────────────────────────────
+app.get   ('/api/admin/teams',                mountHandler(teamsListHandler));
+app.post  ('/api/admin/teams/import',         mountHandler(teamsImportHandler));
+app.post  ('/api/admin/teams/generate-codes', mountHandler(generateCodesHandler));
+app.post  ('/api/admin/teams',                mountHandler(teamsAddHandler));
+app.patch ('/api/admin/teams/:id',            mountHandler(teamsUpdateHandler));
+app.delete('/api/admin/teams/:id',            mountHandler(teamsDeleteHandler));
 
 // ── Winners Admin API ─────────────────────────────────────────────────────────
 app.get ('/api/admin/winners',            mountHandler(getWinnersHandler));

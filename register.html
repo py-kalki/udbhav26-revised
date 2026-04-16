@@ -1306,258 +1306,178 @@
 
         <form class="reg-form" id="regForm" novalidate>
 
-          <!-- ─────── TEAM INFORMATION ─────── -->
-          <div class="form-section-sep">
-            <div class="form-section-sep__line"></div>
-            <span class="form-section-sep__label">Team Information</span>
-            <div class="form-section-sep__line"></div>
-          </div>
-
-          <div class="form-row single" style="margin-bottom:1rem;">
-            <div class="form-field">
-              <label class="form-label" for="teamName">
-                Team Name <span class="req" aria-hidden="true">*</span>
-                <span class="hint">Must be unique</span>
-              </label>
-              <input type="text" id="teamName" name="teamName" class="form-input"
-                     placeholder="e.g., CodeStorm" required autocomplete="off" />
-              <span class="form-field-error" id="teamNameErr" role="alert"></span>
+          <!-- ── STEP 1: TEAM CODE VERIFICATION ─────────────────────────── -->
+          <div id="teamCodeStep">
+            <div class="form-section-sep">
+              <div class="form-section-sep__line"></div>
+              <span class="form-section-sep__label">Enter Your Team Code</span>
+              <div class="form-section-sep__line"></div>
             </div>
-          </div>
 
-          <div class="form-row single" style="margin-bottom:1rem;">
-            <div class="form-field">
-              <label class="form-label" for="collegeName">
-                College Name <span class="req" aria-hidden="true">*</span>
-              </label>
-              <input type="text" id="collegeName" name="collegeName" class="form-input"
-                     placeholder="e.g., Sage University, Indore" required autocomplete="organization" />
-              <span class="form-field-error" id="collegeNameErr" role="alert"></span>
-            </div>
-          </div>
-
-          <div class="form-row" style="margin-bottom:1rem;">
-            <div class="form-field">
-              <label class="form-label" for="branch">
-                Branch <span class="req" aria-hidden="true">*</span>
-                <span class="hint">All members</span>
-              </label>
-              <input type="text" id="branch" name="branch" class="form-input"
-                     placeholder="e.g., CSE, IT, ECE" required />
-              <span class="form-field-error" id="branchErr" role="alert"></span>
-            </div>
-            <div class="form-field">
-              <label class="form-label" for="yearOfStudy">
-                Year of Study <span class="req" aria-hidden="true">*</span>
-              </label>
-              <select id="yearOfStudy" name="yearOfStudy" class="form-input form-select" required>
-                <option value="" disabled selected>Select year</option>
-                <option value="1">1st Year</option>
-                <option value="2">2nd Year</option>
-                <option value="3">3rd Year</option>
-                <option value="4">4th Year</option>
-              </select>
-              <span class="form-field-error" id="yearErr" role="alert"></span>
-            </div>
-          </div>
-
-          <!-- ─────── TEAM LEADER ─────── -->
-          <div class="form-section-sep">
-            <div class="form-section-sep__line"></div>
-            <span class="form-section-sep__label">Team Leader</span>
-            <div class="form-section-sep__line"></div>
-          </div>
-
-          <div class="member-block" style="margin-bottom:1rem;">
-            <div class="member-block-header">
-              <span class="member-block-title">Leader</span>
-            </div>
-            <div class="form-row single">
+            <div class="form-row single" style="margin-bottom:0.5rem;">
               <div class="form-field">
-                <label class="form-label" for="leaderName">Full Name <span class="req" aria-hidden="true">*</span></label>
-                <input type="text" id="leaderName" name="leaderName" class="form-input"
-                       placeholder="Team leader's full name" required autocomplete="name" />
-                <span class="form-field-error" id="leaderNameErr" role="alert"></span>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-field">
-                <label class="form-label" for="leaderEmail">
-                  Email Address <span class="req" aria-hidden="true">*</span>
-                  <span class="hint">Team code sent here</span>
+                <label class="form-label" for="teamCodeInput">
+                  Team Code <span class="req" aria-hidden="true">*</span>
+                  <span class="hint">Sent to your leader's email after shortlisting</span>
                 </label>
-                <input type="email" id="leaderEmail" name="leaderEmail" class="form-input"
-                       placeholder="leader@email.com" required autocomplete="email" />
-                <span class="form-field-error" id="leaderEmailErr" role="alert"></span>
-              </div>
-              <div class="form-field">
-                <label class="form-label" for="leaderPhone">
-                  Phone Number <span class="req" aria-hidden="true">*</span>
-                  <span class="hint">+91 format</span>
-                </label>
-                <input type="tel" id="leaderPhone" name="leaderPhone" class="form-input"
-                       placeholder="+91 9876543210" required autocomplete="tel" />
-                <span class="form-field-error" id="leaderPhoneErr" role="alert"></span>
+                <div style="display:flex;gap:0.6rem;align-items:center;">
+                  <input type="text" id="teamCodeInput" name="teamCodeInput" class="form-input"
+                         placeholder="e.g., UDB-ABCD" autocomplete="off" autocapitalize="characters"
+                         style="font-family:'JetBrains Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;flex:1;" />
+                  <button type="button" id="verifyCodeBtn" class="pay-btn enabled"
+                          style="padding:0.7rem 1.2rem;font-size:0.82rem;white-space:nowrap;height:2.9rem;">
+                    Verify →
+                  </button>
+                </div>
+                <span class="form-field-error" id="teamCodeErr" role="alert"></span>
               </div>
             </div>
+
+            <!-- Verify status -->
+            <div id="codeVerifyStatus" style="display:none;margin-top:0.6rem;"></div>
           </div>
 
-          <!-- ─────── TEAM MEMBERS ─────── -->
-          <div class="form-section-sep">
-            <div class="form-section-sep__line"></div>
-            <span class="form-section-sep__label">Team Members</span>
-            <div class="form-section-sep__line"></div>
-          </div>
+          <!-- ── STEP 2: LOCKED AUTO-FILLED DETAILS ─────────────────────── -->
+          <div id="teamDetailsStep" style="display:none;">
 
-          <!-- Member 2 (Required) -->
-          <div class="member-block" id="member2Block">
-            <div class="member-block-header">
-              <span class="member-block-title">Member 2</span>
+            <!-- Verified badge -->
+            <div style="display:flex;align-items:center;gap:0.6rem;padding:0.7rem 1rem;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);border-radius:10px;margin-bottom:1.2rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span style="font-size:0.82rem;color:#4ade80;font-weight:600;">Team code verified — details auto-filled from our database</span>
             </div>
-            <div class="form-row single">
-              <div class="form-field">
-                <label class="form-label" for="m2Name">Full Name <span class="req" aria-hidden="true">*</span></label>
-                <input type="text" id="m2Name" name="m2Name" class="form-input" placeholder="Member's full name" required />
-                <span class="form-field-error" id="m2NameErr" role="alert"></span>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-field">
-                <label class="form-label" for="m2Email">Email <span class="req" aria-hidden="true">*</span></label>
-                <input type="email" id="m2Email" name="m2Email" class="form-input" placeholder="member2@email.com" required />
-                <span class="form-field-error" id="m2EmailErr" role="alert"></span>
-              </div>
-              <div class="form-field">
-                <label class="form-label" for="m2Phone">Phone <span class="req" aria-hidden="true">*</span></label>
-                <input type="tel" id="m2Phone" name="m2Phone" class="form-input" placeholder="+91 xxxxxxxxxx" required />
-                <span class="form-field-error" id="m2PhoneErr" role="alert"></span>
-              </div>
-            </div>
-          </div>
 
-          <!-- Member 3 (Optional, hidden) -->
-          <div class="member-optional" id="member3Wrap" data-visible="false" aria-hidden="true">
-            <div class="member-block" id="member3Block">
-              <div class="member-block-header">
-                <span class="member-block-title">Member 3 <span class="opt-badge">optional</span></span>
-                <button type="button" class="remove-member-btn" id="removeMember3" aria-label="Remove member 3">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                  Remove
-                </button>
+            <!-- ── LOCKED TEAM INFO ─────────────────────────────────────── -->
+            <div class="form-section-sep">
+              <div class="form-section-sep__line"></div>
+              <span class="form-section-sep__label">Team Information <span style="font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:0.1em;">🔒 READ-ONLY</span></span>
+              <div class="form-section-sep__line"></div>
+            </div>
+
+            <div class="form-row single" style="margin-bottom:1rem;">
+              <div class="form-field">
+                <label class="form-label">Team Name</label>
+                <input type="text" id="teamName" class="form-input" readonly
+                       style="opacity:0.6;cursor:not-allowed;border-color:rgba(168,85,247,0.15);" />
               </div>
+            </div>
+
+            <div class="form-row" style="margin-bottom:1rem;">
+              <div class="form-field">
+                <label class="form-label">College</label>
+                <input type="text" id="collegeName" class="form-input" readonly
+                       style="opacity:0.6;cursor:not-allowed;border-color:rgba(168,85,247,0.15);" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Branch</label>
+                <input type="text" id="branch" class="form-input" readonly
+                       style="opacity:0.6;cursor:not-allowed;border-color:rgba(168,85,247,0.15);" />
+              </div>
+            </div>
+
+            <!-- ── LOCKED LEADER ───────────────────────────────────────── -->
+            <div class="form-section-sep">
+              <div class="form-section-sep__line"></div>
+              <span class="form-section-sep__label">Team Leader <span style="font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:0.1em;">🔒 READ-ONLY</span></span>
+              <div class="form-section-sep__line"></div>
+            </div>
+
+            <div class="member-block" style="margin-bottom:1rem;">
               <div class="form-row single">
                 <div class="form-field">
-                  <label class="form-label" for="m3Name">Full Name</label>
-                  <input type="text" id="m3Name" name="m3Name" class="form-input" placeholder="Member's full name" />
+                  <label class="form-label">Leader Name</label>
+                  <input type="text" id="leaderName" class="form-input" readonly
+                         style="opacity:0.6;cursor:not-allowed;border-color:rgba(168,85,247,0.15);" />
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-field">
-                  <label class="form-label" for="m3Email">Email</label>
-                  <input type="email" id="m3Email" name="m3Email" class="form-input" placeholder="member3@email.com" />
+                  <label class="form-label">Leader Email</label>
+                  <input type="email" id="leaderEmail" class="form-input" readonly
+                         style="opacity:0.6;cursor:not-allowed;border-color:rgba(168,85,247,0.15);" />
                 </div>
                 <div class="form-field">
-                  <label class="form-label" for="m3Phone">Phone</label>
-                  <input type="tel" id="m3Phone" name="m3Phone" class="form-input" placeholder="+91 xxxxxxxxxx" />
+                  <label class="form-label">Leader Phone</label>
+                  <input type="tel" id="leaderPhone" class="form-input" readonly
+                         style="opacity:0.6;cursor:not-allowed;border-color:rgba(168,85,247,0.15);" />
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Member 4 (Optional, hidden) -->
-          <div class="member-optional" id="member4Wrap" data-visible="false" aria-hidden="true">
-            <div class="member-block" id="member4Block">
-              <div class="member-block-header">
-                <span class="member-block-title">Member 4 <span class="opt-badge">optional</span></span>
-                <button type="button" class="remove-member-btn" id="removeMember4" aria-label="Remove member 4">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                  Remove
-                </button>
-              </div>
-              <div class="form-row single">
-                <div class="form-field">
-                  <label class="form-label" for="m4Name">Full Name</label>
-                  <input type="text" id="m4Name" name="m4Name" class="form-input" placeholder="Member's full name" />
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-field">
-                  <label class="form-label" for="m4Email">Email</label>
-                  <input type="email" id="m4Email" name="m4Email" class="form-input" placeholder="member4@email.com" />
-                </div>
-                <div class="form-field">
-                  <label class="form-label" for="m4Phone">Phone</label>
-                  <input type="tel" id="m4Phone" name="m4Phone" class="form-input" placeholder="+91 xxxxxxxxxx" />
-                </div>
-              </div>
+            <!-- ── EDITABLE: TEAM MEMBERS ───────────────────────────────── -->
+            <div class="form-section-sep">
+              <div class="form-section-sep__line"></div>
+              <span class="form-section-sep__label">Team Members <span style="font-size:0.6rem;color:#a855f7;letter-spacing:0.1em;">✏ YOU FILL THIS</span></span>
+              <div class="form-section-sep__line"></div>
             </div>
-          </div>
 
-          <!-- Add Member Button -->
-          <button type="button" class="add-member-btn" id="addMemberBtn" aria-label="Add another team member">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Add Member
-          </button>
-
-          <!-- ─────── MENTOR & PAYMENT ─────── -->
-          <div class="form-section-sep">
-            <div class="form-section-sep__line"></div>
-            <span class="form-section-sep__label">Mentor &amp; Payment</span>
-            <div class="form-section-sep__line"></div>
-          </div>
-
-          <!-- Mentor checkbox -->
-          <div class="mentor-check-wrap" id="mentorWrap" role="checkbox" aria-checked="false" tabindex="0" aria-label="Add mentor session for ₹300 extra">
-            <div class="custom-checkbox" id="mentorCheckbox" aria-hidden="true"></div>
-            <div class="mentor-check-text">
-              <div class="mentor-check-title">I want a Mentor Session</div>
-              <div class="mentor-check-desc">Get direct Q&amp;amp;A time with an expert mentor during the hackathon. Exclusive guidance for your team. <span class="price-tag">+₹300 extra</span></div>
+            <div id="membersContainer">
+              <!-- Dynamic member rows injected here by JS -->
             </div>
-          </div>
 
-          <!-- Total Display -->
-          <div class="total-card" aria-live="polite" aria-label="Total payable amount">
-            <div class="total-label">Total Payable</div>
-            <div class="total-amount-display" id="totalAmount">₹800</div>
-            <div class="total-breakdown" id="totalBreakdown"></div>
-          </div>
-
-          <!-- ─────── AGREEMENT ─────── -->
-          <div class="form-section-sep">
-            <div class="form-section-sep__line"></div>
-            <span class="form-section-sep__label">Agreement</span>
-            <div class="form-section-sep__line"></div>
-          </div>
-
-          <div class="agreement-list">
-            <label class="agreement-item" id="agreeTC" role="checkbox" aria-checked="false" tabindex="0">
-              <div class="agreement-checkbox" id="checkTC" aria-hidden="true"></div>
-              <span class="agreement-text">
-                I agree to the <a href="/code-of-conduct.html" target="_blank" rel="noopener">Terms &amp; Conditions</a> of UDBHAV'26
-              </span>
-            </label>
-            <label class="agreement-item" id="agreeConduct" role="checkbox" aria-checked="false" tabindex="0">
-              <div class="agreement-checkbox" id="checkConduct" aria-hidden="true"></div>
-              <span class="agreement-text">
-                I have read and agree to the <a href="/code-of-conduct.html" target="_blank" rel="noopener">Code of Conduct</a>
-              </span>
-            </label>
-          </div>
-
-          <!-- API error toast -->
-          <div class="api-error-toast" id="apiErrorToast" role="alert" aria-live="assertive">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" flex-shrink="0" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <span id="apiErrorMsg">Something went wrong. Please try again.</span>
-          </div>
-
-          <!-- PAY NOW BUTTON -->
-          <div class="pay-btn-wrap">
-            <button type="submit" class="pay-btn disabled" id="payBtn" disabled>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-              <span id="payBtnLabel">Pay ₹800 Securely</span>
+            <button type="button" id="addMemberBtn" class="add-member-btn" aria-label="Add another team member">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Member
             </button>
-            <div class="pay-secure-note" aria-label="Secure payment information">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+
+            <!-- ── MENTOR & PAYMENT ─────────────────────────────────────── -->
+            <div class="form-section-sep">
+              <div class="form-section-sep__line"></div>
+              <span class="form-section-sep__label">Mentor &amp; Payment</span>
+              <div class="form-section-sep__line"></div>
+            </div>
+
+            <!-- Mentor checkbox -->
+            <div class="mentor-check-wrap" id="mentorWrap" role="checkbox" aria-checked="false" tabindex="0" aria-label="Add mentor session for ₹300 extra">
+              <div class="custom-checkbox" id="mentorCheckbox" aria-hidden="true"></div>
+              <div class="mentor-check-text">
+                <div class="mentor-check-title">I want a Mentor Session</div>
+                <div class="mentor-check-desc">Get direct Q&amp;A time with an expert mentor during the hackathon. <span class="price-tag">+₹300 extra</span></div>
+              </div>
+            </div>
+
+            <!-- Total Display -->
+            <div class="total-card" aria-live="polite">
+              <div class="total-label">Total Payable</div>
+              <div class="total-amount-display" id="totalAmount">₹800</div>
+              <div class="total-breakdown" id="totalBreakdown"></div>
+            </div>
+
+            <!-- ── AGREEMENT ───────────────────────────────────────────── -->
+            <div class="form-section-sep">
+              <div class="form-section-sep__line"></div>
+              <span class="form-section-sep__label">Agreement</span>
+              <div class="form-section-sep__line"></div>
+            </div>
+
+            <div class="agreement-list">
+              <label class="agreement-item" id="agreeTC" role="checkbox" aria-checked="false" tabindex="0">
+                <div class="agreement-checkbox" id="checkTC" aria-hidden="true"></div>
+                <span class="agreement-text">
+                  I agree to the <a href="/code-of-conduct.html" target="_blank" rel="noopener">Terms &amp; Conditions</a> of UDBHAV'26
+                </span>
+              </label>
+              <label class="agreement-item" id="agreeConduct" role="checkbox" aria-checked="false" tabindex="0">
+                <div class="agreement-checkbox" id="checkConduct" aria-hidden="true"></div>
+                <span class="agreement-text">
+                  I have read and agree to the <a href="/code-of-conduct.html" target="_blank" rel="noopener">Code of Conduct</a>
+                </span>
+              </label>
+            </div>
+
+            <!-- API error toast -->
+            <div class="api-error-toast" id="apiErrorToast" role="alert" aria-live="assertive">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span id="apiErrorMsg">Something went wrong. Please try again.</span>
+            </div>
+
+            <!-- PAY BUTTON -->
+            <div class="pay-btn-wrap">
+              <button type="submit" class="pay-btn disabled" id="payBtn" disabled>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                <span id="payBtnLabel">Pay ₹800 Securely</span>
+              </button>
+              <div class="pay-secure-note">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               256-bit encrypted &amp; Powered by Cashfree
             </div>
           </div>
@@ -2010,93 +1930,108 @@
     });
     document.getElementById('agreeConduct')?.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleConduct(); } });
 
-    // ── Pay button state ─────────────────────────────────────────────────
+    // -- Team Code Verify flow
+    let verifiedTeamCode = null;
+    let memberCount      = 0;
+
+    const verifyBtn        = document.getElementById('verifyCodeBtn');
+    const codeInput        = document.getElementById('teamCodeInput');
+    const codeErr          = document.getElementById('teamCodeErr');
+    const detailsStep      = document.getElementById('teamDetailsStep');
+    const membersContainer = document.getElementById('membersContainer');
+
+    window.memberCount = 0;
+
+    function addMemberRow() {
+      if (window.memberCount >= 3) return;
+      window.memberCount++;
+      const idx = window.memberCount;
+      const block = document.createElement('div');
+      block.className = 'member-block';
+      block.id = 'dynMember' + idx;
+      block.innerHTML = '<div class="member-block-header"><span class="member-block-title">Member ' + (idx + 1) + ' <span class="opt-badge">optional</span></span>' +
+        '<button type="button" class="remove-member-btn" onclick="this.closest(\'.member-block\').remove(); window.memberCount = Math.max(0, window.memberCount-1); document.getElementById(\'addMemberBtn\').style.display = \'\';">' +
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Remove</button></div>' +
+        '<div class="form-row"><div class="form-field"><label class="form-label">Full Name</label>' +
+        '<input type="text" class="form-input dyn-member-name" placeholder="Member full name" /></div>' +
+        '<div class="form-field"><label class="form-label">Phone</label>' +
+        '<input type="tel" class="form-input dyn-member-phone" placeholder="+91 xxxxxxxxxx" /></div></div>';
+      membersContainer.appendChild(block);
+      if (window.memberCount >= 3) document.getElementById('addMemberBtn').style.display = 'none';
+    }
+
+    document.getElementById('addMemberBtn')?.addEventListener('click', addMemberRow);
+
+    async function verifyTeamCode() {
+      const code = (codeInput?.value || '').trim().toUpperCase();
+      if (!code) { codeErr.textContent = 'Please enter your team code.'; return; }
+      codeErr.textContent = '';
+      verifyBtn.disabled = true;
+      verifyBtn.textContent = 'Checking...';
+      try {
+        const res  = await fetch('/api/team?code=' + encodeURIComponent(code));
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          codeErr.textContent   = data.error || 'Invalid team code. Please try again.';
+          verifyBtn.disabled    = false;
+          verifyBtn.textContent = 'Verify ->';
+          return;
+        }
+        const team = data.team;
+        verifiedTeamCode = team.code;
+        document.getElementById('teamName').value    = team.teamName    || '';
+        document.getElementById('collegeName').value = team.collegeName || '';
+        document.getElementById('branch').value      = team.branch      || '';
+        document.getElementById('leaderName').value  = team.leader?.name  || '';
+        document.getElementById('leaderEmail').value = team.leader?.email || '';
+        document.getElementById('leaderPhone').value = team.leader?.phone || '';
+        detailsStep.style.display = 'block';
+        detailsStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        codeInput.readOnly      = true;
+        verifyBtn.disabled      = true;
+        verifyBtn.textContent   = 'Verified';
+        verifyBtn.style.opacity = '0.55';
+        updatePayBtn();
+      } catch (err) {
+        codeErr.textContent   = 'Network error. Please try again.';
+        verifyBtn.disabled    = false;
+        verifyBtn.textContent = 'Verify ->';
+      }
+    }
+
+    verifyBtn?.addEventListener('click', verifyTeamCode);
+    codeInput?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); verifyTeamCode(); } });
+
+    // -- Pay button state
     const payBtn = document.getElementById('payBtn');
 
     function updatePayBtn() {
-      const canPay = tcChecked && conductChecked;
+      const canPay = tcChecked && conductChecked && !!verifiedTeamCode;
       payBtn.classList.toggle('disabled', !canPay);
-      payBtn.classList.toggle('enabled', canPay);
+      payBtn.classList.toggle('enabled',   canPay);
       payBtn.disabled = !canPay;
       if (payLabel) {
-        payLabel.textContent = canPay
-          ? (mentorSelected ? 'Pay ₹1,100 Securely' : 'Pay ₹800 Securely')
-          : 'Pay ₹800 Securely';
+        payLabel.textContent = !verifiedTeamCode
+          ? 'Verify team code first'
+          : (canPay ? (mentorSelected ? 'Pay Rs.1,100 Securely' : 'Pay Rs.800 Securely') : 'Accept agreements to pay');
       }
     }
 
-    // ── Form validation & submit ─────────────────────────────────────────
-    function showErr(id, msg) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.textContent = msg;
-      el.classList.add('visible');
-    }
-    function clearErr(id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.textContent = '';
-      el.classList.remove('visible');
-    }
-    function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); }
-    function isValidPhone(v) { return /^(\+91[\s-]?)?[6-9]\d{9}$/.test(v.trim().replace(/\s/g,'')); }
-
-    // Live clear on input
-    ['teamName','collegeName','branch','yearOfStudy','leaderName','leaderEmail','leaderPhone','m2Name','m2Email','m2Phone'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.addEventListener('input', () => {
-          el.classList.remove('is-error');
-          clearErr(id + 'Err');
-        });
-        el.addEventListener('change', () => {
-          el.classList.remove('is-error');
-          clearErr(id + 'Err');
-        });
-      }
-    });
+    function showErr(id, msg) { const el = document.getElementById(id); if (!el) return; el.textContent = msg; el.classList.add('visible'); }
+    function clearErr(id)     { const el = document.getElementById(id); if (!el) return; el.textContent = '';  el.classList.remove('visible'); }
 
     document.getElementById('regForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (!verifiedTeamCode) { codeErr.textContent = 'Please verify your team code first.'; return; }
+      if (!tcChecked || !conductChecked) return;
 
-      let valid = true;
-
-      // ── Client-side validation ──────────────────────────────────────────────
-      const teamName = document.getElementById('teamName').value.trim();
-      if (!teamName) { showErr('teamNameErr', 'Team name is required.'); document.getElementById('teamName').classList.add('is-error'); valid = false; } else clearErr('teamNameErr');
-
-      const college = document.getElementById('collegeName').value.trim();
-      if (!college) { showErr('collegeNameErr', 'College name is required.'); document.getElementById('collegeName').classList.add('is-error'); valid = false; } else clearErr('collegeNameErr');
-
-      const branch = document.getElementById('branch').value.trim();
-      if (!branch) { showErr('branchErr', 'Branch is required.'); document.getElementById('branch').classList.add('is-error'); valid = false; } else clearErr('branchErr');
-
-      const year = document.getElementById('yearOfStudy').value;
-      if (!year) { showErr('yearErr', 'Year of study is required.'); document.getElementById('yearOfStudy').classList.add('is-error'); valid = false; } else clearErr('yearErr');
-
-      const lName = document.getElementById('leaderName').value.trim();
-      if (!lName) { showErr('leaderNameErr', 'Leader name is required.'); document.getElementById('leaderName').classList.add('is-error'); valid = false; } else clearErr('leaderNameErr');
-
-      const lEmail = document.getElementById('leaderEmail').value.trim();
-      if (!lEmail || !isValidEmail(lEmail)) { showErr('leaderEmailErr', 'Valid email required.'); document.getElementById('leaderEmail').classList.add('is-error'); valid = false; } else clearErr('leaderEmailErr');
-
-      const lPhone = document.getElementById('leaderPhone').value.trim();
-      if (!lPhone) { showErr('leaderPhoneErr', 'Phone number is required.'); document.getElementById('leaderPhone').classList.add('is-error'); valid = false; } else clearErr('leaderPhoneErr');
-
-      const m2Name = document.getElementById('m2Name').value.trim();
-      if (!m2Name) { showErr('m2NameErr', 'Member 2 name is required.'); document.getElementById('m2Name').classList.add('is-error'); valid = false; } else clearErr('m2NameErr');
-      const m2Email = document.getElementById('m2Email').value.trim();
-      if (!m2Email || !isValidEmail(m2Email)) { showErr('m2EmailErr', 'Valid email required.'); document.getElementById('m2Email').classList.add('is-error'); valid = false; } else clearErr('m2EmailErr');
-      const m2Phone = document.getElementById('m2Phone').value.trim();
-      if (!m2Phone) { showErr('m2PhoneErr', 'Phone number is required.'); document.getElementById('m2Phone').classList.add('is-error'); valid = false; } else clearErr('m2PhoneErr');
-
-      if (!tcChecked || !conductChecked) { valid = false; }
-
-      if (!valid) {
-        const firstErr = document.querySelector('.is-error');
-        if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
+      // Collect dynamic member rows
+      const membersPayload = [];
+      (membersContainer || document.body).querySelectorAll('.member-block').forEach(block => {
+        const name  = block.querySelector('.dyn-member-name')?.value.trim();
+        const phone = block.querySelector('.dyn-member-phone')?.value.trim();
+        if (name) membersPayload.push({ name, phone: phone || '' });
+      });
 
       // ── Collect form data ───────────────────────────────────────────────────
       const membersPayload = [];
@@ -2218,11 +2153,9 @@
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            teamCode:      verifiedTeamCode,
             mentorSession: mentorSelected,
-            teamName:      formData.teamName,
-            leaderName:    formData.leader.name,
-            leaderEmail:   formData.leader.email,
-            leaderPhone:   formData.leader.phone,
+            members:       membersPayload,
           }),
         });
         const orderData = await orderRes.json();

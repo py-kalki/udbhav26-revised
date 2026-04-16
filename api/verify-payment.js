@@ -1,52 +1,26 @@
-﻿/**
+/**
  * api/verify-payment.js
- * â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+ * ─────────────────────────────────────────────────────────────────
  * POST /api/verify-payment
  *
- * Verifies a Cashfree payment by calling the Cashfree Orders API
- * (GET /orders/{order_id}) and checking order_status === 'PAID'.
+ * Called by the frontend after Cashfree redirects back.
+ * Verifies the payment server-side, then updates the Team document.
  *
- * No HMAC signature needed â€” server-to-server API call is the
- * authoritative source of truth.
- *
- * Request body (JSON):
- *   {
- *     orderId:   string,   // Cashfree order_id returned from create-order
- *     formData:  { teamName, collegeName, branch, yearOfStudy,
- *                  leader: { name, email, phone },
- *                  members: [...], mentorSession: boolean }
- *   }
- *
- * Response:
- *   200 { success: true, teamCode, teamName, amountPaid, wantsMentor }
- *   400/500 { success: false, error }
- * â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+ * Request body: { orderId: string }
+ * ─────────────────────────────────────────────────────────────────
  */
 
-import { connectDB }         from './lib/mongodb.js';
-import { Registration }      from './models/Registration.js';
-import { generateTeamCode }  from './lib/teamCode.js';
-import { sendTeamCodeEmail } from './lib/email.js';
+import { connectDB }           from './lib/mongodb.js';
+import { Team }                from './models/Team.js';
+import { sendTeamCodeEmail }   from './lib/email.js';
 
 const APP_ID     = process.env.CASHFREE_APP_ID;
 const SECRET_KEY = process.env.CASHFREE_SECRET_KEY;
-const CF_ENV     = process.env.NODE_ENV === 'production' ? 'production' : 'sandbox';
+const CF_ENV     = process.env.CASHFREE_ENV
+  || (process.env.NODE_ENV === 'production' ? 'production' : 'sandbox');
 const CF_BASE    = CF_ENV === 'production'
   ? 'https://api.cashfree.com/pg'
   : 'https://sandbox.cashfree.com/pg';
-
-const BASE_AMOUNT  = 800;
-const MENTOR_ADDON = 300;
-
-const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((v || '').trim());
-
-function validateMember(m, label) {
-  if (!m || typeof m !== 'object') return `${label}: missing data`;
-  if (!(m.name  || '').trim()) return `${label}: name is required`;
-  if (!isValidEmail(m.email))  return `${label}: valid email required`;
-  if (!(m.phone || '').trim()) return `${label}: phone is required`;
-  return null;
-}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -57,24 +31,15 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  if (!APP_ID || !SECRET_KEY) {
-    return res.status(500).json({ success: false, error: 'Server configuration error.' });
+  const { orderId } = req.body || {};
+  if (!orderId) {
+    return res.status(400).json({ success: false, error: 'orderId is required.' });
   }
 
   try {
-    const { orderId, formData } = req.body || {};
-
-    // â”€â”€ 1. Presence checks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    if (!orderId) {
-      return res.status(400).json({ success: false, error: 'Missing Cashfree order ID.' });
-    }
-    if (!formData) {
-      return res.status(400).json({ success: false, error: 'Missing registration data.' });
-    }
-
-    // â”€â”€ 2. Fetch order status from Cashfree (authoritative) â”€â”€â”€â”€â”€
+    // ── 1. Verify with Cashfree server-to-server ──────────────────
     const cfRes = await fetch(`${CF_BASE}/orders/${orderId}`, {
-      method: 'GET',
+      method:  'GET',
       headers: {
         'x-api-version':   '2023-08-01',
         'x-client-id':     APP_ID,
@@ -83,136 +48,88 @@ export default async function handler(req, res) {
     });
 
     const cfData = await cfRes.json();
+    console.log(`[verify-payment] Cashfree status for ${orderId}:`, cfData?.order_status);
 
     if (!cfRes.ok) {
-      console.error('[verify-payment] Cashfree order fetch error:', cfData);
-      return res.status(400).json({ success: false, error: 'Could not retrieve payment status. Please contact support.' });
+      return res.status(502).json({ success: false, error: 'Could not verify payment with Cashfree.' });
     }
 
-    // Cashfree statuses: ACTIVE, PAID, EXPIRED, CANCELLED
-    const orderStatus = cfData.order_status;
-    console.log(`[verify-payment] Order ${orderId} status: ${orderStatus}`);
-
-    if (orderStatus !== 'PAID') {
+    if (cfData.order_status !== 'PAID') {
       return res.status(400).json({
         success: false,
-        error: orderStatus === 'ACTIVE'
-          ? 'Payment not completed yet. Please complete the payment and try again.'
-          : `Payment ${orderStatus.toLowerCase()}. Please contact support.`,
+        error:   `Payment not completed. Status: ${cfData.order_status}`,
+        status:  cfData.order_status,
       });
     }
 
-    // â”€â”€ 3. Extract Cashfree payment ID from payments â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    // Fetch payment details for this order to get cf_payment_id
-    let cfPaymentId = cfData.cf_order_id || orderId;
+    // ── 2. Get Cashfree payment ID ────────────────────────────────
+    let cashfreePaymentId = null;
     try {
-      const pymtRes  = await fetch(`${CF_BASE}/orders/${orderId}/payments`, {
+      const paymentsRes  = await fetch(`${CF_BASE}/orders/${orderId}/payments`, {
         headers: {
           'x-api-version':   '2023-08-01',
           'x-client-id':     APP_ID,
           'x-client-secret': SECRET_KEY,
         },
       });
-      const payments = await pymtRes.json();
-      if (Array.isArray(payments) && payments.length > 0) {
-        cfPaymentId = String(payments[0].cf_payment_id || cfPaymentId);
-      }
+      const paymentsData = await paymentsRes.json();
+      const paid = Array.isArray(paymentsData)
+        ? paymentsData.find(p => p.payment_status === 'SUCCESS')
+        : null;
+      cashfreePaymentId = paid?.cf_payment_id?.toString() || null;
     } catch (_) { /* non-fatal */ }
 
-    // â”€â”€ 4. Validate form data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    if (!(formData.teamName    || '').trim()) return res.status(400).json({ success: false, error: 'Team name is required.' });
-    if (!(formData.collegeName || '').trim()) return res.status(400).json({ success: false, error: 'College name is required.' });
-    if (!(formData.branch      || '').trim()) return res.status(400).json({ success: false, error: 'Branch is required.' });
-    if (!(formData.yearOfStudy || '').trim()) return res.status(400).json({ success: false, error: 'Year of study is required.' });
-
-    const leaderErr = validateMember(formData.leader, 'Leader');
-    if (leaderErr) return res.status(400).json({ success: false, error: leaderErr });
-
-    const members = Array.isArray(formData.members) ? formData.members : [];
-    for (let i = 0; i < members.length; i++) {
-      const err = validateMember(members[i], `Member ${i + 2}`);
-      if (err) return res.status(400).json({ success: false, error: err });
-    }
-
-    // Server-authoritative amount
-    const totalAmount = formData.mentorSession ? BASE_AMOUNT + MENTOR_ADDON : BASE_AMOUNT;
-
-    // â”€â”€ 5. Connect DB + duplicate guard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── 3. Update the Team document ───────────────────────────────
     await connectDB();
 
-    const existing = await Registration.findOne({ cashfreeOrderId: orderId });
-    if (existing) {
+    const team = await Team.findOne({ cashfreeOrderId: orderId });
+    if (!team) {
+      console.error(`[verify-payment] No team found for orderId: ${orderId}`);
+      return res.status(404).json({ success: false, error: 'Team not found for this order.' });
+    }
+
+    // Idempotent: already marked paid
+    if (team.paymentStatus === 'paid') {
+      console.log(`[verify-payment] Already paid: ${team.code}`);
       return res.status(200).json({
         success:     true,
-        teamCode:    existing.teamCode,
-        teamName:    existing.teamName,
-        amountPaid:  existing.totalAmount,
-        wantsMentor: existing.mentorSession,
-        message:     'Already registered.',
+        teamCode:    team.code,
+        teamName:    team.teamName,
+        leaderEmail: team.leader.email,
+        amountPaid:  team.totalAmount,
+        wantsMentor: team.mentorSession,
+        orderId,
       });
     }
 
-    // â”€â”€ 6. Generate team code â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    const teamCode = await generateTeamCode();
+    team.paymentStatus      = 'paid';
+    team.cashfreePaymentId  = cashfreePaymentId;
+    team.paymentDate        = new Date();
+    await team.save();
 
-    // â”€â”€ 7. Save registration â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    const registration = await Registration.create({
-      teamName:    formData.teamName.trim(),
-      collegeName: formData.collegeName.trim(),
-      branch:      formData.branch.trim(),
-      yearOfStudy: String(formData.yearOfStudy),
-      leader: {
-        name:  formData.leader.name.trim(),
-        email: formData.leader.email.trim().toLowerCase(),
-        phone: formData.leader.phone.trim(),
-      },
-      members: members.map(m => ({
-        name:  m.name.trim(),
-        email: m.email.trim().toLowerCase(),
-        phone: m.phone.trim(),
-      })),
-      mentorSession:     Boolean(formData.mentorSession),
-      totalAmount,
-      paymentStatus:     'paid',
-      registrationCompleted: true,
-      cashfreeOrderId:   orderId,
-      cashfreePaymentId: cfPaymentId,
-      teamCode,
-      ipAddress: req.headers['x-forwarded-for'] || req.socket?.remoteAddress || null,
-      userAgent: req.headers['user-agent'] || null,
-    });
+    console.log(`[verify-payment] ✅ Payment confirmed: ${team.code} | ${team.teamName} | ₹${team.totalAmount}`);
 
-    console.log(`[verify-payment] âœ… Registered: ${registration._id} | Team: ${formData.teamName} | Code: ${teamCode}`);
-
-    // â”€â”€ 8. Send confirmation email (non-blocking) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── 4. Send confirmation email ────────────────────────────────
     sendTeamCodeEmail({
-      to:          formData.leader.email.trim().toLowerCase(),
-      teamName:    formData.teamName.trim(),
-      teamCode,
-      wantsMentor: Boolean(formData.mentorSession),
-      amountPaid:  totalAmount,
+      to:          team.leader.email,
+      teamName:    team.teamName,
+      teamCode:    team.code,
+      wantsMentor: team.mentorSession,
+      amountPaid:  team.totalAmount,
     }).catch(err => console.error('[verify-payment] Email error:', err));
 
-    // â”€â”€ 9. Respond â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     return res.status(200).json({
       success:     true,
-      teamCode,
-      teamName:    formData.teamName.trim(),
-      amountPaid:  totalAmount,
-      wantsMentor: Boolean(formData.mentorSession),
-      leaderEmail: formData.leader.email.trim().toLowerCase(),
-      message:     'Registration confirmed!',
+      teamCode:    team.code,
+      teamName:    team.teamName,
+      leaderEmail: team.leader.email,
+      amountPaid:  team.totalAmount,
+      wantsMentor: team.mentorSession,
+      orderId,
     });
 
   } catch (err) {
-    console.error('[verify-payment] Error:', err);
-    if (err.code === 11000) {
-      return res.status(400).json({ success: false, error: 'This team is already registered.' });
-    }
-    return res.status(500).json({
-      success: false,
-      error: 'Server error â€” please contact support with your order ID.',
-    });
+    console.error('[verify-payment] Unexpected error:', err);
+    return res.status(500).json({ success: false, error: 'Payment verification failed.' });
   }
 }
-
