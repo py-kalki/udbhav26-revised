@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <head>
@@ -896,6 +896,24 @@
       align-items: center;
       gap: 0.75rem;
     }
+    .verify-code-btn {
+      flex: 0 0 auto;
+      padding: 0 1.5rem;
+      height: 3rem;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 60%, #a78bfa 100%);
+      color: #fff;
+      font-family: var(--font-ui, inherit);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .verify-code-btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+    .verify-code-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
     .pay-btn {
       width: 100%;
@@ -1320,12 +1338,11 @@
                   Team Code <span class="req" aria-hidden="true">*</span>
                   <span class="hint">Sent to your leader's email after shortlisting</span>
                 </label>
-                <div style="display:flex;gap:0.6rem;align-items:center;">
+                <div style="display:flex;gap:0.75rem;align-items:stretch;width:100%;">
                   <input type="text" id="teamCodeInput" name="teamCodeInput" class="form-input"
                          placeholder="e.g., UDB-ABCD" autocomplete="off" autocapitalize="characters"
-                         style="font-family:'JetBrains Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;flex:1;" />
-                  <button type="button" id="verifyCodeBtn" class="pay-btn enabled"
-                          style="padding:0.7rem 1.2rem;font-size:0.82rem;white-space:nowrap;height:2.9rem;">
+                         style="font-family:'JetBrains Mono',monospace;letter-spacing:0.12em;text-transform:uppercase;flex:1;min-width:0;font-size:1rem;font-weight:700;" />
+                  <button type="button" id="verifyCodeBtn" class="verify-code-btn">
                     Verify →
                   </button>
                 </div>
