@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -2770,6 +2770,8 @@
       if (mentorWrap)  mentorWrap.setAttribute('aria-checked', mentorOn ? 'true' : 'false');
       if (totalEl)     totalEl.textContent = mentorOn ? '₹1,100' : '₹800';
       if (breakdownEl) breakdownEl.textContent = mentorOn ? '₹800 base + ₹300 mentor session = ₹1,100' : '';
+      var lbl = document.getElementById('payBtnLabel');
+      if (lbl) lbl.textContent = mentorOn ? 'Pay ₹1,100 Securely' : 'Pay ₹800 Securely';
       updatePayBtn();
     }
     if (mentorWrap) {
