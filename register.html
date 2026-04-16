@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <head>
@@ -1057,6 +1057,24 @@
   <link rel="stylesheet" href="/mobile-perf.css" />
   <!-- Cashfree JS SDK -->
   <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+  <style>
+    /* ── Register page footer fixes ──────────────────────────────────
+       The cinematic footer uses a scroll-pinned 200vh wrapper on the
+       home page. On the register page we just want a normal footer,
+       so collapse the wrapper height and force all GSAP-animated
+       elements visible (opacity/transform are set to 0 by CSS and then
+       animated in by GSAP, but GSAP never runs here due to IIFE crash).
+    ─────────────────────────────────────────────────────────────────── */
+    .cf-wrapper        { height: auto !important; }
+    .cf-footer         { position: relative !important; height: auto !important; min-height: unset !important; padding-bottom: 3rem !important; }
+    .cf-giant-text     { opacity: 0.06 !important; transform: none !important; }
+    .cf-center         { opacity: 1 !important; transform: none !important; }
+    .cf-heading        { opacity: 1 !important; transform: none !important; }
+    .cf-links          { opacity: 1 !important; transform: none !important; }
+    .cf-pill           { opacity: 1 !important; transform: none !important; }
+    .cf-bottom-bar     { opacity: 1 !important; transform: none !important; }
+    .cf-marquee-wrap   { opacity: 1 !important; }
+  </style>
 </head>
 
 <body>
