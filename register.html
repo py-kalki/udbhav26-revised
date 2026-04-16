@@ -2590,52 +2590,226 @@
   <script src="/mobile-perf.js" defer></script>
 
 
-  <!-- Verify button safety net — runs independently of Lenis/GSAP -->
+
+  <!-- ══ UDBHAV'26 Register Form — Interactive Logic ══════════════════════════
+       This script is COMPLETELY STANDALONE — no 'use strict', no IIFE conflicts.
+       It handles all interactive elements and is guaranteed to run.
+  ═══════════════════════════════════════════════════════════════════════════ -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var btn = document.getElementById('verifyCodeBtn');
-      var inp = document.getElementById('teamCodeInput');
-      if (!btn || !inp) return;
-      // If the main IIFE already bound the listener, do nothing (idempotent)
-      if (btn.dataset.listenerBound) return;
-      btn.dataset.listenerBound = '1';
-      btn.addEventListener('click', async function() {
-        var code = (inp.value || '').trim().toUpperCase();
-        var errEl = document.getElementById('teamCodeErr');
-        var statusEl = document.getElementById('codeVerifyStatus');
-        if (!code) { if (errEl) errEl.textContent = 'Please enter your team code.'; return; }
-        if (errEl) errEl.textContent = '';
-        btn.disabled = true;
-        btn.textContent = 'Checking...';
+  document.addEventListener('DOMContentLoaded', function() {
+
+    // ── NAVBAR MOBILE MENU ───────────────────────────────────────────────────
+    var menuBtn    = document.getElementById('mobileMenuBtn');
+    var menuDrawer = document.getElementById('mobileMenuDrawer');
+    if (menuBtn && menuDrawer) {
+      menuBtn.addEventListener('click', function() {
+        var open = menuDrawer.getAttribute('aria-hidden') === 'false';
+        menuDrawer.setAttribute('aria-hidden', open ? 'true' : 'false');
+        menuBtn.setAttribute('aria-expanded', open ? 'false' : 'true');
+        menuDrawer.style.display = open ? '' : 'block';
+      });
+      document.querySelectorAll('.mmd-nav a').forEach(function(a) {
+        a.addEventListener('click', function() {
+          menuDrawer.setAttribute('aria-hidden', 'true');
+          menuBtn.setAttribute('aria-expanded', 'false');
+          menuDrawer.style.display = '';
+        });
+      });
+    }
+
+    // ── TEAM CODE VERIFY ─────────────────────────────────────────────────────
+    var verifyBtn  = document.getElementById('verifyCodeBtn');
+    var codeInput  = document.getElementById('teamCodeInput');
+    var codeErr    = document.getElementById('teamCodeErr');
+    var detailStep = document.getElementById('teamDetailsStep');
+    window.__verifiedTeamCode = null;
+
+    if (verifyBtn && codeInput) {
+      verifyBtn.addEventListener('click', async function() {
+        var code = (codeInput.value || '').trim().toUpperCase();
+        if (!code) { if (codeErr) codeErr.textContent = 'Please enter your team code.'; return; }
+        if (codeErr) codeErr.textContent = '';
+        verifyBtn.disabled = true; verifyBtn.textContent = 'Checking…';
         try {
           var res  = await fetch('/api/team?code=' + encodeURIComponent(code));
           var data = await res.json();
           if (!res.ok || !data.success) {
-            if (errEl) errEl.textContent = data.error || 'Invalid team code. Please try again.';
-            btn.disabled = false; btn.textContent = 'Verify →';
+            if (codeErr) codeErr.textContent = data.error || 'Invalid team code. Please try again.';
+            verifyBtn.disabled = false; verifyBtn.textContent = 'Verify →';
             return;
           }
           var team = data.team;
-          ['teamName','collegeName','branch','leaderName','leaderEmail','leaderPhone'].forEach(function(id, i) {
-            var vals = [team.teamName, team.collegeName, team.branch, team.leader&&team.leader.name, team.leader&&team.leader.email, team.leader&&team.leader.phone];
+          var fieldMap = { teamName: team.teamName, collegeName: team.collegeName, branch: team.branch,
+            leaderName: team.leader && team.leader.name, leaderEmail: team.leader && team.leader.email, leaderPhone: team.leader && team.leader.phone };
+          Object.keys(fieldMap).forEach(function(id) {
             var el = document.getElementById(id);
-            if (el) el.value = vals[i] || '';
+            if (el) el.value = fieldMap[id] || '';
           });
-          var step = document.getElementById('teamDetailsStep');
-          if (step) { step.style.display = 'block'; step.scrollIntoView({ behavior:'smooth', block:'start' }); }
-          inp.readOnly = true;
-          btn.textContent = '✓ Verified';
-          btn.style.background = 'linear-gradient(135deg,#16a34a,#4ade80)';
-          btn.style.opacity = '0.85';
-          // store code for payment
           window.__verifiedTeamCode = team.code;
-          if (typeof window !== 'undefined' && window.verifiedTeamCode !== undefined) window.verifiedTeamCode = team.code;
+          if (detailStep) { detailStep.style.display = 'block'; detailStep.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+          codeInput.readOnly = true;
+          verifyBtn.textContent = '✓ Verified';
+          verifyBtn.style.background = 'linear-gradient(135deg,#16a34a,#4ade80)';
+          verifyBtn.style.opacity = '0.85';
+          updatePayBtn();
         } catch(err) {
-          if (errEl) errEl.textContent = 'Network error. Please try again.';
-          btn.disabled = false; btn.textContent = 'Verify →';
+          if (codeErr) codeErr.textContent = 'Network error. Please try again.';
+          verifyBtn.disabled = false; verifyBtn.textContent = 'Verify →';
         }
       });
-    });
+      codeInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); verifyBtn.click(); } });
+    }
+
+    // ── MEMBERS ──────────────────────────────────────────────────────────────
+    var membersContainer = document.getElementById('membersContainer');
+    var addBtn           = document.getElementById('addMemberBtn');
+    var memberIdx        = 0;
+
+    function addMemberRow() {
+      memberIdx++;
+      var row = document.createElement('div');
+      row.className = 'member-block';
+      row.id = 'dynMember' + memberIdx;
+      row.innerHTML =
+        '<div class="member-block-header">' +
+          '<span class="member-block-title">Member ' + (memberIdx + 1) +
+            ' <span class="opt-badge" style="opacity:.6;font-size:.7rem;font-weight:600">required</span></span>' +
+          '<button type="button" class="remove-member-btn" onclick="this.closest(\'.member-block\').remove();updatePayBtn();">' +
+            '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+            'Remove</button></div>' +
+        '<div class="form-row">' +
+          '<div class="form-field"><label class="form-label">Full Name <span class="req">*</span></label>' +
+            '<input type="text" class="form-input dyn-member-name" placeholder="Member full name" autocomplete="off" /></div>' +
+          '<div class="form-field"><label class="form-label">Phone <span class="req">*</span></label>' +
+            '<input type="tel" class="form-input dyn-member-phone" placeholder="+91 xxxxxxxxxx" autocomplete="off" /></div>' +
+        '</div>';
+      if (membersContainer) membersContainer.appendChild(row);
+      updatePayBtn();
+    }
+
+    if (addBtn) addBtn.addEventListener('click', addMemberRow);
+    // Add first required member row on verify
+    document.addEventListener('teamVerified', function() { if (memberIdx === 0) addMemberRow(); });
+
+    // ── MENTOR SESSION TOGGLE ─────────────────────────────────────────────────
+    var mentorWrap  = document.getElementById('mentorWrap');
+    var mentorCheck = document.getElementById('mentorCheckbox');
+    var totalEl     = document.getElementById('totalAmount');
+    var breakdownEl = document.getElementById('totalBreakdown');
+    var mentorOn    = false;
+
+    function toggleMentor() {
+      mentorOn = !mentorOn;
+      if (mentorCheck) mentorCheck.classList.toggle('checked', mentorOn);
+      if (mentorWrap)  mentorWrap.setAttribute('aria-checked', mentorOn ? 'true' : 'false');
+      if (totalEl)     totalEl.textContent = mentorOn ? '₹1,100' : '₹800';
+      if (breakdownEl) breakdownEl.textContent = mentorOn ? '₹800 base + ₹300 mentor session = ₹1,100' : '';
+      updatePayBtn();
+    }
+    if (mentorWrap) {
+      mentorWrap.addEventListener('click', toggleMentor);
+      mentorWrap.addEventListener('keydown', function(e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleMentor(); } });
+    }
+
+    // ── AGREEMENT CHECKBOXES ─────────────────────────────────────────────────
+    var tcChecked      = false;
+    var conductChecked = false;
+
+    function toggleTC() {
+      tcChecked = !tcChecked;
+      var el = document.getElementById('checkTC');
+      if (el) el.classList.toggle('checked', tcChecked);
+      var ag = document.getElementById('agreeTC');
+      if (ag) ag.setAttribute('aria-checked', tcChecked ? 'true' : 'false');
+      updatePayBtn();
+    }
+    function toggleConduct() {
+      conductChecked = !conductChecked;
+      var el = document.getElementById('checkConduct');
+      if (el) el.classList.toggle('checked', conductChecked);
+      var ag = document.getElementById('agreeConduct');
+      if (ag) ag.setAttribute('aria-checked', conductChecked ? 'true' : 'false');
+      updatePayBtn();
+    }
+    var agTC = document.getElementById('agreeTC');
+    var agCo = document.getElementById('agreeConduct');
+    if (agTC) agTC.addEventListener('click', function(e) { if (e.target.tagName !== 'A') toggleTC(); });
+    if (agCo) agCo.addEventListener('click', function(e) { if (e.target.tagName !== 'A') toggleConduct(); });
+    if (agTC) agTC.addEventListener('keydown', function(e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleTC(); } });
+    if (agCo) agCo.addEventListener('keydown', function(e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleConduct(); } });
+
+    // ── PAY BUTTON STATE ─────────────────────────────────────────────────────
+    var payBtn = document.getElementById('payBtn');
+
+    function updatePayBtn() {
+      if (!payBtn) return;
+      var hasCode    = !!window.__verifiedTeamCode;
+      var hasMembers = document.querySelectorAll('.dyn-member-name').length > 0;
+      var ready      = hasCode && hasMembers && tcChecked && conductChecked;
+      payBtn.disabled = !ready;
+      payBtn.classList.toggle('disabled', !ready);
+      payBtn.classList.toggle('enabled', ready);
+    }
+    window.updatePayBtn = updatePayBtn;
+
+    // ── PAY BUTTON SUBMIT ─────────────────────────────────────────────────────
+    if (payBtn) {
+      payBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+        if (!window.__verifiedTeamCode) return;
+
+        var members = [];
+        document.querySelectorAll('.member-block').forEach(function(block) {
+          var nameEl  = block.querySelector('.dyn-member-name');
+          var phoneEl = block.querySelector('.dyn-member-phone');
+          if (nameEl && nameEl.value.trim()) {
+            members.push({ name: nameEl.value.trim(), phone: (phoneEl && phoneEl.value.trim()) || '' });
+          }
+        });
+
+        if (members.length === 0) {
+          alert('Please add at least 1 team member.');
+          return;
+        }
+
+        payBtn.disabled = true; payBtn.textContent = 'Processing…';
+
+        try {
+          var res = await fetch('/api/create-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              teamCode:      window.__verifiedTeamCode,
+              mentorSession: mentorOn,
+              members:       members,
+            }),
+          });
+          var data = await res.json();
+          if (!res.ok || !data.orderId) throw new Error(data.error || 'Order creation failed');
+
+          // Open Cashfree checkout
+          var cfg = {
+            paymentSessionId: data.paymentSessionId,
+            redirectTarget: '_self',
+          };
+          if (window.Cashfree) {
+            var cf = window.Cashfree({ mode: data.env || 'sandbox' });
+            cf.checkout(cfg).then(function(r) {
+              if (r.error) { payBtn.disabled = false; payBtn.textContent = 'Pay & Register'; }
+            });
+          } else {
+            window.location.href = data.paymentLink || '/';
+          }
+        } catch(err) {
+          alert('Payment error: ' + err.message);
+          payBtn.disabled = false; payBtn.textContent = 'Pay & Register';
+        }
+      });
+    }
+
+    // Initial state
+    updatePayBtn();
+  });
   </script>
 </body>
 </html>
