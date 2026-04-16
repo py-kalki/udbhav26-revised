@@ -649,6 +649,11 @@
         Registrations
       </a>
 
+      <a href="/admin/submissions.html" class="sidebar-link" id="navSubmissions">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Submissions
+      </a>
+
       <a href="/admin/problem-statements.html" class="sidebar-link">
         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
         Problem Statements
@@ -764,6 +769,29 @@
         </div>
       </div>
 
+      <!-- Recent submissions -->
+      <div class="section-card">
+        <div class="section-card-header">
+          <span class="section-card-title">Recent Submissions</span>
+          <a href="/admin/submissions.html" class="section-card-action">View All →</a>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Team ID</th>
+                <th>Type</th>
+                <th>Link</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="submissionTableBody">
+              <tr><td colspan="4" style="text-align:center;padding:2rem;color:rgba(255,255,255,0.25);">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- Quick actions -->
       <div class="section-card" style="border:none;background:transparent;">
         <div class="section-card-header" style="border:none;padding-left:0;">
@@ -804,7 +832,7 @@
   </main>
 
   <script type="module">
-    import { AdminAuth, RegistrationStore, AdminUI, seedRegistrations } from '/src/admin.js';
+    import { AdminAuth, RegistrationStore, SubmissionStore, AdminUI, seedRegistrations } from '/src/admin.js';
 
     // Auth guard
     if (!AdminAuth.isAuthenticated()) {
@@ -857,6 +885,28 @@
       `).join('');
     }
     renderRecent();
+
+    // Recent submissions
+    async function renderSubmissions() {
+      const submissions = await SubmissionStore.getAll();
+      const recent = submissions.slice(0, 5);
+      const tbody = document.getElementById('submissionTableBody');
+
+      if (recent.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:2rem;color:rgba(255,255,255,0.25);">No submissions yet</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = recent.map(s => `
+        <tr>
+          <td class="td-team">${s.teamId}</td>
+          <td>${SubmissionStore.getTypeBadge(s.type)}</td>
+          <td><a href="${s.submissionLink}" target="_blank" class="td-link" style="color:var(--clr-blue);text-decoration:none;">View ↗</a></td>
+          <td>${AdminUI.formatDate(s.submittedAt)}</td>
+        </tr>
+      `).join('');
+    }
+    renderSubmissions();
 
     // Export
     document.getElementById('exportBtn').addEventListener('click', (e) => {

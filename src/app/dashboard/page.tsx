@@ -136,22 +136,6 @@ export default function DashboardPage() {
                     </h2>
                     <DashboardTimeline />
                   </div>
-                  
-                  {/* Stats Placeholder */}
-                  <div className="glass-dark border-white/5 p-6 rounded-3xl relative overflow-hidden group">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <h3 className="text-sm font-bold font-heading mb-4 uppercase tracking-[0.2em] text-white/40">Team Status</h3>
-                    <div className="space-y-4 relative z-10">
-                      <div className="flex justify-between items-end">
-                        <span className="text-xs text-white/60">Rank</span>
-                        <span className="text-2xl font-black font-heading text-gradient">#{stats.rank}</span>
-                      </div>
-                      <div className="flex justify-between items-end">
-                        <span className="text-xs text-white/60">Points</span>
-                        <span className="text-2xl font-black font-heading">{stats.points.toLocaleString()}</span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

@@ -82,36 +82,59 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const teamId = searchParams.get("teamId");
+    const adminSecret = request.headers.get("X-Admin-Secret");
+    const isAdmin = adminSecret === process.env.ADMIN_SECRET;
 
-    if (!teamId) {
-      return NextResponse.json({ error: "Team ID is required" }, { status: 400 });
+    if (!teamId && !isAdmin) {
+      return NextResponse.json({ error: "Team ID is required or unauthorized" }, { status: 400 });
     }
 
     if (process.env.MONGODB_URI) {
       await connectDB();
-      const submissions = await Submission.find({ teamId });
       
-      // Calculate basic stats for now
-      const points = submissions.length * 250; // 250 points per submission/action
-      const rank = Math.max(1, 100 - submissions.length * 10); // Mock rank calculation
+      let submissions;
+      if (isAdmin && !teamId) {
+        // Admin view: All submissions
+        submissions = await Submission.find({}).sort({ submittedAt: -1 });
+        return NextResponse.json({
+          success: true,
+          submissions: submissions.map(s => ({
+            id: s._id,
+            teamId: s.teamId,
+            submissionLink: s.submissionLink,
+            type: s.type,
+            description: s.description,
+            isLeader: s.isLeader,
+            submittedAt: s.submittedAt
+          }))
+        });
+      } else {
+        // Team view: submissions for specific team
+        submissions = await Submission.find({ teamId });
+        
+        // Calculate basic stats for now
+        const points = submissions.length * 250; // 250 points per submission/action
+        const rank = Math.max(1, 100 - submissions.length * 10); // Mock rank calculation
 
-      return NextResponse.json({
-        teamId,
-        submissions: submissions.map(s => ({
-          type: s.type,
-          submittedAt: s.submittedAt,
-          id: s._id
-        })),
-        stats: {
-          points,
-          rank,
-          status: "active"
-        }
-      });
+        return NextResponse.json({
+          teamId,
+          submissions: submissions.map(s => ({
+            type: s.type,
+            submittedAt: s.submittedAt,
+            id: s._id,
+            submissionLink: s.submissionLink
+          })),
+          stats: {
+            points,
+            rank,
+            status: "active"
+          }
+        });
+      }
     } else {
       // Mock data for local testing
       return NextResponse.json({
-        teamId,
+        teamId: teamId || "ADMIN-MOCK",
         submissions: [],
         stats: {
           points: 1250,
@@ -124,3 +147,4 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
   }
 }
+
