@@ -18,10 +18,16 @@
 
 const APP_ID     = process.env.CASHFREE_APP_ID;
 const SECRET_KEY = process.env.CASHFREE_SECRET_KEY;
-const CF_ENV     = process.env.NODE_ENV === 'production' ? 'production' : 'sandbox';
+// CASHFREE_ENV can be set explicitly to 'production' or 'sandbox'
+// Defaults to 'production' if NODE_ENV=production, otherwise 'sandbox'
+// Override in .env: CASHFREE_ENV=production  (use when you have PROD keys in dev)
+const CF_ENV     = process.env.CASHFREE_ENV
+  || (process.env.NODE_ENV === 'production' ? 'production' : 'sandbox');
 const CF_BASE    = CF_ENV === 'production'
   ? 'https://api.cashfree.com/pg'
   : 'https://sandbox.cashfreepayments.com/pg';
+
+console.log(`[create-order] Using Cashfree ${CF_ENV.toUpperCase()} (${CF_BASE})`);
 
 const BASE_AMOUNT  = 800;
 const MENTOR_ADDON = 300;
@@ -87,10 +93,15 @@ export default async function handler(req, res) {
     const cfData = await cfRes.json();
 
     if (!cfRes.ok || !cfData.payment_session_id) {
-      console.error('[create-order] Cashfree API error:', cfData);
+      console.error('[create-order] Cashfree API error:', JSON.stringify(cfData, null, 2));
+      console.error('[create-order] HTTP status:', cfRes.status, '| CF_ENV:', CF_ENV);
+      console.error('[create-order] APP_ID used:', APP_ID?.slice(0, 8) + '...');
       return res.status(500).json({
         success: false,
-        error: cfData?.message || 'Could not create payment order. Please try again.',
+        error: cfData?.message || cfData?.error || 'Could not create payment order. Please try again.',
+        // Surface full Cashfree error in development so you can debug
+        cfError: process.env.NODE_ENV !== 'production' ? cfData : undefined,
+        cfEnvUsed: CF_ENV,
       });
     }
 
