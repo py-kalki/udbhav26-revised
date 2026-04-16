@@ -424,39 +424,11 @@ if (IS_MOBILE) {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// GSAP ScrollTrigger — PINNED dissolve + bento reveal
-// uDissolve: 1→0 = transparent→opaque white canvas over hero.
-// onUpdate watches progress each scrub frame:
-//   ≥ 0.98 → section2 fades IN above canvas (z16 > z15), cards blur in.
-//   ≤ 0.02 → section2 resets, ready for re-play.
-// canvas1 opacity is NEVER changed — section2 sits on top of it,
-// so there is zero hero bleed-through / flicker at any browser.
-// ─────────────────────────────────────────────────────────────────
-// GSAP dissolve pin — desktop only (Three.js + pin ScrollTrigger are skipped on mobile)
-if (!IS_MOBILE && material) {
-  gsap.fromTo(
-    material.uniforms.uDissolve,
-    { value: 1 },
-    {
-      value: 0,
-      ease: 'none',
-      scrollTrigger: {
-        trigger:    '.hero',
-        start:      'top top',
-        end:        '+=70%',
-        pin:        true,
-        scrub:      0.6,
-        pinSpacing: true,
-        anticipatePin: 1
-      }
-    }
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────
-// Micro-interaction: letter parallax on mouse hover over name
-// Desktop only — no hover on touch devices.
-// ─────────────────────────────────────────────────────────────────
+// Dissolve shader DISABLED - replaced by CSS sticky slide-up reveal.
+// Canvas is hidden so it doesn't block mouse events on the hero.
+if (material) material.uniforms.uDissolve.value = 1; // keep transparent
+const _canvas1 = document.querySelector('.canvas1');
+if (_canvas1) { _canvas1.style.display = 'none'; _canvas1.style.pointerEvents = 'none'; }
 if (!IS_TOUCH) heroName.addEventListener('mousemove', (e) => {
   const rect  = heroName.getBoundingClientRect();
   const dx    = (e.clientX - rect.left - rect.width  / 2) / (rect.width  / 2); // -1 to +1

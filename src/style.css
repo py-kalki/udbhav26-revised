@@ -45,11 +45,7 @@ body {
 }
 
 /* ── Scroll container ──────────────────────────────────────────────────────── */
-.page-scroll-container {
-  position: relative;
-  z-index: 10;
-  /* sits above the canvas1 overlay (z-index: 5) */
-}
+.page-scroll-container { /* unwrapped */ }
 
 
 /* ── Three.js canvas overlay ───────────────────────────────────────────────── */
@@ -6155,7 +6151,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 .pd3-card:hover .pd3-hint { opacity: 0; }
 
 /* ----------------------------------------------------------
-   PROBLEM DOMAINS � OGL WebGL Gallery (pdg-*)
+   PROBLEM DOMAINS � OGL WebGL Gallery (pdg-*)
    Container must have an explicit height for OGL to render.
    Canvas is appended programmatically by the GalleryApp class.
    ---------------------------------------------------------- */
@@ -6173,7 +6169,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 }
 .pdg-container:active { cursor: grabbing; }
 
-/* OGL injects a <canvas> � make it fill the container */
+/* OGL injects a <canvas> � make it fill the container */
 .pdg-container canvas {
   width: 100%  !important;
   height: 100% !important;
@@ -6208,7 +6204,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 .pd-header { position: relative; z-index: 4; }
 
 /* ----------------------------------------------------------
-   PROBLEM DOMAIN GALLERY � Hover Popup (pdgp-*)
+   PROBLEM DOMAIN GALLERY � Hover Popup (pdgp-*)
    Positioned absolutely over the OGL canvas via JS.
    Slides in from bottom-right corner with cubic-bezier.
    ---------------------------------------------------------- */
@@ -6313,3 +6309,518 @@ img, video, iframe { max-width: 100%; height: auto; }
 
 /* Allow cloned cards to extend track beyond original 8 */
 .pds-track { width: max-content; }
+
+/* ----------------------------------------------------------
+   HERO ? ABOUT  �  Sticky Slide-Up Reveal Effect
+   ----------------------------------------------------------
+   How it works:
+     � .hero stays pinned at top-0 while the user scrolls
+       through its own scroll-height (100vh).
+     � .udbhav-about is ALSO sticky + top-0, so it scrolls
+       up and overlaps the hero with rounded top corners �
+       exactly the "card sliding up" feel from the component.
+     � No JS. No GSAP. Pure CSS scroll-driven stacking.
+   ---------------------------------------------------------- */
+
+/* Hero pins while about slides up over it */
+.hero {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1 !important;       /* behind the about card */
+  will-change: transform;
+}
+
+/* About section: comes up from below with rounded top corners */
+.udbhav-about {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 15 !important;
+  border-radius: 24px 24px 0 0 !important;
+  overflow: hidden !important;
+  /* Glass edge highlight on the rounded ridge */
+  box-shadow: 0 -6px 40px rgba(0,0,0,0.6),
+              0 -1px 0 rgba(255,255,255,0.07);
+  /* Smooth transition for any scale effects */
+  will-change: transform;
+}
+
+/* Increase scroll travel so there's room for the pin effect */
+body {
+  /* nothing extra needed � sections are min-height:100vh already */
+}
+
+
+/* Dissolve shader canvas � permanently hidden (effect replaced by CSS sticky reveal) */
+.canvas1 {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* --------------------------------------------------------------
+   ABOUT SECTION � MOBILE REWRITE  (= 768px only)
+   --------------------------------------------------------------
+   Complete mobile bento layout:
+   +--------------------+
+   �   Header + label   �  ? uab-header (full width)
+   +--------------------�
+   �  50  � 200+ �  24H �  ? stats row (3 col)
+   +--------------------�        
+   �  Prize ?45K        �  ? accent stat (full width)
+   +--------------------�
+   �  01 � Overview     �  ? big bento card
+   +--------------------�
+   � Timeline �  Why    �  ? 2-col mini bento
+   +--------------------�
+   �   CTA Button       �
+   +--------------------+
+   -------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+
+  /* -- Section shell --------------------------------------------- */
+  .udbhav-about {
+    padding: 48px 0 60px;
+    border-radius: 24px 24px 0 0;
+  }
+
+  /* -- Header --------------------------------------------------- */
+  .uab-header {
+    padding: 0 16px;
+    margin-bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .uab-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    opacity: 0.45;
+  }
+  .uab-title {
+    font-size: clamp(2.2rem, 8vw, 3rem);
+    line-height: 1.08;
+    margin: 0;
+  }
+  .uab-tagline {
+    font-size: 0.78rem;
+    opacity: 0.42;
+    margin: 4px 0 0;
+  }
+  /* Hide the looping words widget on mobile � too cramped */
+  .ulw-block { display: none; }
+
+  /* -- Stats bento row ------------------------------------------- */
+  .uab-stats {
+    padding: 0 16px;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 8px;
+  }
+  /* Prize card spans full row at the bottom */
+  .uab-stat-card--accent {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 20px;
+  }
+  .uab-stat-card--accent .uab-stat-num { font-size: 1.5rem; }
+  .uab-stat-card--accent .uab-stat-lbl { font-size: 0.7rem; align-self: center; opacity: 0.55; }
+
+  .uab-stat-card {
+    padding: 14px 10px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .uab-stat-num {
+    font-size: 1.45rem;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .uab-stat-lbl {
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.42;
+  }
+
+  /* -- Main bento grid ------------------------------------------- */
+  .uab-grid {
+    padding: 0 16px;
+    margin-bottom: 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 8px;
+  }
+
+  /* Overview card � full width top */
+  .uab-card--overview {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  /* Timeline � left half */
+  .uab-card--timeline {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  /* Why � right half */
+  .uab-card--why {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  /* -- Card base ------------------------------------------------- */
+  .uab-card {
+    padding: 18px 16px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .uab-card-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    opacity: 0.35;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  /* -- Overview card content ------------------------------------- */
+  .uab-overview-text {
+    font-size: 0.78rem;
+    line-height: 1.65;
+    opacity: 0.7;
+  }
+  .uab-meta-list {
+    margin-top: 14px;
+    gap: 6px;
+  }
+  .uab-meta-item { font-size: 0.72rem; gap: 6px; }
+
+  /* -- Timeline card (compact for mobile) ------------------------ */
+  .uab-timeline { gap: 0; }
+  .uab-tl-item {
+    flex-direction: column;
+    gap: 0;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    padding-left: 10px;
+  }
+  .uab-tl-item:last-child { border-bottom: none; }
+  .uab-tl-dot {
+    position: absolute;
+    left: -2px;
+    top: 10px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    flex-shrink: 0;
+  }
+  .uab-tl-item--hot .uab-tl-dot { background: #f97316; }
+  .uab-tl-item--go  .uab-tl-dot { background: #22c55e; }
+  .uab-tl-item--win .uab-tl-dot { background: #a855f7; }
+  .uab-tl-time {
+    font-size: 0.55rem;
+    opacity: 0.38;
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+    font-family: 'Inter', monospace;
+  }
+  .uab-tl-text {
+    font-size: 0.68rem;
+    line-height: 1.3;
+    font-weight: 500;
+  }
+
+  /* -- Why grid (vertical stack inside half-width card) ----------- */
+  .uab-why-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .uab-why-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .uab-why-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .uab-why-text {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.65rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: rgba(255,255,255,0.85);
+  }
+  .uab-why-sub {
+    font-size: 0.58rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* -- CTA ------------------------------------------------------- */
+  .uab-cta {
+    padding: 0 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    text-align: center;
+  }
+  .uab-cta-btn {
+    width: 100%;
+    text-align: center;
+    padding: 14px 24px;
+    font-size: 0.9rem;
+    border-radius: 14px;
+  }
+  .uab-cta-note {
+    font-size: 0.65rem;
+    line-height: 1.5;
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 380px) {
+  .uab-title { font-size: 2rem; }
+  .uab-grid  { grid-template-columns: 1fr; }
+  .uab-card--timeline,
+  .uab-card--why {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .uab-stats { grid-template-columns: 1fr 1fr; }
+  .uab-stat-card:nth-child(3) { grid-column: 1 / -1; }
+}
+
+/* --------------------------------------------------------------
+   ABOUT SECTION � EVENT TIMELINE CARD  �  Mobile Rewrite (= 768px)
+   --------------------------------------------------------------
+   Full-width card, vertical timeline with a glowing left rail,
+   time pinned to the left column, event text to the right.
+   Coloured accent dots + glowing ring for key moments.
+   -------------------------------------------------------------- */
+@media (max-width: 768px) {
+
+  /* Make timeline card span full width (override the 2-col grid) */
+  .uab-card--timeline {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    padding: 20px 18px 24px !important;
+  }
+
+  /* Why card drops to its own full-width row */
+  .uab-card--why {
+    grid-column: 1 / -1 !important;
+    grid-row: 3 !important;
+  }
+
+  /* -- Timeline rail + items container --------------------------- */
+  .uab-timeline {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-left: 0;
+    gap: 0;
+    margin-top: 6px;
+  }
+
+  /* Vertical glowing rail line */
+  .uab-timeline::before {
+    content: '';
+    position: absolute;
+    left: 72px;                       /* aligns with dots */
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(255,255,255,0.12) 10%,
+      rgba(255,255,255,0.12) 90%,
+      transparent
+    );
+  }
+
+  /* -- Each timeline row ------------------------------------------ */
+  .uab-tl-item {
+    display: grid;
+    grid-template-columns: 72px 16px 1fr;   /* time | dot | label */
+    align-items: center;
+    gap: 0 10px;
+    padding: 10px 0;
+    border-bottom: none;
+    position: relative;
+  }
+  .uab-tl-item:last-child { padding-bottom: 0; }
+
+  /* Time column */
+  .uab-tl-time {
+    font-size: 0.6rem !important;
+    font-family: 'Inter', monospace;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: rgba(255,255,255,0.35);
+    text-align: right;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  /* Dot column � sits on top of the rail */
+  .uab-tl-dot {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    flex-shrink: 0;
+    justify-self: center;
+    z-index: 1;
+    transition: transform 0.2s ease;
+  }
+
+  /* PS Drop � orange hot */
+  .uab-tl-item--hot .uab-tl-dot {
+    background: #f97316;
+    border-color: #f97316;
+    box-shadow: 0 0 8px 2px rgba(249,115,22,0.55);
+  }
+  .uab-tl-item--hot .uab-tl-time { color: rgba(249,115,22,0.75); }
+
+  /* Coding Begins � green go */
+  .uab-tl-item--go .uab-tl-dot {
+    background: #22c55e;
+    border-color: #22c55e;
+    box-shadow: 0 0 8px 2px rgba(34,197,94,0.55);
+    width: 12px;
+    height: 12px;
+  }
+  .uab-tl-item--go .uab-tl-time  { color: rgba(34,197,94,0.75); }
+  .uab-tl-item--go .uab-tl-text  { color: #22c55e; font-weight: 700; }
+
+  /* Results Dropped � purple win */
+  .uab-tl-item--win .uab-tl-dot {
+    background: #a855f7;
+    border-color: #a855f7;
+    box-shadow: 0 0 10px 3px rgba(168,85,247,0.6);
+    width: 12px;
+    height: 12px;
+  }
+  .uab-tl-item--win .uab-tl-time { color: rgba(168,85,247,0.75); }
+  .uab-tl-item--win .uab-tl-text { color: #c084fc; font-weight: 700; }
+
+  /* Event text label */
+  .uab-tl-text {
+    font-size: 0.78rem !important;
+    font-weight: 500;
+    color: rgba(255,255,255,0.82);
+    line-height: 1.3;
+  }
+}
+
+/* Extra small � keep readable with tighter time column */
+@media (max-width: 380px) {
+  .uab-timeline::before { left: 60px; }
+  .uab-tl-item { grid-template-columns: 60px 14px 1fr; gap: 0 8px; }
+  .uab-tl-time { font-size: 0.55rem !important; }
+  .uab-tl-text { font-size: 0.72rem !important; }
+}
+
+/* -- Timeline mobile: remove dots + rearrange date entries -------- */
+@media (max-width: 768px) {
+
+  /* Hide the dot entirely */
+  .uab-tl-dot { display: none !important; }
+
+  /* Remove the rail line */
+  .uab-timeline::before { display: none !important; }
+
+  /* 2-col grid: time | event text � no dot column */
+  .uab-tl-item {
+    grid-template-columns: 78px 1fr !important;
+    grid-template-rows: auto !important;
+    column-gap: 14px !important;
+    padding: 10px 0 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    align-items: start !important;
+  }
+  .uab-tl-item:last-child { border-bottom: none !important; }
+
+  /* Thin left accent on the whole card instead of dots */
+  .uab-card--timeline {
+    border-left: 2px solid rgba(255,255,255,0.10) !important;
+  }
+
+  /* Time � allow wrap so "25 Apr ? 11 AM" wraps naturally */
+  .uab-tl-time {
+    text-align: left !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    font-size: 0.58rem !important;
+    line-height: 1.45 !important;
+    padding-top: 1px;
+  }
+
+  /* Replace the arrow glyph with a newline feel via display-block span */
+  /* Since the HTML uses "25 Apr ? 11 AM" as text, replace ? in CSS */
+  /* We style the whole time chunk as a 2-line block */
+  .uab-tl-time {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1px !important;
+  }
+
+  /* Event text sits beside the time column */
+  .uab-tl-text {
+    font-size: 0.8rem !important;
+    line-height: 1.35 !important;
+    padding-top: 1px;
+    color: rgba(255,255,255,0.82) !important;
+  }
+
+  /* Accent hot/go/win colours without dots � just text colour */
+  .uab-tl-item--hot .uab-tl-time { color: rgba(249,115,22,0.8) !important; }
+  .uab-tl-item--go  .uab-tl-time { color: rgba(34,197,94,0.8)  !important; }
+  .uab-tl-item--go  .uab-tl-text { color: #4ade80 !important; font-weight: 700 !important; }
+  .uab-tl-item--win .uab-tl-time { color: rgba(168,85,247,0.8) !important; }
+  .uab-tl-item--win .uab-tl-text { color: #c084fc !important; font-weight: 700 !important; }
+}
+
+@media (max-width: 380px) {
+  .uab-tl-item { grid-template-columns: 64px 1fr !important; column-gap: 10px !important; }
+}
+
+/* Date + hour sub-spans inside the time column (mobile only) */
+@media (max-width: 768px) {
+  .tl-date {
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.65;
+    color: inherit;
+  }
+  .tl-hr {
+    font-size: 0.62rem;
+    font-weight: 500;
+    opacity: 1;
+    color: inherit;
+  }
+}
