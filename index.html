@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <head>
@@ -155,6 +155,15 @@
                       <span class="md-item__desc">Our partners &amp; supporters</span>
                     </div>
                   </a>
+                  <a href="/team-dashboard.html" class="md-item" role="menuitem" tabindex="-1">
+                    <div class="md-item__icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                    </div>
+                    <div class="md-item__body">
+                      <span class="md-item__title">Team Dashboard</span>
+                      <span class="md-item__desc">View your assigned PS</span>
+                    </div>
+                  </a>
                 </div>
               </div>
             </div>
@@ -258,7 +267,18 @@
           <span class="mmd-link-text">Sponsors</span>
           <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
-      </nav>
+        <a href="/team-dashboard.html" class="mmd-link">
+          <span class="mmd-link-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          </span>
+          <span class="mmd-link-text">Team Dashboard</span>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+              <a href="/contact.html" class="mmd-link">
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+          <span class="mmd-link-text">Contact</span>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a></nav>
       <div class="mmd-footer">
         <a href="/register.html" class="mmd-cta-btn">Register Now →</a>
       </div>
@@ -664,7 +684,8 @@
         <p class="sch-subtitle">24 hours. 4 phases. Every minute counts.</p>
       </div>
 
-      <!-- Full Open Timeline -->
+      <!-- Full Open Timeline (desktop only) -->
+      <div class="sch-desktop-only">
       <div class="sch-timeline-full" id="schTimelineFull">
 
         <!-- Scroll-driven glowing progress line -->
@@ -858,6 +879,172 @@
         </div>
 
       </div><!-- /.sch-timeline-full -->
+      </div><!-- /.sch-desktop-only -->
+
+      <!-- ── MOBILE-ONLY SCHEDULE ── -->
+      <div class="sch-mobile-only">
+
+        <!-- Day 1 -->
+        <div class="schm-day">
+          <div class="schm-day-header">
+            <span class="schm-day-label">Day 1</span>
+            <span class="schm-day-date">25 April 2026</span>
+          </div>
+
+          <div class="schm-phase">
+            <div class="schm-phase-tag schm-phase-tag--arrival">01 · Arrival &amp; Kickoff</div>
+            <div class="schm-events">
+              <div class="schm-event">
+                <span class="schm-time">8:00 – 9:30 AM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Doors Open</span>
+                  <span class="schm-badge schm-badge--keynote">Keynote</span>
+                </div>
+              </div>
+              <div class="schm-event">
+                <span class="schm-time">10:00 AM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Kickoff</span>
+                  <span class="schm-badge schm-badge--keynote">Keynote</span>
+                </div>
+              </div>
+              <div class="schm-event schm-event--critical">
+                <span class="schm-time">10:45 AM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">PS Drop ⚡</span>
+                  <span class="schm-badge schm-badge--critical">Critical</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="schm-phase">
+            <div class="schm-phase-tag schm-phase-tag--build">02 · The Build</div>
+            <div class="schm-events">
+              <div class="schm-event">
+                <span class="schm-time">11:00 AM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Build Sprint 1</span>
+                </div>
+              </div>
+              <div class="schm-event schm-event--break">
+                <span class="schm-time">1:00 PM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Lunch Break</span>
+                  <span class="schm-badge schm-badge--break">Break</span>
+                </div>
+              </div>
+              <div class="schm-event">
+                <span class="schm-time">2:00 PM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Build Sprint 2</span>
+                </div>
+              </div>
+              <div class="schm-event schm-event--fun">
+                <span class="schm-time">5:00 PM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Strategy Pivot</span>
+                  <span class="schm-badge schm-badge--fun">Mentor + Fun</span>
+                </div>
+              </div>
+              <div class="schm-event">
+                <span class="schm-time">6:00 PM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Build Sprint 3</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="schm-phase">
+            <div class="schm-phase-tag schm-phase-tag--night">03 · Midnight Push</div>
+            <div class="schm-events">
+              <div class="schm-event schm-event--break">
+                <span class="schm-time">8:00 PM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Power Dinner</span>
+                  <span class="schm-badge schm-badge--break">Break</span>
+                </div>
+              </div>
+              <div class="schm-event">
+                <span class="schm-time">9:00 PM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Build Sprint 4</span>
+                </div>
+              </div>
+              <div class="schm-event schm-event--critical">
+                <span class="schm-time">2:00 AM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Demo Pitch ⚡</span>
+                  <span class="schm-badge schm-badge--critical">Critical</span>
+                </div>
+              </div>
+              <div class="schm-event">
+                <span class="schm-time">3:00 AM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Final Sprint</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div class="schm-day">
+          <div class="schm-day-header">
+            <span class="schm-day-label">Day 2</span>
+            <span class="schm-day-date">26 April 2026</span>
+          </div>
+
+          <div class="schm-phase">
+            <div class="schm-phase-tag schm-phase-tag--finale">04 · The Finale</div>
+            <div class="schm-events">
+              <div class="schm-event schm-event--submit">
+                <span class="schm-time">7:00 AM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Final Pitch</span>
+                  <span class="schm-badge schm-badge--submit">Submission</span>
+                </div>
+              </div>
+              <div class="schm-event schm-event--break">
+                <span class="schm-time">8:00 AM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Breakfast</span>
+                  <span class="schm-badge schm-badge--break">Break</span>
+                </div>
+              </div>
+              <div class="schm-event schm-event--critical">
+                <span class="schm-time">8:30 AM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Results Drop ⚡</span>
+                  <span class="schm-badge schm-badge--critical">Critical</span>
+                </div>
+              </div>
+              <div class="schm-event">
+                <span class="schm-time">9:00 AM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Grand Presentation</span>
+                  <span class="schm-badge schm-badge--keynote">Keynote</span>
+                </div>
+              </div>
+              <div class="schm-event schm-event--finale">
+                <span class="schm-time">10:30 AM</span>
+                <div class="schm-event-body">
+                  <span class="schm-name">Closing Ceremony 🏆</span>
+                  <span class="schm-badge schm-badge--finale">Finale</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="/schedule.html" class="schm-cta">
+          View Full Schedule
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+
+      </div><!-- /.sch-mobile-only -->
+
     </div><!-- /.sch-container -->
   </section>
 
@@ -1281,7 +1468,7 @@
             <a href="/legal.html#terms" class="cf-pill cf-pill--ghost js-magnetic">Terms</a>
             <a href="/legal.html#privacy" class="cf-pill cf-pill--ghost js-magnetic">Privacy</a>
             <a href="/legal.html#refund" class="cf-pill cf-pill--ghost js-magnetic">Refund Policy</a>
-            <a href="/legal.html#contact" class="cf-pill cf-pill--ghost js-magnetic">Contact Us</a>
+            <a href="/contact.html" class="cf-pill cf-pill--ghost js-magnetic">Contact Us</a>
           </div>
       </div>
 

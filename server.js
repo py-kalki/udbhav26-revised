@@ -1,4 +1,4 @@
-/**
+﻿/**
  * server.js
  * ─────────────────────────────────────────────────────────────────────────────
  * Express server for Google Cloud Run.
@@ -31,6 +31,7 @@ import verifyPaymentHandler from './api/verify-payment.js';
 import cashfreeWebhookHandler from './api/cashfree-webhook.js';
 import registerHandler      from './api/register.js';
 import teamHandler          from './api/team.js';
+import teamDashboardHandler from './api/team-dashboard.js';
 import spotifyHandler       from './api/spotify.js';
 
 // ── Import PS Drop handlers ──────────────────────────────────────────────────
@@ -66,9 +67,11 @@ import {
   publicWinnersHandler,
 } from './api/admin/winners.js';
 
-// ── Import Submissions handlers ────────────────────────────────────────────────
-import submitHandler from './api/submissions/submit.js';
-import listHandler   from './api/submissions/list.js';
+// ── Import Submissions handlers ───────────────────────────────────────
+import submitHandler           from './api/submissions/submit.js';
+import listSubmissionsHandler  from './api/submissions/list.js';
+import getSubmissionHandler    from './api/submissions/get.js';
+
 
 // ── App setup ────────────────────────────────────────────────────────────────
 const app  = express();
@@ -92,7 +95,8 @@ const cleanRoutes = {
   '/code-of-conduct':   'code-of-conduct.html',
   '/our-team':          'our-team.html',
   '/register':          'register.html',
-  '/dashboard':         'user-dashboard.html',
+  '/team-dashboard':    'team-dashboard.html',
+  '/contact':            'contact.html',
   
   // Portfolio/Personal Pages
   '/work':              'work.html',
@@ -109,11 +113,11 @@ const cleanRoutes = {
   '/admin/login':        'admin/login.html',
   '/admin/dashboard':    'admin/dashboard.html',
   '/admin/registrations':'admin/registrations.html',
-  '/admin/submissions':  'admin/submissions.html',
   '/admin/problem-statements': 'admin/problem-statements.html',
   '/admin/payments':           'admin/payments.html',
   '/admin/ps-stats':           'admin/ps-stats.html',
   '/admin/winners':            'admin/winners.html',
+  '/admin/submissions':        'admin/submissions.html',
 };
 
 // ── Vercel-handler adapter ────────────────────────────────────────────────────
@@ -136,6 +140,7 @@ app.all('/api/verify-payment',    mountHandler(verifyPaymentHandler));
 app.post('/api/cashfree-webhook', mountHandler(cashfreeWebhookHandler));  // Cashfree payment events
 app.all('/api/register',       mountHandler(registerHandler));
 app.all('/api/team',           mountHandler(teamHandler));
+app.get ('/api/team-dashboard',mountHandler(teamDashboardHandler));
 app.all('/api/spotify',        mountHandler(spotifyHandler));
 
 // ── PS Drop Public API ────────────────────────────────────────────────────────
@@ -175,7 +180,9 @@ app.get('/api/winners', mountHandler(publicWinnersHandler));
 
 // ── Submissions API ───────────────────────────────────────────────────────────
 app.post('/api/submissions/submit', mountHandler(submitHandler));
-app.get ('/api/submissions/list',   mountHandler(listHandler));
+app.get ('/api/submissions/get',    mountHandler(getSubmissionHandler));
+app.get ('/api/admin/submissions',  mountHandler(listSubmissionsHandler));
+
 
 // ── Clean URL Routes ──────────────────────────────────────────────────────────
 for (const [route, file] of Object.entries(cleanRoutes)) {

@@ -1,38 +1,36 @@
 /**
- * api/submissions/list.js
+ * api/submissions/get.js
  * ─────────────────────────────────────────────────────────────────────────────
- * GET /api/admin/submissions  (admin-only)
- * Returns all team submissions sorted by submittedAt desc.
+ * GET /api/submissions/get?code=UDB-XXXX
+ * Public — returns the submission for a given team code (no auth required).
+ * Used by the team dashboard to pre-fill the form.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
 import { connectDB }  from '../lib/mongodb.js';
 import { Submission } from '../models/Submission.js';
-import { psLog, getIP } from '../lib/rateLimiter.js';
-
-function requireAdmin(req, res) {
-  const secret = req.headers['x-admin-secret'] || req.headers['authorization']?.replace('Bearer ', '');
-  if (!secret || secret !== process.env.ADMIN_SECRET) {
-    psLog(req, { event: 'admin_auth_failed', ip: getIP(req) });
-    res.status(401).json({ error: 'unauthorized' });
-    return false;
-  }
-  return true;
-}
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'method_not_allowed' });
-  if (!requireAdmin(req, res)) return;
+
+  const code = String(req.query?.code || '').trim().toUpperCase();
+  if (!code) return res.status(400).json({ error: 'code_required' });
 
   try {
     await connectDB();
-    const submissions = await Submission.find({})
-      .sort({ submittedAt: -1 })
-      .lean();
+    const sub = await Submission.findOne({ teamCode: code }).lean();
+    if (!sub) return res.status(200).json({ submission: null });
 
-    return res.status(200).json({ success: true, count: submissions.length, submissions });
+    return res.status(200).json({
+      submission: {
+        teamCode:  sub.teamCode,
+        pptLink:   sub.pptLink  || '',
+        liveLink:  sub.liveLink || '',
+        submittedAt: sub.submittedAt,
+      },
+    });
   } catch (err) {
-    console.error('[submissions/list]', err);
+    console.error('[submissions/get]', err);
     return res.status(500).json({ error: 'server_error' });
   }
 }

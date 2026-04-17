@@ -72,12 +72,19 @@ export default async function handler(req, res) {
     const orderId     = `UDBHAV26_${Date.now()}_${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
 
     // ── Return URL ────────────────────────────────────────────────
-    // Use x-forwarded-host in prod; in dev Cashfree calls Express (8080)
-    // but the user browses via Vite (5173), so we force 5173 locally.
-    const rawHost   = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:5173';
-    const host      = rawHost.replace(':8080', ':5173'); // local dev fix
-    const protocol  = req.headers['x-forwarded-proto'] || (host.includes('localhost') ? 'http' : 'https');
-    const returnUrl = `${protocol}://${host}/payment-status?order_id={order_id}&status={order_status}`;
+    // In production (CASHFREE_ENV=production) always use APP_URL so
+    // Cashfree gets an https:// URL. In sandbox use the request host.
+    let returnBase;
+    if (CF_ENV === 'production' && process.env.APP_URL) {
+      returnBase = process.env.APP_URL.replace(/\/$/, ''); // e.g. https://udbhav26.in
+    } else {
+      const rawHost  = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:5173';
+      const host     = rawHost.replace(':8080', ':5173');
+      const protocol = req.headers['x-forwarded-proto'] || (host.includes('localhost') ? 'http' : 'https');
+      returnBase = `${protocol}://${host}`;
+    }
+    const returnUrl = `${returnBase}/payment-status?order_id={order_id}&status={order_status}`;
+    const notifyUrl = `${returnBase}/api/cashfree-webhook`;
 
     const payload = {
       order_id:      orderId,
@@ -91,7 +98,7 @@ export default async function handler(req, res) {
       },
       order_meta: {
         return_url:      returnUrl,
-        notify_url:      `${protocol}://${host}/api/cashfree-webhook`,
+        notify_url:      notifyUrl,
         payment_methods: 'cc,dc,upi,nb,app,paylater,emi',
       },
       order_note: `UDBHAV'26 — ${team.teamName}${wantsMentor ? ' + Mentor Session' : ''}`,
