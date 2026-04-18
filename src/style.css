@@ -6165,6 +6165,341 @@ img, video, iframe { max-width: 100%; height: auto; }
 }
 
 /* ----------------------------------------------------------
+   PROBLEM DOMAINS — Interactive Track Selector (pdt-*)
+   3-column layout: sidebar ↔ image ↔ description
+   Inspired by the "click track → swap content" pattern.
+   ---------------------------------------------------------- */
+
+.pdt-layout {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 520px;
+}
+
+/* ── LEFT: Track sidebar ───────────────────────────────── */
+.pdt-sidebar {
+  width: 28%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  height: 460px;
+}
+
+.pdt-sidebar-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+/* ── Track button ─────────────────────────────────────── */
+.pdt-track-btn {
+  position: relative;
+  text-align: left;
+  padding: 10px 16px 10px 20px;
+  border-radius: 12px;
+  width: 90%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pdt-track-btn:hover {
+  transform: translateX(6px);
+}
+
+/* Background glow (visible on active) */
+.pdt-btn-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(to right,
+    color-mix(in srgb, var(--track-clr) 25%, transparent),
+    color-mix(in srgb, var(--track-clr) 12%, transparent),
+    transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+/* Left indicator bar */
+.pdt-btn-indicator {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) scaleY(0);
+  width: 3px;
+  height: 28px;
+  border-radius: 4px;
+  background: var(--track-clr);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--track-clr) 80%, transparent);
+}
+
+/* Label text */
+.pdt-btn-label {
+  position: relative;
+  z-index: 10;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1rem, 1.8vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  padding-left: 12px;
+  color: rgba(156, 163, 175, 1);
+  text-shadow: none;
+  transition: color 0.35s ease, text-shadow 0.35s ease;
+}
+
+/* ── Active state ─────────────────────────────────────── */
+.pdt-track-btn.is-active {
+  transform: translateX(12px) translateZ(20px) scale(1.05);
+}
+
+.pdt-track-btn.is-active .pdt-btn-glow {
+  opacity: 1;
+  box-shadow: inset 0 0 20px color-mix(in srgb, var(--track-clr) 10%, transparent);
+}
+
+.pdt-track-btn.is-active .pdt-btn-indicator {
+  transform: translateY(-50%) scaleY(1);
+  opacity: 1;
+}
+
+.pdt-track-btn.is-active .pdt-btn-label {
+  color: var(--track-clr);
+  text-shadow: 0 0 20px color-mix(in srgb, var(--track-clr) 60%, transparent),
+               0 0 40px color-mix(in srgb, var(--track-clr) 30%, transparent);
+}
+
+/* ── CENTER + RIGHT: Content panel ─────────────────────── */
+.pdt-content-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 24px 28px;
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.5);
+  height: 460px;
+}
+
+/* ── Center: Image showcase ────────────────────────────── */
+.pdt-image-wrap {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+  z-index: 20;
+}
+
+.pdt-image-frame {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(103, 232, 249, 0.2);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  transform-style: preserve-3d;
+}
+
+.pdt-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.4s ease;
+}
+
+/* Gradient overlay at bottom of image */
+.pdt-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.1) 40%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Title overlay on image */
+.pdt-image-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 0 30px rgba(0, 0, 0, 0.8),
+               0 4px 20px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  text-align: center;
+}
+
+/* Inner border for depth */
+.pdt-image-border {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(103, 232, 249, 0.12);
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── Right: Description panel ──────────────────────────── */
+.pdt-info {
+  width: 42%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+  height: 100%;
+  gap: 20px;
+}
+
+.pdt-info-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(0.95rem, 1.3vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+  color: rgba(165, 220, 240, 0.7);
+  margin: 0;
+}
+
+.pdt-info-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.pdt-info-tags span {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.3s, background 0.3s, border-color 0.3s;
+}
+
+/* ── Responsive: Stack on mobile ─────────────────────── */
+@media (max-width: 900px) {
+  .pdt-layout {
+    flex-direction: column;
+    height: auto;
+    gap: 20px;
+    padding: 0 16px;
+  }
+
+  .pdt-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .pdt-sidebar::-webkit-scrollbar { display: none; }
+
+  .pdt-sidebar-inner {
+    flex-direction: row;
+    gap: 4px;
+    width: max-content;
+    height: auto;
+  }
+
+  .pdt-track-btn {
+    width: auto;
+    padding: 8px 16px;
+    flex-shrink: 0;
+  }
+
+  .pdt-track-btn.is-active {
+    transform: scale(1.05);
+  }
+
+  .pdt-btn-indicator {
+    /* On mobile, put indicator at bottom instead of left */
+    left: 50%;
+    top: auto;
+    bottom: 0;
+    transform: translateX(-50%) scaleX(0);
+    width: 28px;
+    height: 3px;
+  }
+
+  .pdt-track-btn.is-active .pdt-btn-indicator {
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  .pdt-btn-label {
+    font-size: 0.85rem;
+    padding-left: 0;
+  }
+
+  .pdt-content-panel {
+    flex-direction: column;
+    height: auto;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .pdt-image-frame {
+    max-width: 280px;
+  }
+
+  .pdt-info {
+    width: 100%;
+    text-align: center;
+    align-items: center;
+  }
+
+  .pdt-info-tags {
+    justify-content: center;
+  }
+}
+
+/* ----------------------------------------------------------
    PROBLEM DOMAINS � 3D Auto-rotating Carousel (pd3-*)
    Cards arranged in cylinder: rotateY(i*45deg) translateZ(430px)
    Ring tilted -8deg on X for the "oval dish" look from the sketch.

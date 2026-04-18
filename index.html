@@ -589,65 +589,78 @@
       </div>
     </div>
 
-    <!-- 3D Scene -->
-    <!-- ── Drag-to-scroll card slider ── -->
-    <!-- ── Drag-to-scroll Domain Card Slider ── -->
-    <div class="pds-wrapper" id="pdsWrapper">
+    <!-- ── Interactive Track Selector ── -->
+    <div class="pdt-layout" id="pdtLayout">
 
-      <button class="pds-arrow pds-arrow--left" id="pdsLeft" aria-label="Scroll left">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <button class="pds-arrow pds-arrow--right" id="pdsRight" aria-label="Scroll right">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
-
-      <div class="pds-track-outer" id="pdsTrackOuter">
-        <div class="pds-track" id="pdsTrack">
-
-          <div class="pds-card" style="--card-clr:#f43f5e">
-            <div class="pds-card-img"><img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=640&h=360&fit=crop&auto=format" alt="HealthTech" loading="lazy"/><span class="pds-badge">HealthTech</span></div>
-            <div class="pds-card-body"><div class="pds-num">01</div><h3 class="pds-name">HealthTech &amp; MedTech</h3><p class="pds-desc">Tackle real challenges in healthcare delivery, remote diagnostics, patient monitoring, and medical data management.</p><div class="pds-tags"><span>Remote Health</span><span>Diagnostics</span><span>Wearables</span></div></div>
-          </div>
-
-          <div class="pds-card" style="--card-clr:#a855f7">
-            <div class="pds-card-img"><img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=640&h=360&fit=crop&auto=format" alt="AI/ML" loading="lazy"/><span class="pds-badge">AI / ML</span></div>
-            <div class="pds-card-body"><div class="pds-num">02</div><h3 class="pds-name">AI/ML &amp; Data Science</h3><p class="pds-desc">Build intelligent systems that learn, predict and automate — from NLP to computer vision and predictive analytics.</p><div class="pds-tags"><span>NLP</span><span>Computer Vision</span><span>Neural Nets</span></div></div>
-          </div>
-
-          <div class="pds-card" style="--card-clr:#22d3ee">
-            <div class="pds-card-img"><img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=640&h=360&fit=crop&auto=format" alt="Smart Cities" loading="lazy"/><span class="pds-badge">Smart Cities</span></div>
-            <div class="pds-card-body"><div class="pds-num">03</div><h3 class="pds-name">Smart Cities &amp; IoT</h3><p class="pds-desc">Design connected solutions for urban infrastructure — smart traffic, energy grids, and public safety systems.</p><div class="pds-tags"><span>IoT Sensors</span><span>Traffic AI</span><span>Energy Grid</span></div></div>
-          </div>
-
-          <div class="pds-card" style="--card-clr:#22c55e">
-            <div class="pds-card-img"><img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=640&h=360&fit=crop&auto=format" alt="GreenTech" loading="lazy"/><span class="pds-badge">GreenTech</span></div>
-            <div class="pds-card-body"><div class="pds-num">04</div><h3 class="pds-name">Sustainability &amp; GreenTech</h3><p class="pds-desc">Engineer eco-friendly solutions targeting climate change, carbon tracking, clean energy, and sustainable agriculture.</p><div class="pds-tags"><span>Carbon Track</span><span>Clean Energy</span><span>AgriTech</span></div></div>
-          </div>
-
-          <div class="pds-card" style="--card-clr:#f59e0b">
-            <div class="pds-card-img"><img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=640&h=360&fit=crop&auto=format" alt="EdTech" loading="lazy"/><span class="pds-badge">EdTech</span></div>
-            <div class="pds-card-body"><div class="pds-num">05</div><h3 class="pds-name">EdTech &amp; Skilling</h3><p class="pds-desc">Reimagine how people learn — adaptive platforms, vernacular tools, and AI-powered career guidance for the next billion.</p><div class="pds-tags"><span>Adaptive Learn</span><span>Vernacular AI</span><span>AR / VR</span></div></div>
-          </div>
-
-          <div class="pds-card" style="--card-clr:#3b82f6">
-            <div class="pds-card-img"><img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=640&h=360&fit=crop&auto=format" alt="FinTech" loading="lazy"/><span class="pds-badge">FinTech</span></div>
-            <div class="pds-card-body"><div class="pds-num">06</div><h3 class="pds-name">FinTech &amp; Web3</h3><p class="pds-desc">Build the future of finance — DeFi apps, smart contracts, digital wallets, fraud detection, and financial inclusion.</p><div class="pds-tags"><span>DeFi</span><span>Smart Contracts</span><span>Fraud AI</span></div></div>
-          </div>
-
-          <div class="pds-card" style="--card-clr:#f97316">
-            <div class="pds-card-img"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=640&h=360&fit=crop&auto=format" alt="CyberSecurity" loading="lazy"/><span class="pds-badge">CyberSec</span></div>
-            <div class="pds-card-body"><div class="pds-num">07</div><h3 class="pds-name">CyberSecurity &amp; Privacy</h3><p class="pds-desc">Defend digital systems against evolving threats — zero-trust architectures, threat intelligence, and privacy-first tools.</p><div class="pds-tags"><span>Zero Trust</span><span>Threat Intel</span><span>Privacy Tools</span></div></div>
-          </div>
-
-          <div class="pds-card" style="--card-clr:#ec4899">
-            <div class="pds-card-img"><img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=640&h=360&fit=crop&auto=format" alt="Social Impact" loading="lazy"/><span class="pds-badge">Social</span></div>
-            <div class="pds-card-body"><div class="pds-num">08</div><h3 class="pds-name">Social Impact &amp; Rural Tech</h3><p class="pds-desc">Bridge the urban-rural divide — digital governance, farmer tech, women safety systems, and accessibility solutions.</p><div class="pds-tags"><span>Digital Gov</span><span>AgriTech</span><span>Accessibility</span></div></div>
-          </div>
-
+      <!-- LEFT: Track name buttons -->
+      <div class="pdt-sidebar" id="pdtSidebar" style="perspective: 1000px;">
+        <div class="pdt-sidebar-inner" style="transform-style: preserve-3d;">
+          <button class="pdt-track-btn is-active" data-pdt-idx="0" style="--track-clr:#f43f5e">
+            <div class="pdt-btn-glow"></div>
+            <div class="pdt-btn-indicator"></div>
+            <span class="pdt-btn-label">HealthTech</span>
+          </button>
+          <button class="pdt-track-btn" data-pdt-idx="1" style="--track-clr:#a855f7">
+            <div class="pdt-btn-glow"></div>
+            <div class="pdt-btn-indicator"></div>
+            <span class="pdt-btn-label">AI / ML</span>
+          </button>
+          <button class="pdt-track-btn" data-pdt-idx="2" style="--track-clr:#22d3ee">
+            <div class="pdt-btn-glow"></div>
+            <div class="pdt-btn-indicator"></div>
+            <span class="pdt-btn-label">Smart Cities</span>
+          </button>
+          <button class="pdt-track-btn" data-pdt-idx="3" style="--track-clr:#22c55e">
+            <div class="pdt-btn-glow"></div>
+            <div class="pdt-btn-indicator"></div>
+            <span class="pdt-btn-label">GreenTech</span>
+          </button>
+          <button class="pdt-track-btn" data-pdt-idx="4" style="--track-clr:#f59e0b">
+            <div class="pdt-btn-glow"></div>
+            <div class="pdt-btn-indicator"></div>
+            <span class="pdt-btn-label">EdTech</span>
+          </button>
+          <button class="pdt-track-btn" data-pdt-idx="5" style="--track-clr:#3b82f6">
+            <div class="pdt-btn-glow"></div>
+            <div class="pdt-btn-indicator"></div>
+            <span class="pdt-btn-label">FinTech</span>
+          </button>
+          <button class="pdt-track-btn" data-pdt-idx="6" style="--track-clr:#f97316">
+            <div class="pdt-btn-glow"></div>
+            <div class="pdt-btn-indicator"></div>
+            <span class="pdt-btn-label">CyberSec</span>
+          </button>
+          <button class="pdt-track-btn" data-pdt-idx="7" style="--track-clr:#ec4899">
+            <div class="pdt-btn-glow"></div>
+            <div class="pdt-btn-indicator"></div>
+            <span class="pdt-btn-label">Social Impact</span>
+          </button>
         </div>
       </div>
 
-      <div class="pds-dots" id="pdsDots" aria-hidden="true"></div>
+      <!-- CENTER + RIGHT: Content panel -->
+      <div class="pdt-content-panel" id="pdtContentPanel">
+
+        <!-- Center: Image showcase -->
+        <div class="pdt-image-wrap" id="pdtImageWrap">
+          <div class="pdt-image-frame" id="pdtImageFrame">
+            <div class="pdt-image-border"></div>
+            <img class="pdt-image" id="pdtImage" src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=640&h=640&fit=crop&auto=format" alt="HealthTech" />
+            <div class="pdt-image-overlay"></div>
+            <span class="pdt-image-title" id="pdtImageTitle">HEALTHTECH</span>
+          </div>
+        </div>
+
+        <!-- Right: Description -->
+        <div class="pdt-info" id="pdtInfo">
+          <p class="pdt-info-desc" id="pdtInfoDesc">Tackle real challenges in healthcare delivery, remote diagnostics, patient monitoring, and medical data management.</p>
+          <div class="pdt-info-tags" id="pdtInfoTags">
+            <span>Remote Health</span><span>Diagnostics</span><span>Wearables</span>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
   </section>

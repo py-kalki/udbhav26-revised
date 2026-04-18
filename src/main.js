@@ -1353,203 +1353,220 @@ document.querySelectorAll('.nav-link').forEach(link => {
   });
 })();
 // -----------------------------------------------------------------
-// PROBLEM DOMAINS — Drag-to-scroll Card Slider
+// PROBLEM DOMAINS — Interactive Track Selector
+// Left sidebar track buttons → center image + right description
+// Smooth GSAP transitions on click, 3D tilt on image hover
 // -----------------------------------------------------------------
-// PROBLEM DOMAINS — Infinite Auto-scroll + Drag Card Slider
-// Cards are cloned for seamless loop. Auto-scrolls continuously,
-// pauses on hover/drag. Spring snap on drag release.
-// -----------------------------------------------------------------
-(function initDomainSlider() {
-  const outer   = document.getElementById('pdsTrackOuter');
-  const track   = document.getElementById('pdsTrack');
-  const btnLeft = document.getElementById('pdsLeft');
-  const btnRight= document.getElementById('pdsRight');
-  const dotsEl  = document.getElementById('pdsDots');
-  if (!outer || !track) return;
+(function initTrackSelector() {
+  const sidebar  = document.getElementById('pdtSidebar');
+  const imgEl    = document.getElementById('pdtImage');
+  const titleEl  = document.getElementById('pdtImageTitle');
+  const descEl   = document.getElementById('pdtInfoDesc');
+  const tagsEl   = document.getElementById('pdtInfoTags');
+  const frameEl  = document.getElementById('pdtImageFrame');
+  const infoEl   = document.getElementById('pdtInfo');
+  if (!sidebar || !imgEl) return;
 
-  const CARD_W     = 320 + 24;   // card width + gap
-  const AUTO_SPEED = 0.55;       // px per frame (auto drift)
-  const SPRING_K   = 0.10;
-  const FRICTION   = 0.86;
+  const DOMAINS = [
+    {
+      label: 'HealthTech', title: 'HEALTHTECH',
+      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=640&h=640&fit=crop&auto=format',
+      desc: 'Tackle real challenges in healthcare delivery, remote diagnostics, patient monitoring, and medical data management.',
+      tags: ['Remote Health', 'Diagnostics', 'Wearables'],
+      clr: '#f43f5e',
+    },
+    {
+      label: 'AI / ML', title: 'AI / ML',
+      image: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=640&h=640&fit=crop&auto=format',
+      desc: 'Build intelligent systems that learn, predict and automate — from NLP to computer vision and predictive analytics.',
+      tags: ['NLP', 'Computer Vision', 'Neural Nets'],
+      clr: '#a855f7',
+    },
+    {
+      label: 'Smart Cities', title: 'SMART CITIES',
+      image: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=640&h=640&fit=crop&auto=format',
+      desc: 'Design connected solutions for urban infrastructure — smart traffic, energy grids, and public safety systems.',
+      tags: ['IoT Sensors', 'Traffic AI', 'Energy Grid'],
+      clr: '#22d3ee',
+    },
+    {
+      label: 'GreenTech', title: 'GREENTECH',
+      image: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=640&h=640&fit=crop&auto=format',
+      desc: 'Engineer eco-friendly solutions targeting climate change, carbon tracking, clean energy, and sustainable agriculture.',
+      tags: ['Carbon Track', 'Clean Energy', 'AgriTech'],
+      clr: '#22c55e',
+    },
+    {
+      label: 'EdTech', title: 'EDTECH',
+      image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=640&h=640&fit=crop&auto=format',
+      desc: 'Reimagine how people learn — adaptive platforms, vernacular tools, and AI-powered career guidance for the next billion.',
+      tags: ['Adaptive Learn', 'Vernacular AI', 'AR / VR'],
+      clr: '#f59e0b',
+    },
+    {
+      label: 'FinTech', title: 'FINTECH',
+      image: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=640&h=640&fit=crop&auto=format',
+      desc: 'Build the future of finance — DeFi apps, smart contracts, digital wallets, fraud detection, and financial inclusion.',
+      tags: ['DeFi', 'Smart Contracts', 'Fraud AI'],
+      clr: '#3b82f6',
+    },
+    {
+      label: 'CyberSec', title: 'CYBERSEC',
+      image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=640&h=640&fit=crop&auto=format',
+      desc: 'Defend digital systems against evolving threats — zero-trust architectures, threat intelligence, and privacy-first tools.',
+      tags: ['Zero Trust', 'Threat Intel', 'Privacy Tools'],
+      clr: '#f97316',
+    },
+    {
+      label: 'Social Impact', title: 'SOCIAL IMPACT',
+      image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=640&h=640&fit=crop&auto=format',
+      desc: 'Bridge the urban-rural divide — digital governance, farmer tech, women safety systems, and accessibility solutions.',
+      tags: ['Digital Gov', 'AgriTech', 'Accessibility'],
+      clr: '#ec4899',
+    },
+  ];
 
-  let origCards = [];
-  let origCount = 0;
-  let currentX  = 0;
-  let targetX   = 0;
-  let velX      = 0;
-  let isDragging = false;
-  let isHovered  = false;
-  let lastMouseX = 0;
-  let activeIdx  = 0;
-  let rafId      = null;
+  let activeIdx = 0;
+  let isAnimating = false;
+  const btns = sidebar.querySelectorAll('.pdt-track-btn');
 
-  // ── Clone cards for seamless infinite loop ────────────────────
-  function initLoop() {
-    origCards = Array.from(track.querySelectorAll('.pds-card'));
-    origCount = origCards.length;
-    // Append 2 full sets of clones so the loop never runs out
-    for (let r = 0; r < 2; r++) {
-      origCards.forEach(card => {
-        const clone = card.cloneNode(true);
-        clone.setAttribute('aria-hidden', 'true');
-        track.appendChild(clone);
+  function switchTrack(newIdx) {
+    if (newIdx === activeIdx || isAnimating) return;
+    isAnimating = true;
+    const domain = DOMAINS[newIdx];
+
+    // Deactivate old button
+    btns[activeIdx].classList.remove('is-active');
+    // Activate new button
+    btns[newIdx].classList.add('is-active');
+
+    // Animate image & text out, swap content, animate in
+    const tl = gsap.timeline({
+      onComplete: () => {
+        activeIdx = newIdx;
+        isAnimating = false;
+      }
+    });
+
+    // 1. Fade out image + info
+    tl.to(imgEl, {
+      opacity: 0,
+      scale: 0.92,
+      duration: 0.3,
+      ease: 'power2.in',
+    }, 0);
+
+    tl.to(titleEl, {
+      opacity: 0,
+      y: -15,
+      duration: 0.25,
+      ease: 'power2.in',
+    }, 0);
+
+    tl.to(descEl, {
+      opacity: 0,
+      x: 20,
+      duration: 0.25,
+      ease: 'power2.in',
+    }, 0.05);
+
+    tl.to(tagsEl, {
+      opacity: 0,
+      y: 10,
+      duration: 0.2,
+      ease: 'power2.in',
+    }, 0.1);
+
+    // 2. Swap content (at midpoint)
+    tl.call(() => {
+      imgEl.src = domain.image;
+      imgEl.alt = domain.label;
+      titleEl.textContent = domain.title;
+      descEl.textContent = domain.desc;
+      tagsEl.innerHTML = domain.tags.map(t => `<span>${t}</span>`).join('');
+
+      // Update image frame border color
+      frameEl.style.borderColor = `color-mix(in srgb, ${domain.clr} 25%, transparent)`;
+    }, null, '+=0');
+
+    // 3. Fade in image + info
+    tl.fromTo(imgEl, {
+      opacity: 0,
+      scale: 1.06,
+    }, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.45,
+      ease: 'power2.out',
+    });
+
+    tl.fromTo(titleEl, {
+      opacity: 0,
+      y: 15,
+    }, {
+      opacity: 1,
+      y: 0,
+      duration: 0.4,
+      ease: 'power3.out',
+    }, '<+=0.1');
+
+    tl.fromTo(descEl, {
+      opacity: 0,
+      x: -20,
+    }, {
+      opacity: 1,
+      x: 0,
+      duration: 0.45,
+      ease: 'power3.out',
+    }, '<+=0.05');
+
+    tl.fromTo(tagsEl, {
+      opacity: 0,
+      y: 12,
+    }, {
+      opacity: 1,
+      y: 0,
+      duration: 0.4,
+      ease: 'power3.out',
+    }, '<+=0.05');
+  }
+
+  // Bind click events
+  btns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.pdtIdx, 10);
+      switchTrack(idx);
+    });
+  });
+
+  // 3D tilt effect on image frame hover
+  if (frameEl) {
+    const wrapEl = document.getElementById('pdtImageWrap');
+    if (wrapEl) {
+      wrapEl.addEventListener('mousemove', (e) => {
+        const rect = frameEl.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        gsap.to(frameEl, {
+          rotationY: x * 12,
+          rotationX: -y * 8,
+          duration: 0.5,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
+      });
+
+      wrapEl.addEventListener('mouseleave', () => {
+        gsap.to(frameEl, {
+          rotationY: 0,
+          rotationX: 0,
+          duration: 0.8,
+          ease: 'elastic.out(1, 0.4)',
+          overwrite: 'auto',
+        });
       });
     }
   }
-
-  function buildDots() {
-    if (!dotsEl) return;
-    dotsEl.innerHTML = '';
-    origCards.forEach((_, i) => {
-      const d = document.createElement('button');
-      d.className = 'pds-dot' + (i === 0 ? ' is-active' : '');
-      d.setAttribute('aria-label', `Domain ${i + 1}`);
-      d.addEventListener('click', () => snapToCard(i));
-      dotsEl.appendChild(d);
-    });
-  }
-
-  function updateDots() {
-    if (!dotsEl) return;
-    const raw = Math.round(-currentX / CARD_W);
-    const idx = ((raw % origCount) + origCount) % origCount;
-    if (idx !== activeIdx) {
-      activeIdx = idx;
-      dotsEl.querySelectorAll('.pds-dot').forEach((d, i) => d.classList.toggle('is-active', i === idx));
-    }
-  }
-
-  function applyX(x) {
-    // Seamless wrap: shift by one full set width when we overflow
-    const SET = origCount * CARD_W;
-    if (x < -(SET * 2)) { x += SET; targetX += SET; }
-    if (x > 0)          { x -= SET; targetX -= SET; }
-    currentX = x;
-    track.style.transform = `translateX(${currentX}px)`;
-    updateDots();
-  }
-
-  function snapToCard(idx) {
-    // Find the nearest equivalent position for idx
-    const SET  = origCount * CARD_W;
-    const base = -(idx * CARD_W);
-    // Choose the closest equivalent target (accounts for wrap)
-    let t = base;
-    while (t > currentX + SET / 2) t -= SET;
-    while (t < currentX - SET / 2) t += SET;
-    targetX = t;
-    velX    = 0;
-    isHovered  = false;
-    isDragging = false;
-  }
-
-  // ── Main RAF tick ────────────────────────────────────────────
-  function tick() {
-    if (!isDragging) {
-      if (!isHovered) {
-        // Auto-scroll: push targetX left continuously
-        targetX -= AUTO_SPEED;
-      }
-      // Spring toward targetX
-      velX    += (targetX - currentX) * SPRING_K;
-      velX    *= FRICTION;
-      applyX(currentX + velX);
-    }
-    rafId = requestAnimationFrame(tick);
-  }
-
-  // ── Arrow buttons ────────────────────────────────────────────
-  if (btnLeft)  btnLeft.addEventListener('click',  () => snapToCard(((activeIdx - 1) + origCount) % origCount));
-  if (btnRight) btnRight.addEventListener('click', () => snapToCard((activeIdx + 1) % origCount));
-
-  // ── Two-finger trackpad / mouse-wheel scroll ─────────────────
-  let wheelSnapTimer = null;
-  outer.addEventListener('wheel', e => {
-    // Prefer deltaX (trackpad horizontal swipe); fall back to deltaY
-    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    if (Math.abs(delta) < 2) return;       // ignore tiny jitter
-    e.preventDefault();                     // stop page scroll while swiping cards
-
-    isHovered  = true;                      // pause auto-scroll during interaction
-    applyX(currentX - delta * 0.9);
-    targetX = currentX;
-    velX    = -delta * 0.15;               // carry a bit of momentum
-
-    // After 200 ms of no wheel events, snap to nearest card and resume drift
-    clearTimeout(wheelSnapTimer);
-    wheelSnapTimer = setTimeout(() => {
-      const raw = Math.round(-currentX / CARD_W);
-      const idx = ((raw % origCount) + origCount) % origCount;
-      snapToCard(idx);
-      isHovered = false;
-    }, 220);
-  }, { passive: false });
-
-  // ── Hover pause ──────────────────────────────────────────────
-  outer.addEventListener('mouseenter', () => { isHovered = true; });
-  outer.addEventListener('mouseleave', () => {
-    if (!isDragging) isHovered = false;
-  });
-
-  // ── Mouse drag ───────────────────────────────────────────────
-  outer.addEventListener('mousedown', e => {
-    isDragging = true;
-    lastMouseX = e.clientX;
-    velX = 0;
-    outer.classList.add('is-dragging');
-    e.preventDefault();
-  });
-
-  window.addEventListener('mousemove', e => {
-    if (!isDragging) return;
-    const dx = e.clientX - lastMouseX;
-    lastMouseX = e.clientX;
-    velX = dx;
-    applyX(currentX + dx);
-    targetX = currentX;
-  });
-
-  window.addEventListener('mouseup', () => {
-    if (!isDragging) return;
-    isDragging = false;
-    outer.classList.remove('is-dragging');
-    // Snap to nearest card with momentum
-    const momentum = velX * 5;
-    const raw      = Math.round(-(currentX + momentum) / CARD_W);
-    const idx      = ((raw % origCount) + origCount) % origCount;
-    snapToCard(idx);
-  });
-
-  // ── Touch drag ───────────────────────────────────────────────
-  let lastTouchX = 0;
-  outer.addEventListener('touchstart', e => {
-    isDragging = true;
-    lastTouchX = e.touches[0].clientX;
-    velX = 0;
-  }, { passive: true });
-
-  outer.addEventListener('touchmove', e => {
-    if (!isDragging) return;
-    const dx = e.touches[0].clientX - lastTouchX;
-    lastTouchX = e.touches[0].clientX;
-    velX = dx;
-    applyX(currentX + dx);
-    targetX = currentX;
-  }, { passive: true });
-
-  outer.addEventListener('touchend', () => {
-    isDragging = false;
-    const momentum = velX * 4;
-    const raw      = Math.round(-(currentX + momentum) / CARD_W);
-    const idx      = ((raw % origCount) + origCount) % origCount;
-    snapToCard(idx);
-  });
-
-  // ── Init ─────────────────────────────────────────────────────
-  initLoop();
-  buildDots();
-  window.addEventListener('resize', () => {});
-  rafId = requestAnimationFrame(tick);
 })();
 
 
