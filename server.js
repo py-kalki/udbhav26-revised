@@ -1,4 +1,4 @@
-﻿/**
+/**
  * server.js
  * ─────────────────────────────────────────────────────────────────────────────
  * Express server for Google Cloud Run.
@@ -26,13 +26,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
 
 // ── Import existing API handlers ─────────────────────────────────────────────
-import createOrderHandler  from './api/create-order.js';
-import verifyPaymentHandler from './api/verify-payment.js';
+import createOrderHandler    from './api/create-order.js';
+import verifyPaymentHandler  from './api/verify-payment.js';
 import cashfreeWebhookHandler from './api/cashfree-webhook.js';
-import registerHandler      from './api/register.js';
-import teamHandler          from './api/team.js';
-import teamDashboardHandler from './api/team-dashboard.js';
-import spotifyHandler       from './api/spotify.js';
+import paymentStatusHandler  from './api/payment-status.js';
+import registerHandler        from './api/register.js';
+import teamHandler            from './api/team.js';
+import teamDashboardHandler   from './api/team-dashboard.js';
+import spotifyHandler         from './api/spotify.js';
 
 // ── Import PS Drop handlers ──────────────────────────────────────────────────
 import psStatusHandler     from './api/ps/status.js';
@@ -138,6 +139,7 @@ function mountHandler(handler) {
 app.all('/api/create-order',      mountHandler(createOrderHandler));
 app.all('/api/verify-payment',    mountHandler(verifyPaymentHandler));
 app.post('/api/cashfree-webhook', mountHandler(cashfreeWebhookHandler));  // Cashfree payment events
+app.get ('/api/payment-status',   mountHandler(paymentStatusHandler));    // Frontend polling after redirect
 app.all('/api/register',       mountHandler(registerHandler));
 app.all('/api/team',           mountHandler(teamHandler));
 app.get ('/api/team-dashboard',mountHandler(teamDashboardHandler));

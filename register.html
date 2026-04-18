@@ -1844,247 +1844,28 @@
 
     if (typeof gsap !== 'undefined') {
       gsap.registerPlugin(ScrollTrigger);
-
-      gsap.from(regLeft, { opacity: 0, x: -40, duration: 1, ease: 'power3.out', delay: 0.15 });
-      gsap.from(regRight, { opacity: 0, x: 40, duration: 1, ease: 'power3.out', delay: 0.25 });
-
-      // Stagger the stepper steps
-      gsap.from('.step-item', {
-        opacity: 0, y: 20, stagger: 0.1, duration: 0.7, ease: 'power3.out', delay: 0.4
-      });
+      gsap.from(regLeft,  { opacity: 0, x: -40, duration: 1, ease: 'power3.out', delay: 0.15 });
+      gsap.from(regRight, { opacity: 0, x:  40, duration: 1, ease: 'power3.out', delay: 0.25 });
+      gsap.from('.step-item', { opacity: 0, y: 20, stagger: 0.1, duration: 0.7, ease: 'power3.out', delay: 0.4 });
     }
 
-    // ── Member add/remove logic ──────────────────────────────────────────
-    let memberCount = 2; // leader + member 2 already shown
-
-    function showMember(n) {
-      const wrap = document.getElementById('member' + n + 'Wrap');
-      if (!wrap) return;
-      wrap.setAttribute('data-visible', 'true');
-      wrap.setAttribute('aria-hidden', 'false');
-      if (typeof gsap !== 'undefined') {
-        gsap.from('#member' + n + 'Block', { opacity: 0, y: 18, duration: 0.55, ease: 'power3.out' });
-      }
-    }
-
-    function hideMember(n) {
-      const wrap = document.getElementById('member' + n + 'Wrap');
-      if (!wrap) return;
-      // Clear inputs
-      ['Name', 'Email', 'Phone'].forEach(f => {
-        const inp = document.getElementById('m' + n + f.toLowerCase().charAt(0).toUpperCase() + f.slice(1).toLowerCase());
-        if (inp) inp.value = '';
-      });
-      wrap.setAttribute('data-visible', 'false');
-      wrap.setAttribute('aria-hidden', 'true');
-    }
-
-    function updateAddBtn() {
-      const btn = document.getElementById('addMemberBtn');
-      if (!btn) return;
-      if (memberCount >= 4) {
-        btn.style.display = 'none';
-      } else {
-        btn.style.display = '';
-      }
-    }
-
-    document.getElementById('addMemberBtn')?.addEventListener('click', () => {
-      if (memberCount >= 4) return;
-      memberCount++;
-      showMember(memberCount);
-      updateAddBtn();
-    });
-
-    document.getElementById('removeMember3')?.addEventListener('click', () => {
-      hideMember(3);
-      if (memberCount === 4) {
-        // Move member 4 up to 3 slot visually — just hide 3 and keep 4
-      }
-      memberCount = Math.max(2, memberCount - 1);
-      // If member 4 is visible but 3 is removed, also hide 4
-      const wrap4 = document.getElementById('member4Wrap');
-      if (wrap4 && wrap4.dataset.visible === 'true') {
-        hideMember(4);
-        memberCount = 2;
-      }
-      updateAddBtn();
-    });
-
-    document.getElementById('removeMember4')?.addEventListener('click', () => {
-      hideMember(4);
-      memberCount = Math.max(2, memberCount - 1);
-      updateAddBtn();
-    });
-
-    updateAddBtn();
-
-    // ── Mentor toggle ────────────────────────────────────────────────────
-    let mentorSelected = false;
-    const mentorWrap   = document.getElementById('mentorWrap');
-    const mentorCB     = document.getElementById('mentorCheckbox');
-    const totalEl      = document.getElementById('totalAmount');
-    const breakdownEl  = document.getElementById('totalBreakdown');
-    const payLabel     = document.getElementById('payBtnLabel');
-
-    function toggleMentor() {
-      mentorSelected = !mentorSelected;
-      mentorCB.classList.toggle('checked', mentorSelected);
-      mentorWrap.setAttribute('aria-checked', mentorSelected ? 'true' : 'false');
-
-      if (typeof gsap !== 'undefined') {
-        // Animate the amount number
-        const target = mentorSelected ? 1100 : 800;
-        const obj = { val: mentorSelected ? 800 : 1100 };
-        gsap.to(obj, {
-          val: target,
-          duration: 0.55,
-          ease: 'power2.out',
-          onUpdate: function () {
-            totalEl.textContent = '₹' + Math.round(obj.val).toLocaleString('en-IN');
-          },
-          onComplete: updatePayBtn
-        });
-      } else {
-        totalEl.textContent = mentorSelected ? '₹1,100' : '₹800';
-        updatePayBtn();
-      }
-
-      if (mentorSelected) {
-        totalEl.classList.add('is-mentor');
-        breakdownEl.textContent = '₹800 base + ₹300 mentor session = ₹1,100';
-      } else {
-        totalEl.classList.remove('is-mentor');
-        breakdownEl.textContent = '';
-      }
-    }
-
-    mentorWrap?.addEventListener('click', toggleMentor);
-    mentorWrap?.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleMentor(); } });
-
-    // ── Agreement checkboxes ─────────────────────────────────────────────
-    let tcChecked      = false;
-    let conductChecked = false;
-
-    function toggleTC() {
-      tcChecked = !tcChecked;
-      document.getElementById('checkTC').classList.toggle('checked', tcChecked);
-      document.getElementById('agreeTC').setAttribute('aria-checked', tcChecked ? 'true' : 'false');
-      updatePayBtn();
-    }
-    function toggleConduct() {
-      conductChecked = !conductChecked;
-      document.getElementById('checkConduct').classList.toggle('checked', conductChecked);
-      document.getElementById('agreeConduct').setAttribute('aria-checked', conductChecked ? 'true' : 'false');
-      updatePayBtn();
-    }
-
-    document.getElementById('agreeTC')?.addEventListener('click', (e) => {
-      if (e.target.tagName === 'A') return; // let links through
-      toggleTC();
-    });
-    document.getElementById('agreeTC')?.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleTC(); } });
-    document.getElementById('agreeConduct')?.addEventListener('click', (e) => {
-      if (e.target.tagName === 'A') return;
-      toggleConduct();
-    });
-    document.getElementById('agreeConduct')?.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleConduct(); } });
-
-    // -- Team Code Verify flow
-    let verifiedTeamCode = null;
-
-    const verifyBtn        = document.getElementById('verifyCodeBtn');
-    const codeInput        = document.getElementById('teamCodeInput');
-    const codeErr          = document.getElementById('teamCodeErr');
-    const detailsStep      = document.getElementById('teamDetailsStep');
-    const membersContainer = document.getElementById('membersContainer');
-
-    window.memberCount = 0;
-
-    function addMemberRow() {
-      if (window.memberCount >= 3) return;
-      window.memberCount++;
-      const idx = window.memberCount;
-      const block = document.createElement('div');
-      block.className = 'member-block';
-      block.id = 'dynMember' + idx;
-      block.innerHTML = '<div class="member-block-header"><span class="member-block-title">Member ' + (idx + 1) + ' <span class="opt-badge">optional</span></span>' +
-        '<button type="button" class="remove-member-btn" onclick="this.closest(\'.member-block\').remove(); window.memberCount = Math.max(0, window.memberCount-1); document.getElementById(\'addMemberBtn\').style.display = \'\';">' +
-        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Remove</button></div>' +
-        '<div class="form-row"><div class="form-field"><label class="form-label">Full Name</label>' +
-        '<input type="text" class="form-input dyn-member-name" placeholder="Member full name" /></div>' +
-        '<div class="form-field"><label class="form-label">Phone</label>' +
-        '<input type="tel" class="form-input dyn-member-phone" placeholder="+91 xxxxxxxxxx" /></div></div>';
-      membersContainer.appendChild(block);
-      if (window.memberCount >= 3) document.getElementById('addMemberBtn').style.display = 'none';
-    }
-
-    document.getElementById('addMemberBtn')?.addEventListener('click', addMemberRow);
-
-    async function verifyTeamCode() {
-      const code = (codeInput?.value || '').trim().toUpperCase();
-      if (!code) { codeErr.textContent = 'Please enter your team code.'; return; }
-      codeErr.textContent = '';
-      verifyBtn.disabled = true;
-      verifyBtn.textContent = 'Checking...';
-      try {
-        const res  = await fetch('/api/team?code=' + encodeURIComponent(code));
-        const data = await res.json();
-        if (!res.ok || !data.success) {
-          codeErr.textContent   = data.error || 'Invalid team code. Please try again.';
-          verifyBtn.disabled    = false;
-          verifyBtn.textContent = 'Verify ->';
-          return;
-        }
-        const team = data.team;
-        verifiedTeamCode = team.code;
-        document.getElementById('teamName').value    = team.teamName    || '';
-        document.getElementById('collegeName').value = team.collegeName || '';
-        document.getElementById('branch').value      = team.branch      || '';
-        document.getElementById('leaderName').value  = team.leader?.name  || '';
-        document.getElementById('leaderEmail').value = team.leader?.email || '';
-        document.getElementById('leaderPhone').value = team.leader?.phone || '';
-        detailsStep.style.display = 'block';
-        detailsStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        codeInput.readOnly      = true;
-        verifyBtn.disabled      = true;
-        verifyBtn.textContent   = 'Verified';
-        verifyBtn.style.opacity = '0.55';
-        updatePayBtn();
-      } catch (err) {
-        codeErr.textContent   = 'Network error. Please try again.';
-        verifyBtn.disabled    = false;
-        verifyBtn.textContent = 'Verify ->';
-      }
-    }
-
-    verifyBtn?.addEventListener('click', verifyTeamCode);
-    codeInput?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); verifyTeamCode(); } });
-
-    // -- Pay button state
-    const payBtn = document.getElementById('payBtn');
-
-    function updatePayBtn() {
-      const canPay = tcChecked && conductChecked && !!verifiedTeamCode;
-      payBtn.classList.toggle('disabled', !canPay);
-      payBtn.classList.toggle('enabled',   canPay);
-      payBtn.disabled = !canPay;
-      if (payLabel) {
-        payLabel.textContent = !verifiedTeamCode
-          ? 'Verify team code first'
-          : (canPay ? (mentorSelected ? 'Pay Rs.1,100 Securely' : 'Pay Rs.800 Securely') : 'Accept agreements to pay');
-      }
-    }
+    // ── Agreement checkbox state lives in the standalone script (window.__tcChecked / __conductChecked) ─
+    // ── Member/Verify/PayBtn all handled by standalone DOMContentLoaded script below ────────────────────
 
     function showErr(id, msg) { const el = document.getElementById(id); if (!el) return; el.textContent = msg; el.classList.add('visible'); }
     function clearErr(id)     { const el = document.getElementById(id); if (!el) return; el.textContent = '';  el.classList.remove('visible'); }
 
     document.getElementById('regForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!verifiedTeamCode) { codeErr.textContent = 'Please verify your team code first.'; return; }
-      if (!tcChecked || !conductChecked) return;
+      const verifiedTeamCode = window.__verifiedTeamCode;
+      if (!verifiedTeamCode) { alert('Please verify your team code first.'); return; }
+      if (!window.__tcChecked || !window.__conductChecked) { alert('Please accept both agreements.'); return; }
 
-      // Collect dynamic member rows (min 1 additional â€” team must be leader + at least 1 member)
+
+      // Collect dynamic member rows (min 1 additional - team must be leader + at least 1 member)
+      const membersContainer = document.getElementById('membersContainer');
+      const payLabel         = document.getElementById('payBtnLabel');
+      const mentorSelected   = !!window.__mentorOn;
       const membersPayload = [];
       (membersContainer || document.body).querySelectorAll('.member-block').forEach(block => {
         const name  = block.querySelector('.dyn-member-name')?.value.trim();
@@ -2103,11 +1884,15 @@
 
       // ── Collect form data ───────────────────────────────────────────────────
       const formData = {
-        teamName:    teamName,
-        collegeName: college,
-        branch:      branch,
-        yearOfStudy: year,
-        leader:      { name: lName, email: lEmail, phone: lPhone },
+        teamName:    document.getElementById('teamName')?.value    || '',
+        collegeName: document.getElementById('collegeName')?.value || '',
+        branch:      document.getElementById('branch')?.value      || '',
+        yearOfStudy: document.getElementById('yearOfStudy')?.value || '',
+        leader: {
+          name:  document.getElementById('leaderName')?.value  || '',
+          email: document.getElementById('leaderEmail')?.value || '',
+          phone: document.getElementById('leaderPhone')?.value || '',
+        },
         members:     membersPayload,
         mentorSession: mentorSelected,
         totalAmount:   mentorSelected ? 1100 : 800,
@@ -2780,6 +2565,8 @@
           verifyBtn.style.background = 'linear-gradient(135deg,#16a34a,#4ade80)';
           verifyBtn.style.opacity = '0.85';
           verifyBtn.style.boxShadow = '0 0 18px rgba(74,222,128,0.3)';
+          // Auto-add the first required member row
+          document.dispatchEvent(new CustomEvent('teamVerified'));
           updatePayBtn();
         } catch(err) {
           if (codeErr) codeErr.textContent = 'Network error. Please try again.';
@@ -2795,6 +2582,7 @@
     var memberIdx        = 0;
 
     function addMemberRow() {
+      if (memberIdx >= 3) return; // max 3 additional members (leader + 3 = 4 total)
       memberIdx++;
       var row = document.createElement('div');
       row.className = 'member-block';
@@ -2802,22 +2590,30 @@
       row.innerHTML =
         '<div class="member-block-header">' +
           '<span class="member-block-title">Member ' + (memberIdx + 1) +
-            ' <span class="opt-badge" style="opacity:.6;font-size:.7rem;font-weight:600">required</span></span>' +
-          '<button type="button" class="remove-member-btn" onclick="this.closest(\'.member-block\').remove();updatePayBtn();">' +
+            ' <span class="opt-badge" style="opacity:.6;font-size:.7rem;font-weight:600">' + (memberIdx === 1 ? 'required' : 'optional') + '</span></span>' +
+          '<button type="button" class="remove-member-btn" onclick="(function(btn){' +
+            'btn.closest(\'.member-block\').remove();' +
+            'window.__memberIdx = Math.max(0, (window.__memberIdx||0)-1);' +
+            'var ab=document.getElementById(\'addMemberBtn\');if(ab)ab.style.display=\'\';' +
+            'if(typeof window.updatePayBtn===\'function\')window.updatePayBtn();' +
+          '})(this)">' +
             '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
             'Remove</button></div>' +
         '<div class="form-row">' +
           '<div class="form-field"><label class="form-label">Full Name <span class="req">*</span></label>' +
             '<input type="text" class="form-input dyn-member-name" placeholder="Member full name" autocomplete="off" /></div>' +
-          '<div class="form-field"><label class="form-label">Phone <span class="req">*</span></label>' +
+          '<div class="form-field"><label class="form-label">Phone</label>' +
             '<input type="tel" class="form-input dyn-member-phone" placeholder="+91 xxxxxxxxxx" autocomplete="off" /></div>' +
         '</div>';
       if (membersContainer) membersContainer.appendChild(row);
+      window.__memberIdx = memberIdx;
+      // Hide Add button when at max
+      if (addBtn && memberIdx >= 3) addBtn.style.display = 'none';
       updatePayBtn();
     }
 
     if (addBtn) addBtn.addEventListener('click', addMemberRow);
-    // Add first required member row on verify
+    // Add first required member row when team is verified
     document.addEventListener('teamVerified', function() { if (memberIdx === 0) addMemberRow(); });
 
     // ── MENTOR SESSION TOGGLE ─────────────────────────────────────────────────
@@ -2826,9 +2622,11 @@
     var totalEl     = document.getElementById('totalAmount');
     var breakdownEl = document.getElementById('totalBreakdown');
     var mentorOn    = false;
+    window.__mentorOn = false;
 
     function toggleMentor() {
       mentorOn = !mentorOn;
+      window.__mentorOn = mentorOn;
       if (mentorCheck) mentorCheck.classList.toggle('checked', mentorOn);
       if (mentorWrap)  mentorWrap.setAttribute('aria-checked', mentorOn ? 'true' : 'false');
       if (totalEl)     totalEl.textContent = mentorOn ? '₹1,100' : '₹800';
@@ -2845,9 +2643,13 @@
     // ── AGREEMENT CHECKBOXES ─────────────────────────────────────────────────
     var tcChecked      = false;
     var conductChecked = false;
+    // Expose on window so IIFE form submit handler can read them
+    window.__tcChecked      = false;
+    window.__conductChecked = false;
 
     function toggleTC() {
       tcChecked = !tcChecked;
+      window.__tcChecked = tcChecked;
       var el = document.getElementById('checkTC');
       if (el) el.classList.toggle('checked', tcChecked);
       var ag = document.getElementById('agreeTC');
@@ -2856,6 +2658,7 @@
     }
     function toggleConduct() {
       conductChecked = !conductChecked;
+      window.__conductChecked = conductChecked;
       var el = document.getElementById('checkConduct');
       if (el) el.classList.toggle('checked', conductChecked);
       var ag = document.getElementById('agreeConduct');
@@ -2884,74 +2687,8 @@
     window.updatePayBtn = updatePayBtn;
 
     // ── PAY BUTTON SUBMIT ─────────────────────────────────────────────────────
-    if (payBtn) {
-      payBtn.addEventListener('click', async function(e) {
-        e.preventDefault();
-        if (!window.__verifiedTeamCode) return;
-
-        var members = [];
-        document.querySelectorAll('.member-block').forEach(function(block) {
-          var nameEl  = block.querySelector('.dyn-member-name');
-          var phoneEl = block.querySelector('.dyn-member-phone');
-          if (nameEl && nameEl.value.trim()) {
-            members.push({ name: nameEl.value.trim(), phone: (phoneEl && phoneEl.value.trim()) || '' });
-          }
-        });
-
-        if (members.length === 0) {
-          alert('Please add at least 1 team member.');
-          return;
-        }
-
-        payBtn.disabled = true; payBtn.textContent = 'Processing…';
-
-        try {
-          var res = await fetch('/api/create-order', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              teamCode:      window.__verifiedTeamCode,
-              mentorSession: mentorOn,
-              members:       members,
-            }),
-          });
-          var data = await res.json();
-          if (!res.ok || !data.orderId) throw new Error(data.error || 'Order creation failed');
-
-          // Cashfree checkout→
-          // Cashfree JS SDK v3 checkout
-          var cfMode = data.cfEnv || 'sandbox';
-          if (typeof cashfreeSDK !== 'undefined' || typeof window.Cashfree === 'function') {
-            var initFn = window.Cashfree || cashfreeSDK;
-            var cf = initFn({ mode: cfMode });
-            cf.checkout({
-              paymentSessionId: data.paymentSessionId,
-              redirectTarget: '_self',
-            }).then(function(r) {
-              if (r && r.error) {
-                alert('Payment error: ' + (r.error.message || 'Unknown error'));
-                payBtn.disabled = false; payBtn.textContent = 'Pay & Register';
-              }
-            }).catch(function(err) {
-              alert('Checkout error: ' + err.message);
-              payBtn.disabled = false; payBtn.textContent = 'Pay & Register';
-            });
-          } else {
-            // Fallback: load SDK dynamically if missed
-            var s = document.createElement('script');
-            s.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
-            s.onload = function() {
-              var cf = window.Cashfree({ mode: cfMode });
-              cf.checkout({ paymentSessionId: data.paymentSessionId, redirectTarget: '_self' });
-            };
-            document.head.appendChild(s);
-          }
-        } catch(err) {
-          alert('Payment error: ' + err.message);
-          payBtn.disabled = false; payBtn.textContent = 'Pay & Register';
-        }
-      });
-    }
+    // Handled by the IIFE's regForm 'submit' listener above (Cashfree modal + verify-payment).
+    // No separate click handler needed here — the form submit covers it.
 
     // Initial state
     updatePayBtn();

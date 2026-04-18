@@ -11,10 +11,11 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-import crypto  from 'crypto';
-import { connectDB }          from './lib/mongodb.js';
-import { Team }               from './models/Team.js';
-import { sendTeamCodeEmail }  from './lib/email.js';
+import crypto from 'crypto';
+import { connectDB }         from './lib/mongodb.js';
+import { Team }              from './models/Team.js';
+import { sendTeamCodeEmail } from './lib/email.js';
+import { getPusher }         from './lib/pusher.js';
 
 const WEBHOOK_SECRET = process.env.CASHFREE_WEBHOOK_SECRET;
 const APP_ID         = process.env.CASHFREE_APP_ID;
@@ -79,6 +80,28 @@ export default async function handler(req, res) {
 
   console.log(`[cashfree-webhook] Event: ${eventType} | Order: ${order.order_id} | Status: ${payment.payment_status}`);
 
+  const orderId     = order.order_id;
+  const cfPaymentId = String(payment.cf_payment_id || '');
+
+  if (!orderId) {
+    console.error('[cashfree-webhook] No order_id in payload');
+    return res.status(400).json({ error: 'Missing order_id' });
+  }
+
+  // ── Handle PAYMENT_FAILED ────────────────────────────────────────────────
+  if (eventType === 'PAYMENT_FAILED' || payment.payment_status === 'FAILED') {
+    try {
+      await connectDB();
+      const team = await Team.findOne({ cashfreeOrderId: orderId });
+      if (team && team.paymentStatus !== 'paid') {
+        team.paymentStatus = 'failed';
+        await team.save();
+        console.log(`[cashfree-webhook] ❌ Payment failed: ${team.code}`);
+      }
+    } catch (_) { /* non-fatal */ }
+    return res.status(200).json({ received: true });
+  }
+
   // Only process successful payments
   if (
     eventType !== 'PAYMENT_SUCCESS' &&
@@ -87,14 +110,6 @@ export default async function handler(req, res) {
   ) {
     console.log(`[cashfree-webhook] Ignoring event: ${eventType}`);
     return res.status(200).json({ received: true });
-  }
-
-  const orderId       = order.order_id;
-  const cfPaymentId   = String(payment.cf_payment_id || '');
-
-  if (!orderId) {
-    console.error('[cashfree-webhook] No order_id in payload');
-    return res.status(400).json({ error: 'Missing order_id' });
   }
 
   try {
@@ -122,6 +137,22 @@ export default async function handler(req, res) {
     await team.save();
 
     console.log(`[cashfree-webhook] ✅ Payment confirmed via webhook: ${team.code} | ${team.teamName} | ₹${team.totalAmount}`);
+
+    // ── Pusher: live admin dashboard update ─────────────────────────────────
+    const pusher = getPusher();
+    if (pusher) {
+      pusher.trigger('payments', 'payment_confirmed', {
+        teamCode:    team.code,
+        teamName:    team.teamName,
+        collegeName: team.collegeName,
+        leaderName:  team.leader?.name  || '',
+        leaderEmail: team.leader?.email || '',
+        amountPaid:  team.totalAmount,
+        mentorSession: team.mentorSession,
+        paidAt:      team.paymentDate.toISOString(),
+        orderId,
+      }).catch(e => console.error('[cashfree-webhook] Pusher emit failed:', e.message));
+    }
 
     // ── Send confirmation email ─────────────────────────────────────────────
     if (team.leader?.email) {
