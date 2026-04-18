@@ -71,6 +71,7 @@ import {
 import submitHandler           from './api/submissions/submit.js';
 import listSubmissionsHandler  from './api/submissions/list.js';
 import getSubmissionHandler    from './api/submissions/get.js';
+import listHandler   from './api/submissions/list.js';
 
 
 // ── App setup ────────────────────────────────────────────────────────────────
@@ -95,7 +96,7 @@ const cleanRoutes = {
   '/code-of-conduct':   'code-of-conduct.html',
   '/our-team':          'our-team.html',
   '/register':          'register.html',
-  '/team-dashboard':    'team-dashboard.html',
+  '/dashboard':         'user-dashboard.html',
   '/contact':            'contact.html',
   
   // Portfolio/Personal Pages
@@ -113,6 +114,7 @@ const cleanRoutes = {
   '/admin/login':        'admin/login.html',
   '/admin/dashboard':    'admin/dashboard.html',
   '/admin/registrations':'admin/registrations.html',
+    '/admin/submissions':  'admin/submissions.html',
   '/admin/problem-statements': 'admin/problem-statements.html',
   '/admin/payments':           'admin/payments.html',
   '/admin/ps-stats':           'admin/ps-stats.html',
@@ -174,6 +176,12 @@ app.get ('/api/admin/winners',            mountHandler(getWinnersHandler));
 app.post('/api/admin/winners/save',       mountHandler(saveWinnersHandler));
 app.post('/api/admin/winners/publish',    mountHandler(publishWinnersHandler));
 app.post('/api/admin/winners/unpublish',  mountHandler(unpublishWinnersHandler));
+
+
+
+// ── Submissions API ───────────────────────────────────────────────────────────
+app.post('/api/submissions/submit', mountHandler(submitHandler));
+app.get ('/api/submissions/list',   mountHandler(listHandler));
 
 // ── Winners Public API ────────────────────────────────────────────────────────
 app.get('/api/winners', mountHandler(publicWinnersHandler));
