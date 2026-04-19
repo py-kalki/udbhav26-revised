@@ -53,6 +53,11 @@ import adminLoginHandler from './api/admin/login.js';
 import { paymentsHandler } from './api/admin/payments.js';
 import { psStatsHandler }  from './api/admin/ps-stats.js';
 import {
+  registrationsListHandler,
+  registrationUpdateHandler,
+  registrationDeleteHandler,
+} from './api/admin/registrations.js';
+import {
   teamsListHandler,
   teamsAddHandler,
   teamsImportHandler,
@@ -171,6 +176,11 @@ app.post  ('/api/admin/ps/stop-drop',  mountHandler(stopDropHandler));
 app.get   ('/api/admin/ps/stats',      mountHandler(statsHandler));
 app.get   ('/api/admin/payments',      mountHandler(paymentsHandler));
 app.get   ('/api/admin/ps-stats',         mountHandler(psStatsHandler));
+
+// ── Admin Registrations API (reads from registrations collection) ─────────────
+app.get   ('/api/admin/registrations',        mountHandler(registrationsListHandler));
+app.patch ('/api/admin/registrations/:id',    mountHandler(registrationUpdateHandler));
+app.delete('/api/admin/registrations/:id',    mountHandler(registrationDeleteHandler));
 
 // ── Admin Teams API ───────────────────────────────────────────────────────────
 // IMPORTANT: static paths (/import, /generate-codes, /view) must come BEFORE /:id

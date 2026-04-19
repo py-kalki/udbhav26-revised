@@ -1890,7 +1890,9 @@
       gsap.registerPlugin(ScrollTrigger);
       gsap.from(regLeft,  { opacity: 0, x: -40, duration: 1, ease: 'power3.out', delay: 0.15 });
       gsap.from(regRight, { opacity: 0, x:  40, duration: 1, ease: 'power3.out', delay: 0.25 });
-      gsap.from('.step-item', { opacity: 0, y: 20, stagger: 0.1, duration: 0.7, ease: 'power3.out', delay: 0.4 });
+      if (document.querySelector('.step-item')) {
+        gsap.from('.step-item', { opacity: 0, y: 20, stagger: 0.1, duration: 0.7, ease: 'power3.out', delay: 0.4 });
+      }
     }
 
     // ── Agreement checkbox state lives in the standalone script (window.__tcChecked / __conductChecked) ─

@@ -1,26 +1,26 @@
 /**
  * api/team.js
  * ─────────────────────────────────────────────────────────────────────────────
- * Vercel Serverless Function — GET /api/team?code=UDB26-001
+ * GET /api/team?code=UDB-XXXX
  *
  * Looks up a shortlisted team by their unique team code.
- * Returns safe public fields only (no internal IDs or sensitive data).
+ * Priority:
+ *   1. Check `teams` collection (pre-imported shortlisted teams)
+ *   2. Fall back to `registrations` collection (already-submitted teams)
+ *
+ * This handles the case where teams were registered without being first
+ * imported into the `teams` collection.
  *
  * Response 200:
- *   {
- *     success: true,
- *     team: {
- *       code, teamName, collegeName, branch,
- *       memberCount, mentorSession, totalAmount, paymentStatus
- *     }
- *   }
- * Response 404: team not found
- * Response 400: already paid
+ *   { success: true, team: { code, teamName, collegeName, branch, ... } }
+ * Response 400: already paid / already registered
+ * Response 404: team not found in either collection
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-import { connectDB } from './lib/mongodb.js';
-import { Team }      from './models/Team.js';
+import { connectDB }    from './lib/mongodb.js';
+import { Team }         from './models/Team.js';
+import { Registration } from './models/Registration.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -41,49 +41,57 @@ export default async function handler(req, res) {
   try {
     await connectDB();
 
+    // ── 1. Check `teams` collection first (pre-imported shortlisted teams) ───
     const team = await Team.findOne({ code }).lean();
 
-    if (!team) {
-      return res.status(404).json({
-        success: false,
-        error: 'Invalid team code. Please check your shortlisting email and try again.',
+    if (team) {
+      if (team.paymentStatus === 'paid') {
+        return res.status(400).json({
+          success: false,
+          error: 'This team has already completed payment. Contact support if this is an error.',
+          alreadyPaid: true,
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        team: {
+          _id:           team._id,
+          code:          team.code,
+          teamName:      team.teamName,
+          collegeName:   team.collegeName,
+          branch:        team.branch,
+          memberCount:   team.memberCount,
+          mentorSession: team.mentorSession,
+          totalAmount:   team.totalAmount,
+          paymentStatus: team.paymentStatus,
+          leader: {
+            name:  team.leader?.name  || '',
+            email: team.leader?.email || '',
+            phone: team.leader?.phone || '',
+          },
+        },
       });
     }
 
-    if (team.paymentStatus === 'paid') {
+    // ── 2. Fall back to `registrations` collection ───────────────────────────
+    // This covers teams that submitted before being imported into `teams`.
+    const reg = await Registration.findOne({ teamCode: code }).lean();
+
+    if (reg) {
+      // Already submitted a registration — treat as already registered
       return res.status(400).json({
         success: false,
-        error: 'This team has already completed payment. Contact support if this is an error.',
-        alreadyPaid: true,
+        error: 'This team has already submitted their registration. Contact support if you need to update details.',
+        alreadyPaid: reg.paymentStatus === 'paid',
       });
     }
 
-    if (!team.codeGenerated) {
-      return res.status(404).json({
-        success: false,
-        error: 'Team codes have not been generated yet. Please check back later.',
-      });
-    }
-
-    // Return public fields for autofill on registration page
-    return res.status(200).json({
-      success: true,
-      team: {
-        _id:           team._id,
-        code:          team.code,
-        teamName:      team.teamName,
-        collegeName:   team.collegeName,
-        branch:        team.branch,
-        memberCount:   team.memberCount,
-        mentorSession: team.mentorSession,
-        totalAmount:   team.totalAmount,
-        paymentStatus: team.paymentStatus,
-        leader: {
-          name:  team.leader.name,
-          email: team.leader.email,
-          phone: team.leader.phone,
-        },
-      },
+    // ── 3. Not found in either collection ────────────────────────────────────
+    console.log(`[/api/team] Code not found in teams or registrations: ${code}`);
+    return res.status(404).json({
+      success: false,
+      error: `'${code}' doesn't match any shortlisted team. Double-check your email or contact support.`,
     });
 
   } catch (err) {

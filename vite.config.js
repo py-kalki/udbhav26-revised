@@ -77,7 +77,6 @@ export default defineConfig({
         problemStatement:   resolve(__dirname, 'problem-statement.html'),
         userDashboard:      resolve(__dirname, 'user-dashboard.html'),
         contact:            resolve(__dirname, 'contact.html'),
-        teamDashboard:      resolve(__dirname, 'team-dashboard.html'),
         paymentStatus:      resolve(__dirname, 'payment-status.html'),
         
         // Legal
