@@ -90,7 +90,7 @@ export default async function handler(req, res) {
     console.error('[/api/team] Error:', err);
     return res.status(500).json({
       success: false,
-      error: 'Server error. Please try again.',
+      error: err.message === 'No network connection' ? 'No network connection' : 'Server error. Please try again.',
     });
   }
 }

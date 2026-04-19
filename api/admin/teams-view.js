@@ -122,7 +122,7 @@ export async function teamsViewHandler(req, res) {
 
   } catch (err) {
     console.error('[admin/teams-view] error:', err);
-    return res.status(500).json({ success: false, error: err.message });
+    return res.status(500).json({ success: false, error: err.message === 'No network connection' ? 'No network connection' : err.message });
   }
 }
 

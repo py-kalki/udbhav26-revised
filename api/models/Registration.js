@@ -43,6 +43,7 @@ const RegistrationSchema = new mongoose.Schema(
       enum: ['pending', 'paid', 'failed'],
       default: 'pending',
     },
+    paymentScreenshotUrl: { type: String, required: false },
     cashfreeOrderId:   { type: String, default: null },
     cashfreePaymentId: { type: String, default: null },
 

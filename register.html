@@ -1518,28 +1518,22 @@
               <!-- Divider -->
               <div style="height:1px;background:linear-gradient(to right,transparent,rgba(139,92,246,0.4),transparent);margin:1.5rem 0;"></div>
 
-              <!-- Instruction text -->
+              <!-- Instruction text & Upload -->
               <div style="background:rgba(139,92,246,0.07);border:1px solid rgba(139,92,246,0.2);border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;">
-                <p style="font-family:var(--font-ui);font-size:0.88rem;color:rgba(255,255,255,0.75);line-height:1.7;margin:0;">
-                  <span style="font-size:1.1rem;">📲</span> <strong style="color:#fff;">Scan the QR below</strong> and make the payment, then send your <strong style="color:#a78bfa;">payment screenshot</strong> on WhatsApp along with your <strong style="color:#a78bfa;">Team Code</strong> and <strong style="color:#a78bfa;">Team Name</strong>:
+                <p style="font-family:var(--font-ui);font-size:0.88rem;color:rgba(255,255,255,0.75);line-height:1.7;margin:0 0 1rem;">
+                  <span style="font-size:1.1rem;">📲</span> <strong style="color:#fff;">Scan the QR below</strong> to pay. Then <strong style="color:#a78bfa;">upload your payment screenshot</strong> here:
                 </p>
-                <!-- WhatsApp number -->
-                <div style="margin-top:1rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
-                  <span style="font-family:var(--font-ui);font-size:0.78rem;color:rgba(255,255,255,0.45);">WhatsApp:</span>
-                  <a href="https://wa.me/918829841257" target="_blank" rel="noopener noreferrer"
-                     style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.45rem 1rem;border-radius:999px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.35);color:#25d366;font-family:var(--font-mono);font-size:0.85rem;font-weight:700;text-decoration:none;letter-spacing:0.05em;transition:all 0.2s;"
-                     onmouseover="this.style.background='rgba(37,211,102,0.22)';this.style.boxShadow='0 0 16px rgba(37,211,102,0.25)';"
-                     onmouseout="this.style.background='rgba(37,211,102,0.12)';this.style.boxShadow='none';">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                    +91 88298 41257
-                  </a>
+                <div style="display:flex;flex-direction:column;gap:0.5rem;">
+                  <input type="file" id="paymentScreenshot" accept="image/*" required
+                         style="background:rgba(0,0,0,0.2);padding:0.75rem;border:1px dashed rgba(139,92,246,0.4);border-radius:8px;color:rgba(255,255,255,0.8);font-family:var(--font-ui);font-size:0.8rem;width:100%;cursor:pointer;" />
+                  <span style="font-size:0.7rem;color:rgba(255,255,255,0.4);">Max size: 5MB (JPG, PNG, JPEG)</span>
                 </div>
               </div>
 
               <!-- QR Code -->
               <div style="display:flex;flex-direction:column;align-items:center;gap:1rem;margin-bottom:1.5rem;">
                 <div style="position:relative;padding:1rem;background:rgba(255,255,255,0.03);border:1px solid rgba(139,92,246,0.25);border-radius:20px;box-shadow:0 0 40px rgba(139,92,246,0.12);">
-                  <img src="/payment-qr.png" alt="Payment QR Code" id="paymentQrImg"
+                  <img src="/QR-800.jpeg" alt="Payment QR Code" id="paymentQrImg"
                        style="display:block;width:220px;height:220px;border-radius:12px;object-fit:cover;"
                        onerror="this.style.display='none';document.getElementById('qrFallback').style.display='flex';" />
                   <!-- Fallback if image doesn't load -->
@@ -1566,7 +1560,7 @@
               <!-- After payment notice -->
               <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:1rem 1.25rem;background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.15);border-radius:14px;margin-bottom:1.5rem;">
                 <span style="font-size:1.2rem;flex-shrink:0;">⏳</span>
-                <p style="font-family:var(--font-ui);font-size:0.82rem;color:rgba(255,255,255,0.6);line-height:1.65;margin:0;">Within <strong style="color:#4ade80;">1 hour</strong> of sending your screenshot, you will be able to access your <strong style="color:#4ade80;">Team Dashboard</strong>.</p>
+                <p style="font-family:var(--font-ui);font-size:0.82rem;color:rgba(255,255,255,0.6);line-height:1.65;margin:0;">Within <strong style="color:#4ade80;">1 hour</strong> of submitting your registration, you will be able to access your <strong style="color:#4ade80;">Team Dashboard</strong>.</p>
               </div>
 
             </div><!-- /#qrPaymentSection -->
@@ -1617,6 +1611,12 @@
           <div style="display:flex;gap:0.8rem;flex-wrap:wrap;justify-content:center;margin:1rem 0;">
             <div style="font-family:monospace;font-size:0.78rem;padding:0.4rem 0.9rem;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);" id="successAmountBadge"></div>
             <div style="font-family:monospace;font-size:0.78rem;padding:0.4rem 0.9rem;border-radius:8px;background:rgba(168,85,247,0.07);border:1px solid rgba(168,85,247,0.2);color:#a855f7;" id="successMentorBadge"></div>
+          </div>
+
+          <!-- Registration Dashboard Notice -->
+          <div style="width:100%;max-width:380px;padding:1rem 1.2rem;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.3);border-radius:12px;margin-bottom:1.5rem;text-align:center;">
+            <p style="margin:0;font-size:0.82rem;color:#34d399;font-weight:600;line-height:1.5;">✨ Successfully Registered!</p>
+            <p style="margin:0.25rem 0 0 0;font-size:0.75rem;color:rgba(52,211,153,0.8);line-height:1.5;">Within an hour you will have access to your team dashboard.</p>
           </div>
 
           <!-- What's next -->
@@ -1931,6 +1931,76 @@
         return;
       }
 
+      // ── Loading state ──────────────────────────────────────────────────
+      const payBtn = document.getElementById('payBtn');
+      payBtn.classList.remove('enabled');
+      payBtn.classList.add('loading');
+      payBtn.disabled = true;
+      if (payLabel) payLabel.textContent = 'Uploading Screenshot & Saving…';
+
+      const spinner = document.createElement('div');
+      spinner.className = 'pay-spinner';
+      payBtn.insertBefore(spinner, payBtn.firstChild);
+
+      const toast    = document.getElementById('apiErrorToast');
+      const toastMsg = document.getElementById('apiErrorMsg');
+      toast?.classList.remove('visible');
+
+      function restoreBtn(msg) {
+        if (spinner.parentNode) spinner.remove();
+        payBtn.classList.remove('loading');
+        payBtn.classList.add('enabled');
+        payBtn.disabled = false;
+        if (payLabel) payLabel.textContent = 'Complete Registration';
+        if (toast && toastMsg && msg) {
+          toastMsg.textContent = msg;
+          toast.classList.add('visible');
+          setTimeout(() => toast.classList.remove('visible'), 8000);
+        }
+      }
+
+      // Check for file
+      const fileInput = document.getElementById('paymentScreenshot');
+      if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+        restoreBtn('Please select a payment screenshot to upload.');
+        return;
+      }
+      const file = fileInput.files[0];
+      if (file.size > 5 * 1024 * 1024) {
+        restoreBtn('Screenshot exceeds 5MB limit. Please compress it and try again.');
+        return;
+      }
+
+      // ── Cloudinary Upload ───────────────────────────────────────────────
+      let finalScreenshotUrl = '';
+      try {
+        const cData = new FormData();
+        const ext = file.name.lastIndexOf('.') !== -1 ? file.name.substring(file.name.lastIndexOf('.')) : '.jpg';
+        const newFileName = verifiedTeamCode.toUpperCase() + '_payment' + ext;
+        const renamedFile = new File([file], newFileName, { type: file.type });
+        
+        cData.append('file', renamedFile);
+        cData.append('upload_preset', 'UDBHAV26');
+        cData.append('cloud_name', 'dimq4wo1i');
+
+        const cRes = await fetch('https://api.cloudinary.com/v1_1/dimq4wo1i/image/upload', {
+          method: 'POST',
+          body: cData,
+        });
+        const cJson = await cRes.json();
+        
+        if (!cRes.ok || cJson.error) {
+          throw new Error(cJson.error?.message || 'Cloudinary upload failed.');
+        }
+        
+        finalScreenshotUrl = cJson.secure_url;
+      } catch (err) {
+        console.error('Cloud upload error:', err);
+        alert("Cloudinary Error: " + err.message);
+        restoreBtn('Failed to upload screenshot. Please try again or check your connection.');
+        return;
+      }
+
       // ── Collect form data ──────────────────────────────────────────────
       const formData = {
         teamCode:    verifiedTeamCode,
@@ -1945,23 +2015,9 @@
         members:       membersPayload,
         mentorSession: mentorSelected,
         totalAmount:   mentorSelected ? 1100 : 800,
+        paymentScreenshotUrl: finalScreenshotUrl,
         paymentStatus: 'pending',  // manual QR payment — admin will verify screenshot
       };
-
-      // ── Loading state ──────────────────────────────────────────────────
-      const payBtn = document.getElementById('payBtn');
-      payBtn.classList.remove('enabled');
-      payBtn.classList.add('loading');
-      payBtn.disabled = true;
-      if (payLabel) payLabel.textContent = 'Saving registration…';
-
-      const spinner = document.createElement('div');
-      spinner.className = 'pay-spinner';
-      payBtn.insertBefore(spinner, payBtn.firstChild);
-
-      const toast    = document.getElementById('apiErrorToast');
-      const toastMsg = document.getElementById('apiErrorMsg');
-      toast?.classList.remove('visible');
 
       function showSuccess(data) {
         const tc    = data.teamCode   || verifiedTeamCode || '';
@@ -1990,11 +2046,13 @@
                   success.classList.add('visible');
                   gsap.from(success.children, { opacity: 0, y: 30, stagger: 0.1, duration: 0.6, ease: 'power3.out' });
                 }
+                setTimeout(() => alert('Successfully registered!\n\nNow within an hour you will have access to your team dashboard.'), 300);
               }
             });
           } else {
             form.style.display = 'none';
             success?.classList.add('visible');
+            setTimeout(() => alert('Successfully registered!\n\nNow within an hour you will have access to your team dashboard.'), 300);
           }
         }
         document.getElementById('regRight')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -2610,6 +2668,8 @@
       if (mentorWrap)  mentorWrap.setAttribute('aria-checked', mentorOn ? 'true' : 'false');
       if (totalEl)     totalEl.textContent = mentorOn ? '₹1,100' : '₹800';
       if (breakdownEl) breakdownEl.textContent = mentorOn ? '₹800 base + ₹300 mentor session = ₹1,100' : 'per team';
+      var qrImg = document.getElementById('paymentQrImg');
+      if (qrImg) qrImg.src = mentorOn ? '/QR-1100.jpeg' : '/QR-800.jpeg';
       var lbl = document.getElementById('payBtnLabel');
       if (lbl) lbl.textContent = 'Complete Registration';
       updatePayBtn();

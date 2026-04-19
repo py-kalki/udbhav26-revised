@@ -54,6 +54,7 @@ const TeamSchema = new mongoose.Schema(
       default: 'pending',
     },
     paymentDate:        { type: Date,   default: null },
+    paymentScreenshotUrl: { type: String, default: null },
     cashfreeOrderId:    { type: String, default: null },
     cashfreePaymentId:  { type: String, default: null },
 

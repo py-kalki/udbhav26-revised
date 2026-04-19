@@ -72,21 +72,20 @@ export default async function handler(req, res) {
     // ── 2. Connect to MongoDB ────────────────────────────────────────────────
     await connectDB();
 
-    // ── 3. Duplicate check (same teamCode already submitted) ─────────────────
-    const existing = await Registration.findOne({
-      teamCode: (body.teamCode || '').trim().toUpperCase(),
-    });
+    // ── 3. Duplicate check (Upsert pending, block paid) ──────────────────────
+    const teamCodeStr = (body.teamCode || '').trim().toUpperCase();
+    const existing = await Registration.findOne({ teamCode: teamCodeStr });
 
-    if (existing) {
+    if (existing && existing.paymentStatus === 'paid') {
       return res.status(400).json({
         success: false,
-        error: 'This team has already completed registration. Contact support if unexpected.',
+        error: 'This team has already completed payment & registration. Contact support if unexpected.',
       });
     }
 
-    // ── 4. Save registration ─────────────────────────────────────────────────
-    const registration = await Registration.create({
-      teamCode:    (body.teamCode || '').trim().toUpperCase(),
+    // ── 4. Save or Update Registration ───────────────────────────────────────
+    const payload = {
+      teamCode:    teamCodeStr,
       teamName:    (body.teamName || '').trim(),
       collegeName: (body.collegeName || '').trim(),
       branch:      (body.branch || '').trim(),
@@ -103,10 +102,22 @@ export default async function handler(req, res) {
       })),
       mentorSession: Boolean(body.mentorSession),
       totalAmount,
-      paymentStatus: 'pending',   // admin verifies WhatsApp screenshot → marks paid
+      paymentScreenshotUrl: body.paymentScreenshotUrl || null,
+      paymentStatus: 'pending',   // admin verifies uploaded screenshot → marks paid
       ipAddress: req.headers['x-forwarded-for'] || req.socket?.remoteAddress || null,
       userAgent: req.headers['user-agent'] || null,
-    });
+    };
+
+    let registration;
+    if (existing) {
+      registration = await Registration.findOneAndUpdate(
+        { teamCode: teamCodeStr },
+        { $set: payload },
+        { returnDocument: 'after' }
+      );
+    } else {
+      registration = await Registration.create(payload);
+    }
 
     // ── 4.5. Update the existing Team document ───────────────────────────────
     // The admin dashboard reads from the 'teams' collection.
@@ -122,6 +133,7 @@ export default async function handler(req, res) {
           memberCount: members.length + 1, // leader + members
           mentorSession: Boolean(body.mentorSession),
           totalAmount: totalAmount,
+          paymentScreenshotUrl: body.paymentScreenshotUrl || null,
         }
       }
     );
@@ -148,7 +160,7 @@ export default async function handler(req, res) {
 
     return res.status(500).json({
       success: false,
-      error: 'Server error — please try again in a moment.',
+      error: err.message === 'No network connection' ? 'No network connection' : 'Server error — please try again in a moment.',
     });
   }
 }

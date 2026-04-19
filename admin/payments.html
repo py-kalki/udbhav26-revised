@@ -562,6 +562,7 @@
                 <th>Leader</th>
                 <th>Amount</th>
                 <th>Status</th>
+                <th>Screenshot</th>
                 <th>Cashfree Order ID</th>
                 <th>Cashfree Payment ID</th>
                 <th>Team Code</th>
@@ -570,7 +571,7 @@
               </tr>
             </thead>
             <tbody id="tableBody">
-              <tr><td colspan="10" class="table-empty">Loading transactions…</td></tr>
+              <tr><td colspan="11" class="table-empty">Loading transactions…</td></tr>
             </tbody>
           </table>
         </div>
@@ -691,7 +692,7 @@
         console.error('[fetchPayments]', err);
         showToast('Failed to load payments: ' + err.message, 'error');
         document.getElementById('tableBody').innerHTML =
-          `<tr><td colspan="10" class="table-empty">Could not load data. Check your admin credentials.</td></tr>`;
+          `<tr><td colspan="11" class="table-empty">${err.message || 'Could not load data. Check your admin credentials.'}</td></tr>`;
       }
     }
 
@@ -714,7 +715,7 @@
       const tbody = document.getElementById('tableBody');
 
       if (!allPayments.length) {
-        tbody.innerHTML = `<tr><td colspan="10" class="table-empty">No transactions match your filters.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="11" class="table-empty">No transactions match your filters.</td></tr>`;
         return;
       }
 
@@ -745,6 +746,9 @@
               <span class="status-dot"></span>
               ${p.paymentStatus}
             </span>
+          </td>
+          <td>
+            ${p.paymentScreenshotUrl ? `<a href="${p.paymentScreenshotUrl}" target="_blank" style="color:var(--clr-blue);text-decoration:underline;font-size:0.75rem;font-weight:600;">View File</a>` : '<span style="color:rgba(255,255,255,0.2);">—</span>'}
           </td>
           <td>
             <span class="td-mono" title="${escHtml(orderId)}">${hasOrdId ? orderId.substring(0, 20) + '…' : '—'}</span>
