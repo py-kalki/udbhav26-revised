@@ -2636,7 +2636,7 @@
           '<div class="form-field"><label class="form-label">Full Name <span class="req">*</span></label>' +
             '<input type="text" class="form-input dyn-member-name" placeholder="Member full name" autocomplete="off" /></div>' +
           '<div class="form-field"><label class="form-label">Phone</label>' +
-            '<input type="tel" class="form-input dyn-member-phone" placeholder="+91 xxxxxxxxxx" autocomplete="off" /></div>' +
+            '<input type="tel" class="form-input dyn-member-phone" placeholder="xxxxxxxxxx" autocomplete="off" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, \'\')" /></div>' +
         '</div>';
       if (membersContainer) membersContainer.appendChild(row);
       window.__memberIdx = memberIdx;

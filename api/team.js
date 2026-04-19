@@ -79,11 +79,34 @@ export default async function handler(req, res) {
     const reg = await Registration.findOne({ teamCode: code }).lean();
 
     if (reg) {
-      // Already submitted a registration — treat as already registered
-      return res.status(400).json({
-        success: false,
-        error: 'This team has already submitted their registration. Contact support if you need to update details.',
-        alreadyPaid: reg.paymentStatus === 'paid',
+      if (reg.paymentStatus === 'paid' || reg.registrationCompleted) {
+        // Already submitted a registration — treat as already registered
+        return res.status(400).json({
+          success: false,
+          error: 'This team has already submitted their registration. Contact support if you need to update details.',
+          alreadyPaid: reg.paymentStatus === 'paid',
+        });
+      }
+
+      // If pending and not fully registered, allow them to continue
+      return res.status(200).json({
+        success: true,
+        team: {
+          _id:           reg._id,
+          code:          reg.teamCode,
+          teamName:      reg.teamName,
+          collegeName:   reg.collegeName,
+          branch:        reg.branch,
+          memberCount:   reg.members ? reg.members.length + 1 : 1,
+          mentorSession: reg.mentorSession,
+          totalAmount:   reg.totalAmount,
+          paymentStatus: reg.paymentStatus,
+          leader: {
+            name:  reg.leader?.name  || '',
+            email: reg.leader?.email || '',
+            phone: reg.leader?.phone || '',
+          },
+        },
       });
     }
 
