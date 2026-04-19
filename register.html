@@ -1914,8 +1914,9 @@
       const membersPayload = [];
       (membersContainer || document.body).querySelectorAll('.member-block').forEach(block => {
         const name  = block.querySelector('.dyn-member-name')?.value.trim();
+        const email = block.querySelector('.dyn-member-email')?.value.trim();
         const phone = block.querySelector('.dyn-member-phone')?.value.trim();
-        if (name) membersPayload.push({ name, phone: phone || '' });
+        if (name) membersPayload.push({ name, email: email || '', phone: phone || '' });
       });
 
       if (membersPayload.length < 1) {
@@ -2492,40 +2493,7 @@
       });
     }
 
-    // 2. "More" desktop dropdown
-    var moreBtn      = document.getElementById('nav-more');
-    var moreDropdown = document.getElementById('moreDropdown');
-    var moreWrap     = document.getElementById('navMoreWrap');
-
-    function openMore() {
-      if (!moreDropdown) return;
-      moreDropdown.classList.remove('closing');
-      moreDropdown.classList.add('open');
-      moreWrap && moreWrap.classList.add('open');
-      moreBtn && moreBtn.setAttribute('aria-expanded', 'true');
-    }
-    function closeMore() {
-      if (!moreDropdown) return;
-      moreDropdown.classList.add('closing');
-      moreDropdown.classList.remove('open');
-      moreWrap && moreWrap.classList.remove('open');
-      moreBtn && moreBtn.setAttribute('aria-expanded', 'false');
-      setTimeout(function() { moreDropdown.classList.remove('closing'); }, 200);
-    }
-
-    if (moreBtn && moreDropdown) {
-      moreBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        moreDropdown.classList.contains('open') ? closeMore() : openMore();
-      });
-      document.addEventListener('click', function(e) {
-        if (moreWrap && !moreWrap.contains(e.target)) closeMore();
-      });
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') { closeMore(); moreBtn && moreBtn.focus(); }
-      });
-    }
+    // "More" desktop dropdown handled by initMoreDropdown() above
 
 
     // ── TOAST POPUP HELPER ───────────────────────────────────────────────────
@@ -2571,8 +2539,7 @@
           if (!res.ok || !data.success) {
             // Already paid / registered
             if (data.alreadyPaid) {
-              showToast('warn', 'Already Registered',
-                'Team \'' + code + '\' has already completed payment and is registered. Contact support if this is unexpected.');
+              showToast('warn', 'Already Paid', 'You have already paid the amount.');
             } else if (res.status === 404) {
               showToast('error', 'Code Not Found',
                 '\'' + code + '\' doesn\'t match any team. Double-check your shortlisting email.');
@@ -2615,12 +2582,14 @@
     var memberIdx        = 0;
 
     function addMemberRow(existingMember) {
-      if (document.querySelectorAll('.member-block').length >= 3) return; // max 3 additional members (leader + 3 = 4 total)
+      if (document.querySelectorAll('.member-block').length >= 4) return; // max 3 additional members (leader + 3 = 4 total)
       memberIdx++;
       var isExisting = !!existingMember;
       var nameVal = isExisting ? (existingMember.name || '') : '';
+      var emailVal = isExisting ? (existingMember.email || '') : '';
       var phoneVal = isExisting ? (existingMember.phone || '') : '';
       var nameAttr = isExisting ? 'readonly style="background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.5);"' : '';
+      var emailAttr = isExisting ? 'readonly style="background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.5);"' : '';
       var phoneAttr = isExisting ? 'readonly style="background: rgba(255,255,255,0.02); color: rgba(255,255,255,0.5);"' : '';
       var removeBtn = isExisting ? '' : '<button type="button" class="remove-member-btn" onclick="(function(btn){ btn.closest(\'.member-block\').remove(); var ab=document.getElementById(\'addMemberBtn\'); if(ab) { ab.style.display=\'\'; } if(typeof window.updatePayBtn===\'function\')window.updatePayBtn(); })(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Remove</button>';
 
@@ -2632,16 +2601,20 @@
           '<span class="member-block-title">Member ' + (memberIdx + 1) +
             ' <span class="opt-badge" style="opacity:.6;font-size:.7rem;font-weight:600">' + (memberIdx === 1 ? 'required' : 'optional') + '</span></span>' +
           removeBtn + '</div>' +
-        '<div class="form-row">' +
+        '<div class="form-row single">' +
           '<div class="form-field"><label class="form-label">Full Name <span class="req">*</span></label>' +
             '<input type="text" class="form-input dyn-member-name" placeholder="Member full name" autocomplete="off" value="' + nameVal + '" ' + nameAttr + ' /></div>' +
+        '</div>' +
+        '<div class="form-row">' +
+          '<div class="form-field"><label class="form-label">Email</label>' +
+            '<input type="email" class="form-input dyn-member-email" placeholder="Email address" autocomplete="off" value="' + emailVal + '" ' + emailAttr + ' /></div>' +
           '<div class="form-field"><label class="form-label">Phone</label>' +
             '<input type="tel" class="form-input dyn-member-phone" placeholder="xxxxxxxxxx" autocomplete="off" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, \'\')" value="' + phoneVal + '" ' + phoneAttr + ' /></div>' +
         '</div>';
       if (membersContainer) membersContainer.appendChild(row);
       window.__memberIdx = memberIdx;
       // Hide Add button when at max
-      if (addBtn && document.querySelectorAll('.member-block').length >= 3) addBtn.style.display = 'none';
+      if (addBtn && document.querySelectorAll('.member-block').length >= 4) addBtn.style.display = 'none';
       if (typeof updatePayBtn === 'function') updatePayBtn();
     }
 

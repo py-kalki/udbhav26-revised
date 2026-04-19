@@ -129,6 +129,7 @@ export default async function handler(req, res) {
           members: members.map((m) => ({
             name:  (m.name  || '').trim(),
             phone: (m.phone || '').trim(),
+            email: (m.email || '').trim().toLowerCase(),
           })),
           memberCount: members.length + 1, // leader + members
           mentorSession: Boolean(body.mentorSession),

@@ -46,12 +46,12 @@ export default async function handler(req, res) {
 
     if (team) {
       if (team.paymentStatus === 'paid') {
-        return res.status(400).json({
-          success: false,
-          error: 'This team has already completed payment. Contact support if this is an error.',
-          alreadyPaid: true,
-        });
-      }
+         return res.status(400).json({
+           success: false,
+           error: 'You have already paid the amount.',
+           alreadyPaid: true,
+         });
+       }
 
       return res.status(200).json({
         success: true,
@@ -81,11 +81,10 @@ export default async function handler(req, res) {
 
     if (reg) {
       if (reg.paymentStatus === 'paid' || reg.registrationCompleted) {
-        // Already submitted a registration — treat as already registered
         return res.status(400).json({
-          success: false,
-          error: 'This team has already submitted their registration. Contact support if you need to update details.',
-          alreadyPaid: reg.paymentStatus === 'paid',
+           success: false,
+           error: 'You have already paid the amount.',
+           alreadyPaid: reg.paymentStatus === 'paid',
         });
       }
 
