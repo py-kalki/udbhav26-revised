@@ -144,6 +144,24 @@
       border: 1px solid rgba(251,191,36,0.2);
     }
 
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: 6px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .badge--warn {
+      background: var(--clr-amber);
+      color: #000;
+      box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+    }
+
     .sidebar-footer {
       padding: 1rem 1.2rem;
       border-top: 1px solid rgba(255,255,255,0.06);
@@ -303,9 +321,15 @@
         Registrations
       </a>
 
-      <a href="/admin/team.html" class="sidebar-link active" id="navTeams">
+      <a href="/admin/team.html" class="sidebar-link" id="navTeams">
         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Teams
+      </a>
+
+      <a href="/admin/team.html?filter=mentorship" class="sidebar-link" id="navMentorship">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Mentorship
+        <span class="badge badge--warn" id="mentorshipBadge" style="display:none; margin-left: auto; font-size: 0.6rem; padding: 0.1rem 0.4rem; border-radius: 6px;">0</span>
       </a>
 
       <a href="/admin/submissions.html" class="sidebar-link" id="navSubmissions">
@@ -374,12 +398,12 @@
           <input type="text" id="teamSearch" class="search-input" placeholder="Search by team name, code, college or leader..." />
         </div>
         <div class="filter-group">
-          <select id="statusFilter" class="filter-select">
-            <option value="all">All Payments</option>
+          <select id="statusFilter" class="filter-select" style="background-color: #0f0f0f; border: 1px solid rgba(255,255,255,0.1);">
+            <option value="all" class="bg-blue/5">All Payments</option>
             <option value="paid">Paid</option>
             <option value="pending">Pending</option>
           </select>
-          <select id="mentorshipFilter" class="filter-select">
+          <select id="mentorshipFilter" class="filter-select" style="background-color: #0f0f0f; border: 1px solid rgba(255,255,255,0.1);">
             <option value="all">All Mentorship</option>
             <option value="approved">Approved</option>
             <option value="pending">Pending Verification</option>
@@ -418,6 +442,22 @@
     let teams = [];
     let stats = {};
 
+    function renderStats(s) {
+      document.getElementById('statTotal').textContent   = s.total || 0;
+      document.getElementById('statPaid').textContent    = s.paid || 0;
+      document.getElementById('statPending').textContent = s.pending || 0;
+      document.getElementById('statCoded').textContent   = s.codedCount || 0;
+
+      // Update mentorship badge
+      const badge = document.getElementById('mentorshipBadge');
+      if (s.mentorshipPending > 0) {
+        badge.textContent = s.mentorshipPending;
+        badge.style.display = 'inline-block';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
     async function fetchTeams() {
       const q = document.getElementById('teamSearch').value;
       const status = document.getElementById('statusFilter').value;
@@ -427,7 +467,8 @@
         page: currentPage,
         limit: 12,
         q: q,
-        status: status !== 'all' ? status : ''
+        status: status !== 'all' ? status : '',
+        mentorship: mentorship !== 'all' ? mentorship : ''
       });
 
       try {
@@ -435,13 +476,8 @@
         const data = await res.json();
         if(!data.success) throw new Error(data.error);
         
-        // Frontend filtering for mentorship since API doesn't have it yet
-        let filteredTeams = data.teams || [];
-        if (mentorship !== 'all') {
-          filteredTeams = filteredTeams.filter(t => t.mentorshipStatus === mentorship);
-        }
-
-        renderTeams(filteredTeams);
+        // Server-side filtering is now supported, but we keep this as a fallback or additional layer
+        renderTeams(data.teams || []);
         renderPagination(data.pagination);
       } catch(err) {
         console.error(err);
@@ -522,6 +558,14 @@
         if(!data.success) throw new Error(data.error);
         const t = data.team;
         if(!t) return;
+
+        // Auto-highlight active sidebar link
+        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+        if (document.getElementById('mentorshipFilter').value === 'pending') {
+          document.getElementById('navMentorship').classList.add('active');
+        } else {
+          document.getElementById('navTeams').classList.add('active');
+        }
 
         const content = document.getElementById('detailContent');
         const membersHtml = (t.members || []).map(m => `
@@ -647,6 +691,17 @@
       sidebar.classList.remove('is-open');
       overlay.classList.remove('is-visible');
     });
+
+    // ── Handle URL Filter Params ──
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('filter') === 'mentorship') {
+      document.getElementById('mentorshipFilter').value = 'pending';
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      document.getElementById('navMentorship').classList.add('active');
+    } else {
+        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+        document.getElementById('navTeams').classList.add('active');
+    }
 
     fetchTeams();
   </script>

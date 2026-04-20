@@ -51,11 +51,14 @@ export async function teamsListHandler(req, res) {
 
     const page   = Math.max(1, parseInt(req.query.page  || '1'));
     const limit  = Math.min(200, parseInt(req.query.limit || '100'));
-    const status = req.query.status || 'all';
-    const q      = (req.query.q || '').trim();
+    const status     = req.query.status || 'all';
+    const mentorship = req.query.mentorship || 'all';
+    const q          = (req.query.q || '').trim();
 
     const filter = {};
-    if (status !== 'all') filter.paymentStatus = status;
+    if (status !== 'all')     filter.paymentStatus = status;
+    if (mentorship !== 'all') filter.mentorshipStatus = mentorship;
+    
     if (q) {
       const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
       filter.$or = [
@@ -78,10 +81,11 @@ export async function teamsListHandler(req, res) {
     ]);
 
     const stats = {
-      total:       await Team.countDocuments(),
-      paid:        await Team.countDocuments({ paymentStatus: 'paid' }),
-      pending:     await Team.countDocuments({ paymentStatus: 'pending' }),
-      codedCount:  await Team.countDocuments({ codeGenerated: true }),
+      total:             await Team.countDocuments(),
+      paid:              await Team.countDocuments({ paymentStatus: 'paid' }),
+      pending:           await Team.countDocuments({ paymentStatus: 'pending' }),
+      codedCount:        await Team.countDocuments({ codeGenerated: true }),
+      mentorshipPending: await Team.countDocuments({ mentorshipStatus: 'pending' }),
     };
 
     console.log(`[admin/teams] List: total=${total}, page=${page}, status=${status}, q="${q}"`);
