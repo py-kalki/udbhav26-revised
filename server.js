@@ -186,7 +186,8 @@ const cleanRoutes = {
   '/admin/ps-stats':           'admin/ps-stats.html',
   '/admin/winners':            'admin/winners.html',
   '/admin/submissions':        'admin/submissions.html',
-  '/admin/teams':              'admin/teams.html',
+  '/admin/teams':              'admin/team.html',
+  '/admin/team':               'admin/team.html',
 };
 
 // ── Vercel-handler adapter ────────────────────────────────────────────────────
