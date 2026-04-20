@@ -19,6 +19,7 @@ validateEnv();
 
 import express from 'express';
 import path    from 'path';
+import fs      from 'fs';
 import { fileURLToPath } from 'url';
 import rateLimit from 'express-rate-limit';
 
@@ -65,6 +66,8 @@ import {
   teamsUpdateHandler,
   teamsDeleteHandler,
   generateCodesHandler,
+  mentorshipApproveHandler,
+  teamsGetHandler,
 } from './api/admin/teams.js';
 import {
   teamsViewHandler,
@@ -86,6 +89,8 @@ import listSubmissionsHandler  from './api/submissions/list.js';
 import getSubmissionHandler    from './api/submissions/get.js';
 import teamAuthHandler         from './api/auth/team.js';
 
+// ── Import Mentorship handlers ────────────────────────────────────────────────
+import optMentorshipHandler    from './api/mentorship/opt.js';
 
 // ── App setup ────────────────────────────────────────────────────────────────
 const app  = express();
@@ -242,6 +247,8 @@ app.patch ('/api/admin/teams/:id/payment',    mountHandler(teamPaymentOverrideHa
 app.patch ('/api/admin/teams/:id/member',     mountHandler(teamMemberEditHandler));       // member edit
 app.patch ('/api/admin/teams/:id/mentor',     mountHandler(teamMentorToggleHandler));     // mentor toggle
 app.patch ('/api/admin/teams/:id',            mountHandler(teamsUpdateHandler));
+app.get   ('/api/admin/teams/:id',            mountHandler(teamsGetHandler));
+app.post  ('/api/admin/teams/:id/approve-mentorship', mountHandler(mentorshipApproveHandler));
 app.delete('/api/admin/teams/:id',            mountHandler(teamsDeleteHandler));
 
 // ── Winners Admin API ─────────────────────────────────────────────────────────
@@ -263,6 +270,9 @@ app.get('/api/winners', mountHandler(publicWinnersHandler));
 // ── Team Auth API ─────────────────────────────────────────────────────────────
 app.post('/api/auth/team', mountHandler(teamAuthHandler));
 
+// ── Mentorship API ────────────────────────────────────────────────────────────
+app.post('/api/mentorship/opt', mountHandler(optMentorshipHandler));
+
 // ── Clean URL Routes ──────────────────────────────────────────────────────────
 for (const [route, file] of Object.entries(cleanRoutes)) {
   app.get(route, (req, res) => {
@@ -283,7 +293,12 @@ app.get('/', (req, res) => {
 
 // ── 404 Fallback ──────────────────────────────────────────────────────────────
 app.use((req, res) => {
-  res.status(404).sendFile(path.join(DIST, '404.html'));
+  const page404 = path.join(DIST, '404.html');
+  if (fs.existsSync(page404)) {
+    res.status(404).sendFile(page404);
+  } else {
+    res.status(404).send('Not Found');
+  }
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
