@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -414,10 +414,12 @@
         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
         Registrations
       </a>
+
       <a href="/admin/team.html" class="sidebar-link" id="navTeams">
-        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
         Teams
       </a>
+
       <a href="/admin/submissions.html" class="sidebar-link">
         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Submissions
@@ -440,6 +442,7 @@
       </a>
 
       <span class="sidebar-nav-label" style="margin-top:0.5rem;">Coming Soon</span>
+      
       <a href="#" class="sidebar-link" onclick="event.preventDefault();">
         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         Schedule <span class="coming-tag">Soon</span>
@@ -561,17 +564,15 @@
                 <th>Leader</th>
                 <th>Amount</th>
                 <th>Status</th>
-                <th>Screenshot</th>
                 <th>Cashfree Order ID</th>
                 <th>Cashfree Payment ID</th>
                 <th>Team Code</th>
                 <th>Payment Date</th>
                 <th>Members</th>
-                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="tableBody">
-              <tr><td colspan="12" class="table-empty">Loading transactions…</td></tr>
+              <tr><td colspan="10" class="table-empty">Loading transactions…</td></tr>
             </tbody>
           </table>
         </div>
@@ -692,7 +693,7 @@
         console.error('[fetchPayments]', err);
         showToast('Failed to load payments: ' + err.message, 'error');
         document.getElementById('tableBody').innerHTML =
-          `<tr><td colspan="11" class="table-empty">${err.message || 'Could not load data. Check your admin credentials.'}</td></tr>`;
+          `<tr><td colspan="10" class="table-empty">Could not load data. Check your admin credentials.</td></tr>`;
       }
     }
 
@@ -715,7 +716,7 @@
       const tbody = document.getElementById('tableBody');
 
       if (!allPayments.length) {
-        tbody.innerHTML = `<tr><td colspan="11" class="table-empty">No transactions match your filters.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" class="table-empty">No transactions match your filters.</td></tr>`;
         return;
       }
 
@@ -748,9 +749,6 @@
             </span>
           </td>
           <td>
-            ${p.paymentScreenshotUrl ? `<a href="${p.paymentScreenshotUrl}" target="_blank" style="color:var(--clr-blue);text-decoration:underline;font-size:0.75rem;font-weight:600;">View File</a>` : '<span style="color:rgba(255,255,255,0.2);">—</span>'}
-          </td>
-          <td>
             <span class="td-mono" title="${escHtml(orderId)}">${hasOrdId ? orderId.substring(0, 20) + '…' : '—'}</span>
             ${hasOrdId ? `<button class="copy-btn" data-copy="${escHtml(orderId)}" title="Copy Order ID"><svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>` : ''}
           </td>
@@ -763,59 +761,12 @@
           </td>
           <td style="color:rgba(255,255,255,0.4);font-size:0.76rem;">${payDate}</td>
           <td style="color:rgba(255,255,255,0.4);font-size:0.76rem;">${p.memberCount || 1}</td>
-          <td>
-            ${p.paymentStatus === 'pending' || p.paymentStatus === 'failed' ? '<button class="btn btn--sm btn--green inline-approve-btn" data-id="' + p.id + '" style="padding:0.25rem 0.5rem;font-size:0.7rem;margin-right:0.3rem;">Approve</button>' : ''}
-            ${p.paymentStatus === 'pending' || p.paymentStatus === 'paid' ? '<button class="btn btn--sm inline-reject-btn" data-id="' + p.id + '" style="padding:0.25rem 0.5rem;font-size:0.7rem;background:rgba(248,113,113,0.1);color:#f87171;border:1px solid rgba(248,113,113,0.2);">Reject</button>' : ''}
-          </td>
         </tr>`;
       }).join('');
 
       // Bind copy buttons
       tbody.querySelectorAll('.copy-btn[data-copy]').forEach(btn => {
         btn.addEventListener('click', () => copyToClipboard(btn.dataset.copy, btn));
-      });
-
-      // Bind inline row actions
-      tbody.querySelectorAll('.inline-approve-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          if (!confirm('Mark this payment as PAID?')) return;
-          btn.disabled = true;
-          try {
-            const res = await fetch(`/api/admin/teams/${btn.dataset.id}/payment`, {
-              method: 'PATCH',
-              headers: apiHeaders(),
-              body: JSON.stringify({ paymentStatus: 'paid' })
-            });
-            if (res.ok) {
-              showToast('Payment marked as paid', 'success');
-              fetchPayments(currentPage);
-            } else throw new Error('Failed to update');
-          } catch(e) {
-            showToast(e.message, 'error');
-            btn.disabled = false;
-          }
-        });
-      });
-
-      tbody.querySelectorAll('.inline-reject-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          if (!confirm('Mark this payment as FAILED/REJECTED?')) return;
-          btn.disabled = true;
-          try {
-            const res = await fetch(`/api/admin/teams/${btn.dataset.id}/payment`, {
-              method: 'PATCH',
-              headers: apiHeaders(),
-              body: JSON.stringify({ paymentStatus: 'failed' })
-            });
-            if (res.ok) {
-              showToast('Payment marked as failed', 'success');
-              fetchPayments(currentPage);
-            } else throw new Error('Failed to update');
-          } catch(e) {
-            showToast(e.message, 'error');
-            btn.disabled = false;
-          }
-        });
       });
     }
 
