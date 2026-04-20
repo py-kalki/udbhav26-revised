@@ -89,6 +89,8 @@ import listSubmissionsHandler  from './api/submissions/list.js';
 import getSubmissionHandler    from './api/submissions/get.js';
 import teamAuthHandler         from './api/auth/team.js';
 
+// ── Import Mentorship handlers ────────────────────────────────────────────────
+import optMentorshipHandler    from './api/mentorship/opt.js';
 
 // ── App setup ────────────────────────────────────────────────────────────────
 const app  = express();
