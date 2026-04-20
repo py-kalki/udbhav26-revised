@@ -24,16 +24,30 @@ export default async function handler(req, res) {
 
   try {
     await connectDB();
+    
+    const [team, registration] = await Promise.all([
+      import('../models/Team.js').then(m => m.Team.findOne({ code: formattedCode }).lean()),
+      Registration.findOne({ teamCode: formattedCode }).lean()
+    ]);
 
-    const team = await Registration.findOne({ teamCode: formattedCode }).lean();
+    const activeTeam = team || registration;
 
-    if (!team) {
+    if (!activeTeam) {
       return res.status(404).json({
         success: false,
         error: 'Invalid Team ID. Please check your credentials.'
       });
     }
 
+    // Restriction: Allow 'paid' and 'pending' teams to enter
+    const status = activeTeam.paymentStatus;
+    if (status !== 'paid' && status !== 'pending') {
+      return res.status(403).json({
+        success: false,
+        error: 'Access Denied. Registration not found for this status.',
+        status: status
+      });
+    }
     // Restriction: All registered teams can access the command center now
     // Payment status check removed as requested
 
@@ -41,12 +55,12 @@ export default async function handler(req, res) {
     return res.status(200).json({
       success: true,
       team: {
-        id: team.teamCode,
-        name: team.teamName,
-        college: team.collegeName,
-        leader: team.leader?.name || '',
-        memberCount: 1 + (team.members?.length || 0),
-        psSelectionId: null
+        id: activeTeam.code || activeTeam.teamCode,
+        name: activeTeam.teamName,
+        college: activeTeam.collegeName,
+        leader: activeTeam.leader?.name || '',
+        memberCount: 1 + (activeTeam.members?.length || 0),
+        psSelectionId: activeTeam.psSelectionId || null
       }
     });
 
