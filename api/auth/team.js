@@ -39,17 +39,15 @@ export default async function handler(req, res) {
       });
     }
 
-    // Restriction: Allow 'paid' and 'pending' teams to enter
+    // Restriction: Only allow 'paid' teams to enter
     const status = activeTeam.paymentStatus;
-    if (status !== 'paid' && status !== 'pending') {
+    if (status !== 'paid') {
       return res.status(403).json({
         success: false,
-        error: 'Access Denied. Registration not found for this status.',
+        error: 'Access Denied. Only teams with successful payments can access the dashboard.',
         status: status
       });
     }
-    // Restriction: All registered teams can access the command center now
-    // Payment status check removed as requested
 
     // Success - Return team metadata
     return res.status(200).json({

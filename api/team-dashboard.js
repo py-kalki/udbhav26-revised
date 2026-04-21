@@ -73,14 +73,13 @@ export default async function handler(req, res) {
       });
     }
 
-    // Allow paid OR pending (previously strictly required paid)
-    if (team.paymentStatus !== 'paid' && team.paymentStatus !== 'pending') {
+    // Restriction: Only allow 'paid' teams
+    if (team.paymentStatus !== 'paid') {
       return res.status(403).json({
         error:   'access_denied',
-        message: 'Access denied for this status: ' + team.paymentStatus,
+        message: 'Access denied. Only fully paid teams can access the dashboard.',
       });
     }
-    // Payment status check removed as requested
 
     // Prefer Registration members (has email), fall back to Team.members
     let leader  = team.leader;
