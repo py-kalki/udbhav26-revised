@@ -7,6 +7,15 @@ const Dashboard = {
     targetDate: new Date("2026-04-25T08:00:00"),
     psReleased: false,
 
+    // Command Center Actions (Dynamic Injection)
+    commandActions: [
+        { id: "resources", title: "Resources", subtitle: "Assets & Briefs", icon: "folder-kanban", visibleAfter: "2026-04-25T11:00:00" },
+        { id: "mentorship", title: "Mentor", subtitle: "See your Mentor", icon: "users", visibleAfter: "2000-01-01T00:00:00" },
+        { id: "github-submission", title: "Github Link", subtitle: "Submit your Github Link", icon: "users", visibleAfter: "2026-04-26T01:00:00" },
+        { id: "ppt-submission", title: "PPT Submission", subtitle: "Submit your PPT", icon: "users", visibleAfter: "2026-04-26T07:00:00" },
+        { id: "project-submission", title: "Project Submission", subtitle: "Submit your project Drive Link", icon: "users", visibleAfter: "2026-04-26T07:00:00" }
+    ],
+
     // Timeline Stages Data
     timelineStages: [
         { time: "8:00–9:30 AM", title: "Doors Open", description: "Check-in & On-boarding", timestamp: "2026-04-25T08:00:00" },
@@ -390,38 +399,45 @@ const Dashboard = {
             }
         });
 
-        // 2. Sync Command Center Visibility
-        document.querySelectorAll('[data-visible-after]').forEach(el => {
-            const visibleTime = new Date(el.getAttribute('data-visible-after')).getTime();
-            if (now >= visibleTime) {
-                if (el.classList.contains('hidden')) {
-                    el.classList.remove('hidden');
-                    // Fade in effect
-                    el.style.opacity = '0';
-                    el.style.transform = 'translateY(10px)';
-                    requestAnimationFrame(() => {
-                        el.style.transition = 'all 0.5s ease-out';
-                        el.style.opacity = '1';
-                        el.style.transform = 'translateY(0)';
-                    });
-                }
-            } else {
-                el.classList.add('hidden');
+        // 2. Sync Command Center Visibility (Dynamic Injection)
+        const commandGrid = document.getElementById('command-center-grid');
+        if (commandGrid) {
+            this.commandActions.forEach(action => {
+                const visibleTime = new Date(action.visibleAfter).getTime();
+                const existingEl = document.getElementById(`cmd-${action.id}`);
                 
-                // 5 minutes before popup logic
-                const diffMs = visibleTime - now;
-                if (diffMs > 0 && diffMs <= 5 * 60 * 1000) {
-                    const actionId = el.getAttribute('data-action') || visibleTime.toString();
-                    if (!this.notifiedUpcoming) this.notifiedUpcoming = new Set();
-                    if (!this.notifiedUpcoming.has(actionId)) {
-                        this.notifiedUpcoming.add(actionId);
+                if (now >= visibleTime) {
+                    if (!existingEl) {
+                        const el = document.createElement('div');
+                        el.id = `cmd-${action.id}`;
+                        el.className = "group login-card !p-6 rounded-2xl cursor-pointer !opacity-100 !transform-none border-white/5 hover:border-white/20 transition-all";
+                        el.setAttribute('data-action', action.id);
+                        el.innerHTML = `
+                            <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-5 transition-transform group-hover:scale-110 border border-white/5">
+                                <i data-lucide="${action.icon}" class="w-5 h-5 text-white/60"></i>
+                            </div>
+                            <h4 class="text-sm font-bold font-heading mb-1 text-white">${action.title}</h4>
+                            <p class="text-[9px] text-white/30 uppercase tracking-widest">${action.subtitle}</p>
+                        `;
+                        // Attach event listener
+                        el.addEventListener('click', () => this.openModal(action.id));
+                        commandGrid.appendChild(el);
                         
-                        let title = el.querySelector('h4') ? el.querySelector('h4').textContent.trim() : 'A new feature';
-                        this.showToast(`Heads up! ${title} opens in 5 minutes!`);
+                        this.initializeIcons();
+                    }
+                } else {
+                    // 5 minutes before popup logic
+                    const diffMs = visibleTime - now;
+                    if (diffMs > 0 && diffMs <= 5 * 60 * 1000) {
+                        if (!this.notifiedUpcoming) this.notifiedUpcoming = new Set();
+                        if (!this.notifiedUpcoming.has(action.id)) {
+                            this.notifiedUpcoming.add(action.id);
+                            this.showToast(`Heads up! ${action.title} opens in 5 minutes!`);
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
         this.initializeIcons();
     },
@@ -628,8 +644,8 @@ const Dashboard = {
                         content.innerHTML = `
                             <div class="py-6">
                                 <i data-lucide="clock" class="w-16 h-16 text-orange-500/40 mx-auto mb-4 animate-pulse"></i>
-                                <h3 class="text-lg font-bold text-white mb-2 uppercase">Assignment Pending</h3>
-                                <p class="text-white/40 text-sm">Your mentor is being assigned. Check back shortly!</p>
+                                <h3 class="text-lg font-bold text-white mb-2 uppercase">Mentor Opted</h3>
+                                <p class="text-white/40 text-sm">you have paid the amonunt the details will be shared with you in shortly.</p>
                             </div>
                         `;
                     }
@@ -639,7 +655,7 @@ const Dashboard = {
                             <div class="w-20 h-20 rounded-full bg-blue-500/10 flex items-center justify-center mx-auto border border-blue-500/20 mb-4">
                                 <i data-lucide="shield-check" class="w-10 h-10 text-blue-500 animate-pulse"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-white uppercase tracking-tight">Verification In Progress</h3>
+                            <h3 class="text-xl font-bold text-white uppercase tracking-tight">Your request is pending</h3>
                             <p class="text-white/40 text-sm">Our admins are verifying your ₹300 payment receipt. This usually takes 2-4 hours.</p>
                             ${team.mentorshipReceiptUrl ? `
                                 <div class="mt-4 pt-4 border-t border-white/5">
