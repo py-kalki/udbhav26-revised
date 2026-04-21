@@ -15,14 +15,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  const { teamCode, leaderEmail } = req.body;
+  const { teamCode } = req.body;
 
-  if (!teamCode || !leaderEmail) {
-    return res.status(400).json({ success: false, error: 'Team ID and Leader Email are required.' });
+  if (!teamCode) {
+    return res.status(400).json({ success: false, error: 'Team ID is required.' });
   }
 
   const formattedCode = teamCode.trim().toUpperCase();
-  const formattedEmail = leaderEmail.trim().toLowerCase();
 
   try {
     await connectDB();
@@ -51,14 +50,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // Verify leader email
-    const storedEmail = (activeTeam.leader?.email || '').trim().toLowerCase();
-    if (storedEmail !== formattedEmail) {
-      return res.status(401).json({
-        success: false,
-        error: 'Invalid Leader Email for this Team ID.'
-      });
-    }
+
 
     // Success - Create JWT
     const token = jwt.sign(

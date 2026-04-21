@@ -197,11 +197,9 @@ const Dashboard = {
             loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const idInput = document.getElementById('teamId-input');
-                const emailInput = document.getElementById('leaderEmail-input');
                 const teamCode = idInput.value.trim();
-                const leaderEmail = emailInput ? emailInput.value.trim() : '';
 
-                if (!teamCode || !leaderEmail) return;
+                if (!teamCode) return;
 
                 // UI Loading State
                 loginBtn.disabled = true;
@@ -215,7 +213,7 @@ const Dashboard = {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         credentials: 'include',
-                        body: JSON.stringify({ teamCode, leaderEmail })
+                        body: JSON.stringify({ teamCode })
                     });
 
                     const data = await res.json();
