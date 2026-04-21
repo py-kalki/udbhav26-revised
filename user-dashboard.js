@@ -515,13 +515,38 @@ const Dashboard = {
         try {
             const res = await fetch(`/api/team-dashboard?code=${id}`);
             const data = await res.json();
+
+            // If server denies access (e.g. payment pending), force logout
+            if (res.status === 403 || !data.success) {
+                this.logout();
+                const loginError = document.getElementById('loginError');
+                if (loginError) {
+                    loginError.textContent = data.message || 'Access Denied. Only fully paid teams can access the dashboard.';
+                    loginError.style.opacity = '1';
+                }
+                return;
+            }
+
             if (data.success) {
+                // Double-check payment status on the client side
+                if (data.team.paymentStatus !== 'paid') {
+                    this.logout();
+                    const loginError = document.getElementById('loginError');
+                    if (loginError) {
+                        loginError.textContent = 'Access Denied. Only fully paid teams can access the dashboard.';
+                        loginError.style.opacity = '1';
+                    }
+                    return;
+                }
+
                 this.currentTeamData = data.team;
                 console.log("Team data synchronized:", this.currentTeamData);
 
                 // Update header team name with fresh data from API
                 const headerTeamName = document.getElementById('header-team-name');
-                if (headerTeamName && data.team && data.team.name) {
+                if (headerTeamName && data.team && data.team.teamName) {
+                    headerTeamName.textContent = data.team.teamName;
+                } else if (headerTeamName && data.team && data.team.name) {
                     headerTeamName.textContent = data.team.name;
                 }
             }
