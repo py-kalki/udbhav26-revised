@@ -88,6 +88,8 @@
                                 class="login-input"
                                 placeholder="E.g. UDB-PXZA"
                                 autocomplete="off"
+                                spellcheck="false"
+                                style="text-transform: uppercase;"
                                 required
                             />
                         </div>
@@ -113,15 +115,11 @@
         <header class="sticky top-4 z-50 px-6 mt-4">
             <div class="login-card p-4 md:px-8 py-4 rounded-2xl flex items-center justify-between !opacity-100 !transform-none !shadow-none border-white/5">
                 <div class="flex items-center gap-4">
-                    <div class="hidden md:flex items-center gap-3 px-4 py-2 bg-white/5 rounded-xl border border-white/10">
-                        <i data-lucide="user" class="w-4 h-4 text-white/40"></i>
-                        <span class="text-xs font-bold text-white/80 tracking-widest uppercase display-team-id">
-                            TEAM-ID
-                        </span>
-                    </div>
-                    <div class="flex flex-col">
-                        <h2 class="text-xl font-bold font-heading leading-tight tracking-tight uppercase">UDBHAV'26 <span class="text-white/40"></span></h2>
-                        <p class="text-[9px] text-white/30 tracking-[0.3em] uppercase">Hackathon are Live</p>
+                    
+                    <div class="flex items-center gap-3">
+                        <h2 class="text-lg font-bold font-heading leading-tight tracking-tight uppercase text-white/60 whitespace-nowrap">UDBHAV'26</h2>
+                        <span class="text-white/20 font-thin text-2xl select-none">|</span>
+                        <p id="header-team-name" class="text-xl font-black font-heading tracking-tight uppercase text-white truncate max-w-[260px]"></p>
                     </div>
                 </div>
 
@@ -331,6 +329,7 @@
         <div class="absolute inset-0 modal-close"></div>
         <div class="relative w-full max-w-lg glass-dark border-white/10 rounded-3xl overflow-hidden p-8 shadow-2xl">
             <button class="modal-close absolute top-6 right-6 w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all z-10">
+            <button class="modal-close absolute top-6 right-6 p-2 text-white/20 hover:text-white transition-all">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <h2 id="modal-title" class="text-2xl font-black font-heading tracking-tight uppercase mb-6">Submission</h2>
@@ -350,6 +349,7 @@
         <div class="absolute inset-0 modal-close"></div>
         <div class="relative w-full max-w-sm glass-dark border-white/10 rounded-3xl p-8 text-center shadow-2xl">
             <button class="modal-close absolute top-6 right-6 w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all z-10">
+            <button class="modal-close absolute top-6 right-6 p-2 text-white/20 hover:text-white transition-all">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div id="mentor-modal-content">

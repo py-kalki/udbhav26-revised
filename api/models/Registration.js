@@ -17,9 +17,9 @@ const RegistrationSchema = new mongoose.Schema(
   {
     // ── Team Info ───────────────────────────────────────────────────────
     teamName:    { type: String, required: true, trim: true },
-    collegeName: { type: String, required: true, trim: true },
-    branch:      { type: String, required: true, trim: true },
-    yearOfStudy: { type: String, required: true },
+    collegeName: { type: String, required: false, trim: true, default: '' },
+    branch:      { type: String, required: false, trim: true, default: '' },
+    yearOfStudy: { type: String, required: false, default: 'N/A' },
 
     // ── Leader ──────────────────────────────────────────────────────────
     leader: { type: MemberSchema, required: true },
@@ -43,6 +43,7 @@ const RegistrationSchema = new mongoose.Schema(
       enum: ['pending', 'paid', 'failed'],
       default: 'pending',
     },
+    paymentScreenshotUrl: { type: String, required: false },
     cashfreeOrderId:   { type: String, default: null },
     cashfreePaymentId: { type: String, default: null },
 
@@ -66,6 +67,23 @@ const RegistrationSchema = new mongoose.Schema(
 
     // ── Registration Status ─────────────────────────────────────────────
     registrationCompleted: { type: Boolean, default: false },
+    confirmationEmailSent: { type: Boolean, default: false },
+    paymentReminderSent: { type: Boolean, default: false },
+
+    // ── Mentorship ─────────────────────────────────────────────────────────
+    mentor: {
+      name:     { type: String, default: null },
+      contact:  { type: String, default: null },
+      linkedin: { type: String, default: null },
+    },
+
+    // ── Mentorship Workflow ───────────────────────────────────────────────
+    mentorshipStatus: { 
+      type: String, 
+      enum: ['not_requested', 'pending', 'approved'], 
+      default: 'not_requested' 
+    },
+    mentorshipReceiptUrl: { type: String, default: null },
   },
   {
     timestamps: true,   // adds createdAt + updatedAt automatically
