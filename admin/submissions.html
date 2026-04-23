@@ -1,369 +1,360 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="UDBHAV'26 Admin — Submissions" />
-  <meta name="robots" content="noindex, nofollow" />
-  <title>Submissions — UDBHAV'26 Admin</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    /* ── Reset ── */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+/**
+ * server.js
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Express server for Google Cloud Run.
+ * - Serves the Vite-built static files from /dist
+ * - Mounts all API handlers under /api/*
+ * - Handles clean URL rewrites (no .html extension needed)
+ * - Falls back to 404.html for unknown routes
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 
-    :root {
-      --clr-bg: #080808;
-      --clr-surface: #0f0f0f;
-      --clr-white: #ffffff;
-      --clr-grey: #888888;
-      --clr-green: #4ade80;
-      --clr-red: #f87171;
-      --clr-blue: #60a5fa;
-      --clr-amber: #fbbf24;
-      --clr-purple: #a78bfa;
-      --font-display: 'Bebas Neue', sans-serif;
-      --font-ui: 'Inter', sans-serif;
-      --sidebar-w: 260px;
-    }
+// ── Load environment variables ───────────────────────────────────────────────
+import dotenv from 'dotenv';
+dotenv.config();
 
-    html { background: #000; }
-    body {
-      font-family: var(--font-ui);
-      background: var(--clr-bg);
-      color: var(--clr-white);
-      -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
-    }
+// ── Validate required env vars before anything else ──────────────────────────
+import { validateEnv } from './api/lib/env.js';
+validateEnv();
 
-    ::-webkit-scrollbar { width: 3px; }
-    ::-webkit-scrollbar-track { background: #000; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+import express from 'express';
+import path    from 'path';
+import fs      from 'fs';
+import { fileURLToPath } from 'url';
+import rateLimit from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
 
-    .grain-overlay {
-      position: fixed; inset: 0; z-index: 99;
-      pointer-events: none; opacity: 0.03;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      background-size: 200px 200px; mix-blend-mode: overlay;
-    }
+// ── Polyfills for ESM ────────────────────────────────────────────────────────
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = path.dirname(__filename);
 
-    /* ── Sidebar ── */
-    .admin-sidebar {
-      position: fixed; top: 0; left: 0; bottom: 0;
-      width: var(--sidebar-w); background: rgba(12,12,12,0.95);
-      border-right: 1px solid rgba(255,255,255,0.06);
-      backdrop-filter: blur(30px); z-index: 50;
-      display: flex; flex-direction: column;
-      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
-    }
-    .sidebar-header { padding: 1.5rem 1.4rem; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 0.75rem; }
-    .sidebar-logo { height: 28px; width: auto; opacity: 0.85; }
-    .sidebar-brand { display: flex; flex-direction: column; gap: 0.1rem; }
-    .sidebar-brand-name { font-family: var(--font-display); font-size: 1.2rem; letter-spacing: 0.06em; color: var(--clr-white); line-height: 1; }
-    .sidebar-brand-sub { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+// ── Import existing API handlers ─────────────────────────────────────────────
+import createOrderHandler    from './api/create-order.js';
+import verifyPaymentHandler  from './api/verify-payment.js';
+import cashfreeWebhookHandler from './api/cashfree-webhook.js';
+import paymentStatusHandler  from './api/payment-status.js';
+import registerHandler        from './api/register.js';
+import teamHandler            from './api/team.js';
+import teamDashboardHandler   from './api/team-dashboard.js';
+import spotifyHandler         from './api/spotify.js';
 
-    .sidebar-nav { flex: 1; padding: 1rem 0.8rem; display: flex; flex-direction: column; gap: 0.25rem; }
-    .sidebar-nav-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.2); padding: 0.8rem 0.6rem 0.4rem; }
-    .sidebar-link {
-      display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.8rem; border-radius: 10px;
-      text-decoration: none; font-size: 0.84rem; font-weight: 500; color: rgba(255,255,255,0.5); transition: all 0.2s;
-    }
-    .sidebar-link:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.8); }
-    .sidebar-link.active { background: rgba(255,255,255,0.08); color: var(--clr-white); font-weight: 600; }
-    .sidebar-link svg { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
-    .sidebar-link.active svg { opacity: 1; }
+// ── Import PS Drop handlers ──────────────────────────────────────────────────
+import psStatusHandler     from './api/ps/status.js';
+import psVerifyHandler     from './api/ps/verify-code.js';
+import psListHandler       from './api/ps/list.js';
+import psSelectHandler     from './api/ps/select.js';
+import {
+  configHandler,
+  addPsHandler,
+  updatePsHandler,
+  deletePsHandler,
+  startDropHandler,
+  stopDropHandler,
+  statsHandler,
+} from './api/admin/ps.js';
+import adminLoginHandler from './api/admin/login.js';
+import { paymentsHandler } from './api/admin/payments.js';
+import { psStatsHandler }  from './api/admin/ps-stats.js';
+import {
+  registrationsListHandler,
+  registrationUpdateHandler,
+  registrationDeleteHandler,
+} from './api/admin/registrations.js';
+import {
+  teamsListHandler,
+  teamsGetHandler,
+  teamsAddHandler,
+  teamsImportHandler,
+  teamsUpdateHandler,
+  teamsDeleteHandler,
+  generateCodesHandler,
+  teamsGetByIdHandler,
+  approveMentorshipHandler,
+} from './api/admin/teams.js';
+import {
+  teamsViewHandler,
+  teamPaymentOverrideHandler,
+  teamMemberEditHandler,
+  teamMentorToggleHandler,
+} from './api/admin/teams-view.js';
+import {
+  getWinnersHandler,
+  saveWinnersHandler,
+  publishWinnersHandler,
+  unpublishWinnersHandler,
+  publicWinnersHandler,
+} from './api/admin/winners.js';
+import {
+  getPendingEmailsHandler,
+  sendBulkEmailsHandler,
+} from './api/admin/emails.js';
 
-    .sidebar-footer { padding: 1rem 1.2rem; border-top: 1px solid rgba(255,255,255,0.06); }
-    .sidebar-logout {
-      display: flex; align-items: center; gap: 0.65rem; width: 100%; padding: 0.7rem 0.8rem;
-      border: none; border-radius: 10px; background: rgba(248,113,113,0.08); color: var(--clr-red);
-      font-family: var(--font-ui); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
-    }
-    .sidebar-logout:hover { background: rgba(248,113,113,0.15); }
+// ── Import Submissions handlers ───────────────────────────────────────
+import submitHandler           from './api/submissions/submit.js';
+import listSubmissionsHandler  from './api/submissions/list.js';
+import getSubmissionHandler    from './api/submissions/get.js';
+import getByTeamHandler        from './api/submissions/get-by-team.js';
+import listHandler   from './api/submissions/list.js';
+import teamAuthHandler from './api/auth/team.js';
+import scheduleHandler from './api/schedule.js';
+import { getScheduleHandler, updateScheduleHandler } from './api/admin/schedule.js';
 
-    /* ── Main ── */
-    .admin-main { margin-left: var(--sidebar-w); min-height: 100vh; }
-    .admin-topbar {
-      position: sticky; top: 0; z-index: 30;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 2rem; background: rgba(8,8,8,0.85); backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .topbar-title { font-size: 1.1rem; font-weight: 700; color: var(--clr-white); }
-    .topbar-breadcrumb { font-size: 0.72rem; color: rgba(255,255,255,0.3); margin-top: 0.15rem; }
-    .admin-content { padding: 2rem; }
+// ── Import Mentorship handlers ────────────────────────────────────────────────
+import optMentorshipHandler    from './api/mentorship/opt.js';
 
-    /* ── Filter ── */
-    .filter-bar { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
-    .filter-search { flex: 1; position: relative; }
-    .filter-search-input {
-      width: 100%; padding: 0.7rem 1rem 0.7rem 2.6rem;
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px; color: #fff; font-family: var(--font-ui); font-size: 0.84rem; outline: none;
-    }
-    .filter-search-icon { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: rgba(255,255,255,0.3); }
+// ── App setup ────────────────────────────────────────────────────────────────
+const app  = express();
+const PORT = process.env.PORT || 8080;
+const DIST = path.join(__dirname, 'dist');
 
-    /* ── Table ── */
-    .table-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; overflow: hidden; }
-    .admin-table { width: 100%; border-collapse: collapse; }
-    .admin-table th {
-      text-align: left; padding: 0.75rem 1rem; font-size: 0.68rem; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .admin-table td { padding: 0.85rem 1rem; font-size: 0.82rem; color: rgba(255,255,255,0.7); border-bottom: 1px solid rgba(255,255,255,0.03); }
-    .td-team { color: var(--clr-white) !important; font-weight: 600 !important; }
-    .td-link { color: var(--clr-blue); text-decoration: none; font-weight: 500; }
-    .td-link:hover { text-decoration: underline; }
+// ── Security Headers ─────────────────────────────────────────────────────────
+app.use((req, res, next) => {
+  // Prevent XSS attacks in older browsers
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  // Prevent MIME-type sniffing
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  // Prevent clickjacking
+  res.setHeader('X-Frame-Options', 'DENY');
+  // Referrer policy
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  // Remove server fingerprint
+  res.removeHeader('X-Powered-By');
+  next();
+});
 
-    /* Badges */
-    .status-badge { display: inline-flex; align-items: center; padding: 0.25rem 0.7rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; }
-    .badge--ppt     { background: rgba(96,165,250,0.12); color: var(--clr-blue); border: 1px solid rgba(96,165,250,0.2); }
-    .badge--project { background: rgba(74,222,128,0.12); color: var(--clr-green); border: 1px solid rgba(74,222,128,0.2); }
-    .badge--mentor  { background: rgba(167,139,250,0.12); color: var(--clr-purple); border: 1px solid rgba(167,139,250,0.2); }
-    .badge--other   { background: rgba(255,255,255,0.08); color: var(--clr-grey); border: 1px solid rgba(255,255,255,0.1); }
-    .badge--final   { background: rgba(74,222,128,0.12); color: var(--clr-green); border: 1px solid rgba(74,222,128,0.2); }
-    .badge--draft   { background: rgba(251,191,36,0.12); color: var(--clr-amber); border: 1px solid rgba(251,191,36,0.2); }
+// ── Rate Limiters ─────────────────────────────────────────────────────────────
+// Registration endpoint: max 10 submissions per IP per 15 minutes
+const registerLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Too many registration attempts. Please wait 15 minutes and try again.' },
+});
 
-    .action-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 32px; height: 32px; border: none; border-radius: 8px;
-      background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.4);
-      cursor: pointer; transition: all 0.15s;
-    }
-    .action-btn:hover { background: rgba(255,255,255,0.1); color: var(--clr-white); }
+// Team code lookup: max 30 lookups per IP per 15 minutes
+const teamLookupLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Too many verification attempts. Please wait and try again.' },
+});
 
-    .table-empty { padding: 3rem; text-align: center; color: rgba(255,255,255,0.2); font-size: 0.9rem; }
+// General API limiter: 200 requests per IP per 15 minutes
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Too many requests. Please slow down.' },
+});
 
-    /* ── Modal ── */
-    .modal-overlay {
-      position: fixed; inset: 0; z-index: 100;
-      background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none; transition: opacity 0.25s;
-    }
-    .modal-overlay.is-open { opacity: 1; pointer-events: auto; }
-    .modal-panel {
-      width: 90%; max-width: 560px; max-height: 85vh; overflow-y: auto;
-      background: rgba(16,16,16,0.98); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px; padding: 2rem;
-      transform: translateY(20px) scale(0.96); transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
-    }
-    .modal-overlay.is-open .modal-panel { transform: translateY(0) scale(1); }
+// Auth endpoint limiter: max 5 login attempts per 15 mins
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Too many login attempts. Please wait 15 minutes.' },
+});
 
-    .modal-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.5rem; gap: 1rem; }
-    .modal-title { font-size: 1.2rem; font-weight: 800; color: var(--clr-white); }
-    .modal-subtitle { font-size: 0.78rem; color: rgba(255,255,255,0.35); margin-top: 0.25rem; }
-    .modal-close {
-      width: 32px; height: 32px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
-      background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.5); cursor: pointer;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s;
-    }
-    .modal-close:hover { background: rgba(255,255,255,0.1); color: var(--clr-white); }
-    .modal-close svg { width: 16px; height: 16px; }
+// Upload limiter: max 3 requests per hour
+const uploadLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 3,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Too many upload attempts. Please try again later.' },
+});
 
-    .modal-content { font-size: 0.9rem; line-height: 1.6; color: rgba(255,255,255,0.8); white-space: pre-wrap; }
+// Apply general API limiter to all /api/* routes
+app.use('/api/', apiLimiter);
 
-    @media (max-width: 860px) {
-      .admin-sidebar { transform: translateX(-100%); }
-      .admin-sidebar.is-open { transform: translateX(0); }
-      .admin-main { margin-left: 0; }
-    }
-  </style>
-</head>
-<body>
-  <div class="grain-overlay" aria-hidden="true"></div>
+// Parse JSON bodies — NOTE: webhook handler needs raw body for signature verification
+// We use express.raw for the webhook route and express.json for everything else
+app.use('/api/cashfree-webhook', express.raw({ type: 'application/json' }));
+// Limit body size to 10MB to accommodate base64-encoded receipt images
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+app.use(cookieParser());
 
-  <!-- Sidebar -->
-  <aside class="admin-sidebar" id="adminSidebar">
-    <div class="sidebar-header">
-      <img src="/logo.png" alt="Logo" class="sidebar-logo" />
-      <div class="sidebar-brand">
-        <span class="sidebar-brand-name">UDBHAV'26</span>
-        <span class="sidebar-brand-sub">Admin Panel</span>
-      </div>
-    </div>
-    <nav class="sidebar-nav">
-      <span class="sidebar-nav-label">Main</span>
-      <a href="/admin/dashboard.html" class="sidebar-link">
-        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        Dashboard
-      </a>
-      <a href="/admin/registrations.html" class="sidebar-link">
-        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-        Registrations
-      </a>
+// ── Clean-URL mapping (Combined Portfolio + Udbhav Hackathon) ────────────────
+const cleanRoutes = {
+  // Public Pages
+  '/about':             'about.html',
+  '/schedule':          'schedule.html',
+  '/problem-statement': 'problem-statement.html',
+  '/ps':                'problem-statement.html', // Alias
+  '/winners':           'winners.html',
+  '/sponsors':          'sponsors.html',
+  '/code-of-conduct':   'code-of-conduct.html',
+  '/our-team':          'our-team.html',
+  '/register':          'register.html',
+  '/dashboard':         'user-dashboard.html',
+  '/user-dashboard':    'user-dashboard.html',
+  '/contact':            'contact.html',
+  
+  // Portfolio/Personal Pages
+  '/work':              'work.html',
+  '/blog':              'blog.html',
+  '/blog-post':         'blog-post.html',
+  '/links':             'links.html',
+  '/uses':              'uses.html',
+  '/playground':        'playground.html',
+  '/jamify':            'jamify.html',
+  '/book-a-call':       'book-a-call.html',
+  '/legal':             'legal.html',
 
-      <a href="/admin/team.html" class="sidebar-link" id="navTeams">
-        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-        Teams
-      </a>
+  // Admin Pages
+  '/admin/login':        'admin/login.html',
+  '/admin/dashboard':    'admin/dashboard.html',
+  '/admin/registrations':'admin/registrations.html',
+  '/admin/submissions':  'admin/submissions.html',
+  '/admin/problem-statements': 'admin/problem-statements.html',
+  '/admin/payments':           'admin/payments.html',
+  '/admin/ps-stats':           'admin/ps-stats.html',
+  '/admin/winners':            'admin/winners.html',
+  '/admin/submissions':        'admin/submissions.html',
+  '/admin/schedule':           'admin/schedule.html',
+  '/admin/teams':              'admin/team.html',
+  '/admin/team':               'admin/team.html',
+  '/admin/emails':             'admin/emails.html',
+};
 
-      <a href="/admin/submissions.html" class="sidebar-link active">
-        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Submissions
-      </a>
-      <a href="/admin/problem-statements.html" class="sidebar-link">
-        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        Problem Statements
-      </a>
-      <a href="/admin/payments.html" class="sidebar-link">
-        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        Payments
-      </a>
-      <a href="/admin/ps-stats.html" class="sidebar-link">
-        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        PS Stats
-      </a>
-      <a href="/admin/winners.html" class="sidebar-link">
-        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-        Winners
-      </a>
-      <a href="/admin/schedule" class="sidebar-link">
-        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        Schedule
-      </a>
-    </nav>
-    <div class="sidebar-footer">
-      <button class="sidebar-logout" id="logoutBtn">Logout</button>
-    </div>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="admin-main">
-    <div class="admin-topbar">
-      <div class="topbar-left">
-        <div class="topbar-title">Submissions</div>
-        <div class="topbar-breadcrumb">Admin / Submissions</div>
-      </div>
-    </div>
-
-    <div class="admin-content">
-      <div class="filter-bar">
-        <div class="filter-search">
-          <svg class="filter-search-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" class="filter-search-input" id="searchInput" placeholder="Search by Team ID..." />
-        </div>
-      </div>
-
-      <div class="table-card">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Team ID</th>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Submission Link</th>
-              <th>Submitted At</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody">
-            <tr><td colspan="6" class="table-empty">Loading submissions...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </main>
-
-  <!-- Detail Modal -->
-  <div class="modal-overlay" id="detailModal">
-    <div class="modal-panel">
-      <div class="modal-header">
-        <div>
-          <div class="modal-title" id="modalTitle">Submission Details</div>
-          <div class="modal-subtitle" id="modalSubtitle">Detailed description provided by the team</div>
-        </div>
-        <button class="modal-close" id="modalClose" aria-label="Close">
-          <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div class="modal-content" id="modalContent"></div>
-    </div>
-  </div>
-
-  <script type="module">
-    import { AdminAuth, SubmissionStore, AdminUI } from '/src/admin.js';
-
-    // Auth check
-    if (!AdminAuth.isAuthenticated()) window.location.href = '/admin/login.html';
-
-    AdminUI.initSidebar();
-
-    const detailModal = document.getElementById('detailModal');
-    const modalContent = document.getElementById('modalContent');
-    const modalTitle = document.getElementById('modalTitle');
-
-    function openModal(title, content) {
-      modalTitle.textContent = title;
-      modalContent.textContent = content || 'No description provided.';
-      detailModal.classList.add('is-open');
-    }
-
-    function closeModal() {
-      detailModal.classList.remove('is-open');
-    }
-
-    document.getElementById('modalClose').addEventListener('click', closeModal);
-    detailModal.addEventListener('click', (e) => {
-      if (e.target === detailModal) closeModal();
-    });
-
-    // Handle ESC key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && detailModal.classList.contains('is-open')) closeModal();
-    });
-
-    window.openDetail = (title, content) => openModal(title, content);
-
-    async function loadSubmissions() {
-      const submissions = await SubmissionStore.getAll();
-      const tbody = document.getElementById('tableBody');
-      const searchInput = document.getElementById('searchInput');
-
-      function render(items) {
-        if (items.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6" class="table-empty">No submissions found</td></tr>';
-          return;
-        }
-
-        tbody.innerHTML = items.map(s => {
-          const statusBadge = s.finalSubmitted
-            ? '<span class="status-badge badge--final">Final</span>'
-            : '<span class="status-badge badge--draft">Draft</span>';
-          return `
-          <tr>
-            <td class="td-team">${s.teamId}</td>
-            <td>${SubmissionStore.getTypeBadge(s.type)}</td>
-            <td>${statusBadge}</td>
-            <td><a href="${s.submissionLink}" target="_blank" class="td-link">View File ↗</a></td>
-            <td>${AdminUI.formatDate(s.createdAt)} <small style="opacity:0.4">${AdminUI.formatTime(s.createdAt)}</small></td>
-            <td>
-              <button class="action-btn" title="View details" onclick="openDetail('${s.teamId} Details', \`${(s.description || '').replace(/`/g, "\\`").replace(/\$/g, "\\$")}\`)">
-                <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
-            </td>
-          </tr>
-        `}).join('');
+// ── Vercel-handler adapter ────────────────────────────────────────────────────
+function mountHandler(handler) {
+  return async (req, res) => {
+    try {
+      await handler(req, res);
+    } catch (err) {
+      console.error('Unhandled handler error:', err);
+      if (!res.headersSent) {
+        res.status(500).json({ success: false, error: 'Internal server error' });
       }
-
-      render(submissions);
-
-      searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        const filtered = submissions.filter(s => s.teamId.toLowerCase().includes(query));
-        render(filtered);
-      });
     }
+  };
+}
 
-    loadSubmissions();
+// ── Existing API Routes ───────────────────────────────────────────────────────
+app.all('/api/create-order',      mountHandler(createOrderHandler));
+app.all('/api/verify-payment',    mountHandler(verifyPaymentHandler));
+app.post('/api/cashfree-webhook', mountHandler(cashfreeWebhookHandler));  // Cashfree payment events
+app.get ('/api/payment-status',   mountHandler(paymentStatusHandler));    // Frontend polling after redirect
+app.post('/api/register', registerLimiter,    mountHandler(registerHandler));
+app.get ('/api/team',    teamLookupLimiter,  mountHandler(teamHandler));
+app.get ('/api/team-dashboard',mountHandler(teamDashboardHandler));
+app.get ('/api/schedule',       mountHandler(scheduleHandler));
+app.all('/api/spotify',        mountHandler(spotifyHandler));
 
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      AdminAuth.logout();
-      window.location.href = '/admin/login.html';
-    });
-  </script>
-</body>
-</html>
+
+// ── PS Drop Public API ────────────────────────────────────────────────────────
+app.get ('/api/ps/status',      mountHandler(psStatusHandler));
+app.post('/api/ps/verify-code', mountHandler(psVerifyHandler));
+app.get ('/api/ps/list',        mountHandler(psListHandler));
+app.post('/api/ps/select',      mountHandler(psSelectHandler));
+
+// ── PS Drop Admin API ─────────────────────────────────────────────────────────
+app.post('/api/admin/login',      mountHandler(adminLoginHandler));
+app.post  ('/api/admin/ps/config',      mountHandler(configHandler));
+app.post  ('/api/admin/ps/add-ps',      mountHandler(addPsHandler));
+app.patch ('/api/admin/ps/update-ps',  mountHandler(updatePsHandler));
+app.delete('/api/admin/ps/delete-ps',  mountHandler(deletePsHandler));
+app.post  ('/api/admin/ps/start-drop', mountHandler(startDropHandler));
+app.post  ('/api/admin/ps/stop-drop',  mountHandler(stopDropHandler));
+app.get   ('/api/admin/ps/stats',      mountHandler(statsHandler));
+app.get   ('/api/admin/payments',      mountHandler(paymentsHandler));
+app.get   ('/api/admin/ps-stats',         mountHandler(psStatsHandler));
+app.get   ('/api/admin/schedule',         mountHandler(getScheduleHandler));
+app.post  ('/api/admin/schedule',         mountHandler(updateScheduleHandler));
+
+
+// ── Admin Registrations API (reads from registrations collection) ─────────────
+app.get   ('/api/admin/registrations',        mountHandler(registrationsListHandler));
+app.patch ('/api/admin/registrations/:id',    mountHandler(registrationUpdateHandler));
+app.delete('/api/admin/registrations/:id',    mountHandler(registrationDeleteHandler));
+
+// ── Admin Bulk Emails API ─────────────────────────────────────────────────────
+app.get ('/api/admin/emails/pending',   mountHandler(getPendingEmailsHandler));
+app.post('/api/admin/emails/send-bulk', mountHandler(sendBulkEmailsHandler));
+
+// ── Admin Teams API ───────────────────────────────────────────────────────────
+// IMPORTANT: static paths (/import, /generate-codes, /view) must come BEFORE /:id
+app.get   ('/api/admin/teams',                mountHandler(teamsListHandler));
+app.get   ('/api/admin/teams/:id',            mountHandler(teamsGetHandler));
+app.get   ('/api/admin/teams/view',           mountHandler(teamsViewHandler));       // panel
+app.post  ('/api/admin/teams/import',         mountHandler(teamsImportHandler));
+app.post  ('/api/admin/teams/generate-codes', mountHandler(generateCodesHandler));
+app.post  ('/api/admin/teams',                mountHandler(teamsAddHandler));
+app.patch ('/api/admin/teams/:id/payment',    mountHandler(teamPaymentOverrideHandler)); // payment override
+app.patch ('/api/admin/teams/:id/member',     mountHandler(teamMemberEditHandler));       // member edit
+app.patch ('/api/admin/teams/:id/mentor',     mountHandler(teamMentorToggleHandler));     // mentor toggle
+app.get   ('/api/admin/teams/:id',            mountHandler(teamsGetByIdHandler));
+app.post  ('/api/admin/teams/:id/approve-mentorship', mountHandler(approveMentorshipHandler));
+app.patch ('/api/admin/teams/:id',            mountHandler(teamsUpdateHandler));
+app.delete('/api/admin/teams/:id',            mountHandler(teamsDeleteHandler));
+
+// ── Winners Admin API ─────────────────────────────────────────────────────────
+app.get ('/api/admin/winners',            mountHandler(getWinnersHandler));
+app.post('/api/admin/winners/save',       mountHandler(saveWinnersHandler));
+app.post('/api/admin/winners/publish',    mountHandler(publishWinnersHandler));
+app.post('/api/admin/winners/unpublish',  mountHandler(unpublishWinnersHandler));
+
+
+// ── Submissions API ───────────────────────────────────────────────────────────
+app.post('/api/submissions/submit', mountHandler(submitHandler));
+app.get ('/api/submissions/list',   mountHandler(listSubmissionsHandler));
+app.get ('/api/submissions/get',    mountHandler(getSubmissionHandler));
+app.get ('/api/submissions/get-by-team', mountHandler(getByTeamHandler));
+app.get ('/api/admin/submissions',  mountHandler(listSubmissionsHandler));
+
+// ── Winners Public API ────────────────────────────────────────────────────────
+app.get('/api/winners', mountHandler(publicWinnersHandler));
+
+// ── Team Auth API ─────────────────────────────────────────────────────────────
+app.post('/api/auth/team', authLimiter, mountHandler(teamAuthHandler));
+
+// ── Mentorship API ────────────────────────────────────────────────────────────
+app.post('/api/mentorship/opt', uploadLimiter, mountHandler(optMentorshipHandler));
+
+// ── Clean URL Routes ──────────────────────────────────────────────────────────
+for (const [route, file] of Object.entries(cleanRoutes)) {
+  app.get(route, (req, res) => {
+    res.sendFile(path.join(DIST, file));
+  });
+}
+
+// ── Static files (JS, CSS, images, etc.) ─────────────────────────────────────
+app.use(express.static(DIST, {
+  extensions: ['html'],
+  index:      'index.html',
+}));
+
+// ── Root ──────────────────────────────────────────────────────────────────────
+app.get('/', (req, res) => {
+  res.sendFile(path.join(DIST, 'index.html'));
+});
+
+// ── 404 Fallback ──────────────────────────────────────────────────────────────
+app.use((req, res) => {
+  const page404 = path.join(DIST, '404.html');
+  if (fs.existsSync(page404)) {
+    res.status(404).sendFile(page404);
+  } else {
+    res.status(404).send('Not Found');
+  }
+});
+
+// ── Start ─────────────────────────────────────────────────────────────────────
+app.listen(PORT, () => {
+  console.log(`✅ UDBHAV'26 server running on port ${PORT}`);
+  console.log(`📦 Environment check:`);
+  console.log(`   - MONGODB_URI:      ${process.env.MONGODB_URI      ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - CASHFREE_APP_ID:      ${process.env.CASHFREE_APP_ID      ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - CASHFREE_SECRET_KEY:  ${process.env.CASHFREE_SECRET_KEY  ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - CASHFREE_WEBHOOK_SEC: ${process.env.CASHFREE_WEBHOOK_SECRET ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - RESEND_API_KEY:   ${process.env.RESEND_API_KEY   ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - ADMIN_SECRET:     ${process.env.ADMIN_SECRET     ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - ADMIN_USER:       ${process.env.ADMIN_USER       ? '✓ Set' : '✗ Missing'}`);
+  console.log(`   - Admin password:   ✓ Stored as bcrypt hash in MongoDB Atlas`);
+});

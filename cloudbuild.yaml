@@ -1,0 +1,32 @@
+# ── Cloud Build CI/CD Pipeline ─────────────────────────────────────────────────
+# Triggers automatically on pushes to the `qa` branch.
+# Builds and deploys to Cloud Run using source-based deployment.
+# This preserves all existing environment variables automatically.
+# ──────────────────────────────────────────────────────────────────────────────
+
+substitutions:
+  _SERVICE_NAME: udbhav26
+  _REGION: asia-southeast1
+
+steps:
+  # ── Deploy directly from source to Cloud Run ────────────────────────────────
+  # This builds the image AND deploys in one step.
+  # Crucially, it DOES NOT wipe existing env vars on the Cloud Run service.
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'deploy'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - '$_SERVICE_NAME'
+      - '--source=.'
+      - '--region=$_REGION'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--quiet'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'
+
+timeout: '1800s'

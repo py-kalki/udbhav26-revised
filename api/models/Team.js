@@ -11,6 +11,7 @@ import mongoose from 'mongoose';
 
 const MemberSchema = new mongoose.Schema({
   name:  { type: String, required: true, trim: true },
+  email: { type: String, required: true, trim: true, lowercase: true },
   phone: { type: String, required: true, trim: true },
 }, { _id: false });
 
@@ -48,12 +49,15 @@ const TeamSchema = new mongoose.Schema(
     totalAmount:   { type: Number, default: 800 },  // ₹800 or ₹1100
 
     // ── Payment ───────────────────────────────────────────────────────────
+    confirmationEmailSent: { type: Boolean, default: false },
+    paymentReminderSent: { type: Boolean, default: false },
     paymentStatus: {
       type:    String,
       enum:    ['pending', 'paid', 'failed'],
       default: 'pending',
     },
     paymentDate:        { type: Date,   default: null },
+    paymentScreenshotUrl: { type: String, default: null },
     cashfreeOrderId:    { type: String, default: null },
     cashfreePaymentId:  { type: String, default: null },
 
@@ -64,6 +68,21 @@ const TeamSchema = new mongoose.Schema(
       default: null,
     },
     psSelectedAt: { type: Date, default: null },
+    
+    // ── Mentorship ────────────────────────────────────────────────────────
+    mentor: {
+      name:     { type: String, default: null },
+      contact:  { type: String, default: null },
+      linkedin: { type: String, default: null },
+    },
+
+    // ── Mentorship Workflow ───────────────────────────────────────────────
+    mentorshipStatus: { 
+      type: String, 
+      enum: ['not_requested', 'pending', 'approved'], 
+      default: 'not_requested' 
+    },
+    mentorshipReceiptUrl: { type: String, default: null },
   },
   {
     timestamps: true,

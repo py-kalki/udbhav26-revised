@@ -24,6 +24,7 @@ import { connectDB }       from './lib/mongodb.js';
 import { Team }            from './models/Team.js';
 import { Registration }    from './models/Registration.js';
 import { ProblemStatement } from './models/ProblemStatement.js';
+import jwt                 from 'jsonwebtoken';
 
 const CODE_RE = /^UDB-[A-Z0-9]{2,8}$/i;
 
@@ -38,11 +39,48 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'invalid_format', message: 'Invalid team code format. Expected: UDB-XXXX' });
   }
 
+  // ── Authentication Check ──────────────────────────────────────────────────
+  const token = req.cookies?.udbhav_session;
+  if (!token) {
+    return res.status(401).json({ error: 'unauthorized', message: 'No active session found. Please log in again.' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.ADMIN_SECRET || 'udbhav26_secure_secret');
+    if (decoded.teamCode !== code) {
+      return res.status(403).json({ error: 'forbidden', message: 'Access denied for this team.' });
+    }
+  } catch (err) {
+    return res.status(401).json({ error: 'unauthorized', message: 'Session expired or invalid. Please log in again.' });
+  }
+
   try {
     await connectDB();
 
     // ── Primary: Team record ────────────────────────────────────────────────
-    const team = await Team.findOne({ code }).lean();
+    let team = await Team.findOne({ code }).lean();
+
+    // ── Secondary: Registration record ────────────────────────────────────
+    const reg = await Registration.findOne({ teamCode: code }).lean();
+
+    // Fallback: If no team record, create a virtual one from registration
+    if (!team && reg) {
+      team = {
+        code: reg.teamCode,
+        teamName: reg.teamName,
+        collegeName: reg.collegeName,
+        branch: reg.branch,
+        paymentStatus: reg.paymentStatus,
+        mentorSession: reg.mentorSession,
+        leader: reg.leader,
+        members: reg.members,
+        mentor: reg.mentor,
+        mentorshipStatus: reg.mentorshipStatus,
+        mentorshipReceiptUrl: reg.mentorshipReceiptUrl,
+        psSelectionId: null,
+        psSelectedAt: null
+      };
+    }
 
     if (!team) {
       return res.status(404).json({
@@ -51,16 +89,13 @@ export default async function handler(req, res) {
       });
     }
 
+    // Restriction: Only allow 'paid' teams
     if (team.paymentStatus !== 'paid') {
       return res.status(403).json({
-        error:   'payment_pending',
-        message: 'Payment not confirmed for this team.',
+        error:   'access_denied',
+        message: 'Access denied. Only fully paid teams can access the dashboard.',
       });
     }
-
-    // ── Secondary: Registration record (richer member data) ────────────────
-    // Registration uses teamCode field; Team uses code field — same value
-    const reg = await Registration.findOne({ teamCode: code }).lean();
 
     // Prefer Registration members (has email), fall back to Team.members
     let leader  = team.leader;
@@ -69,6 +104,18 @@ export default async function handler(req, res) {
     if (reg) {
       leader  = reg.leader  || leader;
       members = reg.members || members;
+    }
+
+    // ── Auto-approve mentorship for ₹1100 teams ────────────────────────────
+    if (team.totalAmount >= 1100 && team.mentorshipStatus !== 'approved') {
+      const updateFields = { mentorSession: true, mentorshipStatus: 'approved' };
+      await Promise.all([
+        Team.findOneAndUpdate({ code }, { $set: updateFields }),
+        Registration.findOneAndUpdate({ teamCode: code }, { $set: updateFields }),
+      ]);
+      // Reflect in the response object
+      team.mentorSession    = true;
+      team.mentorshipStatus = 'approved';
     }
 
     // ── PS Selection ────────────────────────────────────────────────────────
@@ -100,6 +147,9 @@ export default async function handler(req, res) {
         members,
         ps,
         psSelectedAt: team.psSelectedAt || null,
+        mentor:        team.mentor        || null,
+        mentorshipStatus:     team.mentorshipStatus     || 'not_requested',
+        mentorshipReceiptUrl: team.mentorshipReceiptUrl || null,
       },
     });
 

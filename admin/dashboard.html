@@ -678,6 +678,13 @@
         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
         Winners
       </a>
+      <a href="/admin/emails.html" class="sidebar-link" id="navEmails">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Bulk Emails
+      </a>
+
+
+      <span class="sidebar-nav-label" style="margin-top:0.5rem;">More</span>
       
       <a href="/admin/schedule" class="sidebar-link" id="navSchedule">
         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -805,15 +812,17 @@
   </main>
 
   <script type="module">
-    import { AdminAuth, RegistrationStore, AdminUI, seedRegistrations } from '/src/admin.js';
+    import { AdminAuth, AdminUI } from '/src/admin.js';
 
     // Auth guard
     if (!AdminAuth.isAuthenticated()) {
       window.location.href = '/admin/login.html';
     }
 
-    // Seed demo data if empty
-    seedRegistrations(50);
+    const apiHeaders = () => ({
+      'X-Admin-Secret': AdminAuth.getToken(),
+      'Content-Type': 'application/json'
+    });
 
     // Sidebar
     AdminUI.initSidebar();
@@ -824,24 +833,38 @@
       window.location.href = '/admin/login.html';
     });
 
-    // Stats
-    function renderStats() {
-      const s = RegistrationStore.getStats();
-      document.getElementById('statTotal').textContent = s.total;
-      document.getElementById('statTotalSub').textContent = `${s.total} teams registered`;
-      document.getElementById('statMembers').textContent = s.totalMembers;
-      document.getElementById('statApproved').textContent = s.approved;
-      document.getElementById('statApprovedSub').textContent = `${s.rejected} rejected`;
-      document.getElementById('statPending').textContent = s.pending;
+    async function loadDashboardData() {
+      try {
+        const res = await fetch('/api/admin/registrations?limit=5', { headers: apiHeaders() });
+        if (res.status === 401) { window.location.href = '/admin/login.html'; return; }
+        const data = await res.json();
+        
+        if (!res.ok || !data.success) throw new Error(data.error || 'Failed to fetch dashboard data');
+
+        renderStats(data.stats);
+        renderRecent(data.registrations);
+      } catch (err) {
+        console.error('Dashboard Error:', err);
+        AdminUI.toast('Failed to load dashboard data', 'error');
+      }
     }
-    renderStats();
+
+    // Stats
+    function renderStats(s) {
+      if (!s) return;
+      document.getElementById('statTotal').textContent = s.total || 0;
+      document.getElementById('statTotalSub').textContent = `${s.total || 0} teams registered`;
+      document.getElementById('statMembers').textContent = s.totalMembers || 0;
+      document.getElementById('statApproved').textContent = s.paid || 0;
+      document.getElementById('statApprovedSub').textContent = `${s.total - (s.paid + s.pending)} rejected / failed`;
+      document.getElementById('statPending').textContent = s.pending || 0;
+    }
 
     // Recent registrations table
-    function renderRecent() {
-      const regs = RegistrationStore.getAll().slice(0, 5);
+    function renderRecent(regs) {
       const tbody = document.getElementById('recentTableBody');
 
-      if (regs.length === 0) {
+      if (!regs || regs.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:rgba(255,255,255,0.25);">No registrations yet</td></tr>';
         return;
       }
@@ -849,21 +872,22 @@
       tbody.innerHTML = regs.map(r => `
         <tr>
           <td class="td-team">${r.teamName || '—'}</td>
-          <td>${r.leaderName || '—'}</td>
-          <td>${r.college || '—'}</td>
+          <td>${r.leader?.name || '—'}</td>
+          <td>${r.collegeName || '—'}</td>
           <td>${(r.members ? r.members.length : 0) + 1}</td>
-          <td>${AdminUI.statusBadge(r.status)}</td>
+          <td>${AdminUI.statusBadge(r.paymentStatus)}</td>
           <td>${AdminUI.formatDate(r.createdAt)}</td>
         </tr>
       `).join('');
     }
-    renderRecent();
 
-    // Export
+    // Initialize
+    loadDashboardData();
+
+    // Export - Currently disabled for dashboard as it requires fetching all
     document.getElementById('exportBtn').addEventListener('click', (e) => {
       e.preventDefault();
-      RegistrationStore.exportCSV(RegistrationStore.getAll());
-      AdminUI.toast('CSV exported successfully!', 'success');
+      window.location.href = '/admin/registrations.html';
     });
   </script>
 

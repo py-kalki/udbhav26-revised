@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <style>
     /* ── Reset & Variables ── */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -268,6 +270,12 @@
     }
     .close-panel:hover { background: rgba(255,255,255,0.1); color: #fff; }
     .close-panel svg { width: 18px; height: 18px; }
+    .detail-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; justify-content: flex-end; }
+    .detail-overlay.is-active { opacity: 1; pointer-events: auto; }
+    .detail-panel { width: 100%; max-width: 500px; background: #0c0c0e; border-left: 1px solid rgba(255,255,255,0.1); padding: 2.5rem; overflow-y: auto; transform: translateX(100%); transition: 0.4s cubic-bezier(0.16,1,0.3,1); position: relative; }
+    .detail-overlay.is-active .detail-panel { transform: translateX(0); }
+    .close-panel { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; color: rgba(255,255,255,0.3); cursor: pointer; padding: 0.5rem; border-radius: 50%; transition: 0.2s; }
+    .close-panel:hover { background: rgba(255,255,255,0.05); color: #fff; }
 
     .section-title { font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.15em; margin: 2rem 0 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem; }
     .detail-row { display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.88rem; }
@@ -364,6 +372,11 @@
         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
         Winners
       </a>
+      <a href="/admin/emails.html" class="sidebar-link" id="navEmails">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Bulk Emails
+      </a>
+
 
       <a href="/admin/schedule" class="sidebar-link">
         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -577,6 +590,8 @@
       fetchTeams();
     };
 
+    window.currentTeam = null;
+
     window.showTeamDetail = async (id) => {
       try {
         const res = await fetch(`/api/admin/teams/${id}`, { headers: apiHeaders() });
@@ -584,6 +599,8 @@
         if(!data.success) throw new Error(data.error);
         const t = data.team;
         if(!t) return;
+        
+        window.currentTeam = t;
 
         // Auto-highlight active sidebar link
         document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
@@ -594,11 +611,28 @@
         }
 
         const content = document.getElementById('detailContent');
+        
+        let paymentSelect = `
+          <select class="filter-select" style="background:#111; padding:0.2rem 0.5rem; width:120px;" onchange="updatePaymentStatus('${t._id}', this.value)">
+            <option value="pending" ${t.paymentStatus === 'pending' ? 'selected' : ''}>Pending</option>
+            <option value="paid" ${t.paymentStatus === 'paid' ? 'selected' : ''}>Paid (₹${t.totalAmount || 800})</option>
+            <option value="failed" ${t.paymentStatus === 'failed' ? 'selected' : ''}>Failed</option>
+          </select>
+        `;
+
+        let mentorSelect = `
+          <select class="filter-select" style="background:#111; padding:0.2rem 0.5rem; width:120px;" onchange="updateMentorSession('${t._id}', this.value === 'true')">
+            <option value="false" ${!t.mentorSession ? 'selected' : ''}>Not Opted</option>
+            <option value="true" ${t.mentorSession ? 'selected' : ''}>Opted In</option>
+          </select>
+        `;
+
         const membersHtml = (t.members || []).map(m => `
           <div class="member-item">
             <div class="member-info">
               <span class="member-name">${m.name}</span>
               <span class="member-phone">${m.phone}</span>
+              <span class="member-phone">${m.phone} <span style="opacity:0.5; font-size:0.8em; margin-left:8px;">${m.email || ''}</span></span>
             </div>
           </div>
         `).join('') || '<div style="color:rgba(255,255,255,0.2); font-size:0.8rem; text-align:center;">No other members added</div>';
@@ -610,6 +644,7 @@
           <div class="section-title">Participation Status</div>
           <div class="detail-row"><span class="detail-label">Team Code</span><span class="detail-val" style="font-family:monospace; color:var(--clr-purple); font-weight:700;">${t.code || 'Not Assigned'}</span></div>
           <div class="detail-row"><span class="detail-label">Payment</span><span class="detail-val">${t.paymentStatus === 'paid' ? '<span style="color:var(--clr-green)">Paid (₹'+t.totalAmount+')</span>' : '<span style="color:var(--clr-amber)">Pending</span>'}</span></div>
+          <div class="detail-row"><span class="detail-label">Payment</span><span class="detail-val">${paymentSelect}</span></div>
           <div class="detail-row"><span class="detail-label">Registered At</span><span class="detail-val">${new Date(t.createdAt).toLocaleDateString()}</span></div>
 
           <div class="section-title">Problem Statement</div>
@@ -624,23 +659,55 @@
 
           <div class="section-title">Mentorship</div>
           <div class="detail-row"><span class="detail-label">Mentor Session</span><span class="detail-val">${t.mentorSession ? 'Opted In' : 'Not Opted'}</span></div>
+          <div class="detail-row"><span class="detail-label">Mentor Session</span><span class="detail-val">${mentorSelect}</span></div>
           ${t.mentorSession ? `
             <div class="detail-row"><span class="detail-label">Verification</span><span class="detail-val">
-              ${t.mentorshipStatus === 'approved' ? '<span style="color:var(--clr-green)">Approved</span>' : t.mentorshipStatus === 'pending' ? '<span style="color:var(--clr-blue)">Pending Verification</span>' : 'Not Requested'}
+              ${t.mentorshipStatus === 'approved' ? '<span style="color:var(--clr-green)">Approved ✓</span>' : t.mentorshipStatus === 'pending' ? '<span style="color:var(--clr-amber)">⏳ Pending Review</span>' : 'Not Requested'}
             </span></div>
-            ${t.mentorshipReceiptUrl ? `
-              <div style="margin-top:1rem; margin-bottom:1rem;">
-                <div style="font-size:0.75rem; color:rgba(255,255,255,0.3); margin-bottom:0.5rem;">Payment Receipt</div>
-                <img src="${t.mentorshipReceiptUrl}" style="width:100%; border-radius:12px; border:1px solid rgba(255,255,255,0.1); cursor:pointer; background:#111; min-height:200px; object-fit:contain;" onclick="window.open(this.src)">
+            ${t.mentorshipStatus === 'pending' || t.mentorshipReceiptUrl ? `
+              <div style="background:rgba(251,191,36,0.06); border:1px solid rgba(251,191,36,0.2); border-radius:14px; padding:1.2rem; margin:1rem 0;">
+                <div style="font-size:0.65rem; font-weight:700; color:var(--clr-amber); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:0.9rem;">📋 Mentorship Request</div>
+                <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem;">
+                  <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+                    <span style="color:rgba(255,255,255,0.4);">Raised By</span>
+                    <span style="font-weight:600; color:#fff;">${t.leader?.name || 'N/A'}</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+                    <span style="color:rgba(255,255,255,0.4);">Team</span>
+                    <span style="font-weight:600; color:#fff;">${t.teamName}</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+                    <span style="color:rgba(255,255,255,0.4);">Contact</span>
+                    <span style="font-weight:500; color:rgba(255,255,255,0.6); font-size:0.75rem;">${t.leader?.phone || ''} · ${t.leader?.email || ''}</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+                    <span style="color:rgba(255,255,255,0.4);">College</span>
+                    <span style="font-weight:500; color:rgba(255,255,255,0.6); font-size:0.75rem; text-align:right; max-width:200px;">${t.collegeName}</span>
+                  </div>
+                  ${t.mentorshipSubmittedAt ? `
+                  <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+                    <span style="color:rgba(255,255,255,0.4);">Submitted At</span>
+                    <span style="font-weight:500; color:rgba(255,255,255,0.6);">${new Date(t.mentorshipSubmittedAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                  </div>` : ''}
+                  <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+                    <span style="color:rgba(255,255,255,0.4);">Amount Paid</span>
+                    <span style="font-weight:700; color:var(--clr-green);">₹${t.totalAmount || 800}</span>
+                  </div>
+                </div>
+                ${t.mentorshipReceiptUrl ? `
+                  <div style="font-size:0.7rem; color:rgba(255,255,255,0.3); margin-bottom:0.5rem;">Payment Screenshot</div>
+                  <img src="${t.mentorshipReceiptUrl}" style="width:100%; border-radius:10px; border:1px solid rgba(255,255,255,0.1); cursor:pointer; background:#111; min-height:180px; object-fit:contain;" onclick="window.open(this.src)" title="Click to open full size">
+                  <div style="text-align:center; margin-top:0.4rem; font-size:0.65rem; color:rgba(255,255,255,0.2);">Click image to view full size</div>
+                ` : `
+                  <div style="padding:0.75rem; background:rgba(255,255,255,0.03); border-radius:8px; font-size:0.8rem; color:rgba(255,255,255,0.3); text-align:center;">No receipt uploaded yet</div>
+                `}
               </div>
-            ` : `
-              <div style="padding:1rem; background:rgba(251,191,36,0.05); border:1px solid rgba(251,191,36,0.1); border-radius:10px; margin:1rem 0; font-size:0.8rem; color:var(--clr-amber);">
-                No receipt uploaded yet. Approve manually if payment is verified via other means.
-              </div>
-            `}
-            ${t.mentorshipStatus !== 'approved' ? `
-              <button class="action-btn btn--primary" onclick="approveMentorship('${t._id}')">Approve Mentorship</button>
             ` : ''}
+            ${t.mentorshipStatus !== 'approved' ? `
+              <button class="action-btn btn--primary" onclick="approveMentorship('${t._id}')">✓ Approve Mentorship</button>
+            ` : `
+              <div style="padding:0.75rem 1rem; background:rgba(74,222,128,0.08); border:1px solid rgba(74,222,128,0.2); border-radius:10px; font-size:0.82rem; color:var(--clr-green); font-weight:600; text-align:center;">✓ Mentorship Approved</div>
+            `}
           ` : ''}
 
           <div class="section-title">Team Leader</div>
@@ -653,12 +720,205 @@
 
           <div style="margin-top:3rem; display:flex; gap:1rem;">
             <button class="action-btn btn--outline" style="flex:1;" onclick="AdminUI.toast('Exporting team report...')">Export Report</button>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2rem;">
+            <div class="section-title" style="margin:0; border:none; padding:0;">Team Members</div>
+            <button class="action-btn btn--outline" style="width:auto; padding:0.25rem 0.75rem; margin:0;" onclick="toggleEditMembersMode()">Edit</button>
+          </div>
+          <div style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem; margin-bottom:1rem;"></div>
+
+          <div id="membersViewMode">
+            <div class="detail-row"><span class="detail-label">Leader</span><span class="detail-val">${t.leader.name} <br><span style="font-size:0.8em;opacity:0.6">${t.leader.email} | ${t.leader.phone}</span></span></div>
+            ${membersHtml}
+          </div>
+
+          <div id="membersEditMode" style="display:none; background:rgba(255,255,255,0.02); padding:1rem; border-radius:12px; margin-bottom:1rem; margin-top:1rem;">
+            <div style="margin-bottom:1rem;">
+              <div style="font-size:0.75rem; color:var(--clr-blue); margin-bottom:0.5rem;">Leader</div>
+              <input type="text" id="editLeaderName" class="search-input" style="padding:0.5rem; margin-bottom:0.5rem;" value="${t.leader.name || ''}" placeholder="Name">
+              <input type="email" id="editLeaderEmail" class="search-input" style="padding:0.5rem; margin-bottom:0.5rem;" value="${t.leader.email || ''}" placeholder="Email">
+              <input type="text" id="editLeaderPhone" class="search-input" style="padding:0.5rem;" value="${t.leader.phone || ''}" placeholder="Phone">
+            </div>
+            <div id="editMembersList">
+              ${(t.members || []).map((m, i) => `
+                <div class="edit-member-row" style="margin-bottom:1rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.1);">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+                    <div style="font-size:0.75rem; color:var(--clr-grey);">Member</div>
+                    <button class="action-btn" style="width:auto; padding:0; background:none; color:var(--clr-red);" onclick="this.parentElement.parentElement.remove()">Remove</button>
+                  </div>
+                  <input type="text" class="search-input member-edit-name" style="padding:0.5rem; margin-bottom:0.5rem;" value="${m.name || ''}" placeholder="Name">
+                  <input type="text" class="search-input member-edit-email" style="padding:0.5rem; margin-bottom:0.5rem;" value="${m.email || ''}" placeholder="Email">
+                  <input type="text" class="search-input member-edit-phone" style="padding:0.5rem;" value="${m.phone || ''}" placeholder="Phone">
+                </div>
+              `).join('')}
+            </div>
+            <button class="action-btn btn--outline" style="margin-bottom:1rem; color:var(--clr-green); border-color:rgba(74,222,128,0.3);" onclick="addMemberRow()">+ Add Member</button>
+            <button class="action-btn btn--primary" onclick="saveMembers('${t._id}')">Save Members</button>
+          </div>
+
+          <div style="margin-top:3rem; display:flex; gap:1rem;">
+            <button class="action-btn btn--outline" style="flex:1;" onclick="exportTeamReport()">Export Report</button>
             <button class="action-btn btn--outline" style="flex:1; color:var(--clr-red); border-color:rgba(248,113,113,0.2);" onclick="deleteTeam('${t._id}')">Delete Team</button>
           </div>
         `;
 
         document.getElementById('detailOverlay').classList.add('is-active');
       } catch(err) { AdminUI.toast('Error loading detail', 'error'); }
+    };
+
+    window.updatePaymentStatus = async (id, status) => {
+      try {
+        const res = await fetch(`/api/admin/teams/${id}/payment`, {
+          method: 'PATCH',
+          headers: apiHeaders(),
+          body: JSON.stringify({ paymentStatus: status })
+        });
+        const data = await res.json();
+        if(data.success) {
+          AdminUI.toast('Payment status updated', 'success');
+          fetchTeams();
+        } else { throw new Error(data.error); }
+      } catch(err) { AdminUI.toast(err.message, 'error'); showTeamDetail(id); }
+    };
+
+    window.updateMentorSession = async (id, opted) => {
+      try {
+        const res = await fetch(`/api/admin/teams/${id}/mentor`, {
+          method: 'PATCH',
+          headers: apiHeaders(),
+          body: JSON.stringify({ mentorSession: opted })
+        });
+        const data = await res.json();
+        if(data.success) {
+          AdminUI.toast('Mentor session updated', 'success');
+          showTeamDetail(id);
+          fetchTeams();
+        } else { throw new Error(data.error); }
+      } catch(err) { AdminUI.toast(err.message, 'error'); showTeamDetail(id); }
+    };
+
+    window.toggleEditMembersMode = () => {
+      const view = document.getElementById('membersViewMode');
+      const edit = document.getElementById('membersEditMode');
+      if (view.style.display === 'none') {
+        view.style.display = 'block';
+        edit.style.display = 'none';
+      } else {
+        view.style.display = 'none';
+        edit.style.display = 'block';
+      }
+    };
+
+    window.addMemberRow = () => {
+      const list = document.getElementById('editMembersList');
+      const div = document.createElement('div');
+      div.className = 'edit-member-row';
+      div.style.cssText = 'margin-bottom:1rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.1);';
+      div.innerHTML = `
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+          <div style="font-size:0.75rem; color:var(--clr-grey);">New Member</div>
+          <button class="action-btn" style="width:auto; padding:0; background:none; color:var(--clr-red);" onclick="this.parentElement.parentElement.remove()">Remove</button>
+        </div>
+        <input type="text" class="search-input member-edit-name" style="padding:0.5rem; margin-bottom:0.5rem;" placeholder="Name">
+        <input type="text" class="search-input member-edit-email" style="padding:0.5rem; margin-bottom:0.5rem;" placeholder="Email">
+        <input type="text" class="search-input member-edit-phone" style="padding:0.5rem;" placeholder="Phone">
+      `;
+      list.appendChild(div);
+    };
+
+    window.exportTeamReport = () => {
+      const t = window.currentTeam;
+      if (!t) return AdminUI.toast('No team data loaded', 'error');
+
+      if (!window.jspdf) {
+         AdminUI.toast('PDF generation library is still loading, please wait...', 'warn');
+         return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      doc.setFontSize(22);
+      doc.text(`Team Report: ${t.teamName}`, 14, 22);
+      
+      doc.setFontSize(11);
+      doc.setTextColor(100);
+      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+
+      const tableData = [
+        ['Team Code', t.code || 'N/A'],
+        ['College & Branch', `${t.collegeName} - ${t.branch}`],
+        ['Payment Status', (t.paymentStatus || '').toUpperCase()],
+        ['Total Amount', `Rs. ${t.totalAmount || 800}`],
+        ['Mentor Session', t.mentorSession ? 'Opted In' : 'Not Opted'],
+        ['Problem Statement', t.psSelectionId?.title ? `${t.psSelectionId.title} (${t.psSelectionId.domain})` : 'Not Selected'],
+      ];
+
+      doc.autoTable({
+        startY: 38,
+        head: [['Field', 'Details']],
+        body: tableData,
+        theme: 'grid',
+        headStyles: { fillColor: [168, 85, 247] }
+      });
+
+      let finalY = doc.lastAutoTable.finalY + 14;
+      doc.setFontSize(16);
+      doc.setTextColor(0);
+      doc.text('Team Roster', 14, finalY);
+
+      const memberData = [];
+      memberData.push(['Leader', t.leader?.name || '', t.leader?.phone || '', t.leader?.email || '']);
+      (t.members || []).forEach((m, i) => {
+        memberData.push([`Member ${i+1}`, m.name, m.phone, m.email || '']);
+      });
+
+      doc.autoTable({
+        startY: finalY + 6,
+        head: [['Role', 'Name', 'Phone', 'Email']],
+        body: memberData,
+        theme: 'striped',
+        headStyles: { fillColor: [96, 165, 250] }
+      });
+
+      doc.save(`${t.teamName.replace(/\s+/g, '_')}_Report.pdf`);
+      AdminUI.toast('PDF generated & downloaded', 'success');
+    };
+
+    window.saveMembers = async (id) => {
+      const leaderName = document.getElementById('editLeaderName').value.trim();
+      const leaderEmail = document.getElementById('editLeaderEmail').value.trim();
+      const leaderPhone = document.getElementById('editLeaderPhone').value.trim();
+
+      if (!leaderName || !leaderEmail || !leaderPhone) {
+        return AdminUI.toast('Leader fields cannot be empty', 'error');
+      }
+
+      const rows = document.querySelectorAll('.edit-member-row');
+      const members = [];
+      for (const row of rows) {
+        const n = row.querySelector('.member-edit-name').value.trim();
+        const e = row.querySelector('.member-edit-email').value.trim();
+        const p = row.querySelector('.member-edit-phone').value.trim();
+        if (n) members.push({ name: n, email: e, phone: p });
+      }
+
+      try {
+        const res = await fetch(`/api/admin/teams/${id}`, {
+          method: 'PATCH',
+          headers: apiHeaders(),
+          body: JSON.stringify({ 
+            leader: { name: leaderName, email: leaderEmail, phone: leaderPhone },
+            members: members,
+            memberCount: members.length + 1
+          })
+        });
+        const data = await res.json();
+        if(data.success) {
+          AdminUI.toast('Members updated successfully', 'success');
+          showTeamDetail(id);
+          fetchTeams();
+        } else { throw new Error(data.error); }
+      } catch(err) { AdminUI.toast(err.message, 'error'); }
     };
 
     window.approveMentorship = async (id) => {
@@ -698,6 +958,8 @@
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeDetailModal();
+    document.getElementById('closeDetail').addEventListener('click', () => {
+      document.getElementById('detailOverlay').classList.remove('is-active');
     });
 
     document.getElementById('teamSearch').addEventListener('input', () => {
