@@ -33,14 +33,14 @@
 
 html {
   background: #000000;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
   width: 100%;
   min-height: 100%;
   font-family: var(--font-ui);
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
 
