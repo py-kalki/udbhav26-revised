@@ -706,7 +706,7 @@ body {
   border-radius: 14px;
   padding: 1.3rem 1.2rem;
   text-decoration: none;
-  min-height: 190px;
+  height: 100%;
   transition: background 0.2s, border-color 0.2s;
 }
 
