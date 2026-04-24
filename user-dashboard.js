@@ -50,8 +50,13 @@ const Dashboard = {
 
     async syncSchedule() {
         try {
-            const res = await fetch('/api/schedule');
-            const data = await res.json();
+            const [schedRes, psRes] = await Promise.all([
+                fetch('/api/schedule'),
+                fetch('/api/ps/status')
+            ]);
+            const data = await schedRes.json();
+            const psData = await psRes.json();
+
             if (data.success && data.config) {
                 const config = data.config;
                 
@@ -84,8 +89,12 @@ const Dashboard = {
                     });
                 }
             }
+
+            if (psData && psData.state) {
+                this.psState = psData.state;
+            }
         } catch (err) {
-            console.error("Failed to sync schedule:", err);
+            console.error("Failed to sync schedule or PS status:", err);
         }
     },
 
@@ -346,7 +355,7 @@ const Dashboard = {
         const countdownEl = document.getElementById('deployment-countdown');
         const releasedEl = document.getElementById('ps-released-info');
 
-        if (distance <= 0) {
+        if (distance <= 0 || this.psState === 'active' || this.psState === 'closed') {
             if (countdownEl) countdownEl.classList.add('hidden');
             if (releasedEl) releasedEl.classList.remove('hidden');
             if (!this.psReleased) {
@@ -460,9 +469,9 @@ const Dashboard = {
 
             this.initializeIcons();
         } else {
-            // No PS selected — check if countdown is already past
+            // No PS selected — check if countdown is already past or PS state is active/closed
             const now = new Date().getTime();
-            if (now >= this.targetDate.getTime()) {
+            if (now >= this.targetDate.getTime() || this.psState === 'active' || this.psState === 'closed') {
                 const countdownEl = document.getElementById('deployment-countdown');
                 if (countdownEl) countdownEl.classList.add('hidden');
                 if (releasedEl) releasedEl.classList.remove('hidden');

@@ -63,8 +63,13 @@ async function run() {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connected to MongoDB');
 
+    // Clean up old TEAM* entries
+    await Team.deleteMany({ code: { $regex: /^TEAM/ } });
+    await Registration.deleteMany({ teamCode: { $regex: /^TEAM/ } });
+    console.log('Cleaned up old TEAM prefixed dummy entries.');
+
     for (let i = 1; i <= 15; i++) {
-      const code = `TEAM${i}`;
+      const code = `UDB-DUM${i}`;
       const teamName = `Dummy Team ${i}`;
       
       const leader = {

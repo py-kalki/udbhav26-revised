@@ -1,14 +1,18 @@
 ﻿<!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="UDBHAV'26 Problem Statement Drop — Select your hackathon problem domain during the live PS Drop window." />
+  <meta name="description"
+    content="UDBHAV'26 Problem Statement Drop — Select your hackathon problem domain during the live PS Drop window." />
   <title>PS Drop — UDBHAV'26</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Italiana&family=JetBrains+Mono:wght@300;400;500;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,300;1,400&family=Fraunces:ital,wght@0,400;0,700;1,400;1,700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Italiana&family=JetBrains+Mono:wght@300;400;500;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,300;1,400&family=Fraunces:ital,wght@0,400;0,700;1,400;1,700&family=Sora:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="/src/style.css">
   <link rel="stylesheet" href="/mobile-perf.css" />
 
@@ -18,50 +22,66 @@
        ══════════════════════════════════════════════════════ */
     :root {
       --ps-purple: #a855f7;
-      --ps-purple-faint: rgba(168,85,247,0.06);
-      --ps-purple-glow: rgba(168,85,247,0.22);
-      --ps-card: rgba(255,255,255,0.025);
-      --ps-border: rgba(255,255,255,0.08);
-      --ps-muted: rgba(255,255,255,0.3);
+      --ps-purple-faint: rgba(168, 85, 247, 0.06);
+      --ps-purple-glow: rgba(168, 85, 247, 0.22);
+      --ps-card: rgba(255, 255, 255, 0.025);
+      --ps-border: rgba(255, 255, 255, 0.08);
+      --ps-muted: rgba(255, 255, 255, 0.3);
     }
 
     /* ── SCANLINE ────────────────────────────────────────── */
     .ps-scanline {
-      position: fixed; inset: 0; z-index: 2; pointer-events: none;
-      background: repeating-linear-gradient(
-        to bottom,transparent 0,transparent 3px,
-        rgba(0,0,0,0.055) 3px,rgba(0,0,0,0.055) 4px
-      );
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: repeating-linear-gradient(to bottom, transparent 0, transparent 3px,
+          rgba(0, 0, 0, 0.055) 3px, rgba(0, 0, 0, 0.055) 4px);
     }
 
     /* ── AURORA / ATMOSPHERE ─────────────────────────────── */
     .ps-aurora {
-      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
       background:
-        radial-gradient(ellipse 70% 60% at 50% 0%,   rgba(88,28,135,0.22) 0%, transparent 65%),
-        radial-gradient(ellipse 50% 40% at 80% 80%,  rgba(168,85,247,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 35% at 10% 60%,  rgba(109,40,217,0.07) 0%, transparent 60%);
+        radial-gradient(ellipse 70% 60% at 50% 0%, rgba(88, 28, 135, 0.22) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 35% at 10% 60%, rgba(109, 40, 217, 0.07) 0%, transparent 60%);
       animation: ps-aurora-breathe 9s ease-in-out infinite alternate;
     }
+
     @keyframes ps-aurora-breathe {
-      from { opacity: 0.7; transform: scale(1); }
-      to   { opacity: 1;   transform: scale(1.05); }
+      from {
+        opacity: 0.7;
+        transform: scale(1);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1.05);
+      }
     }
 
     /* .ps-bar removed */
 
     /* ── MAIN WRAP ───────────────────────────────────────── */
     .ps-main {
-      position: relative; z-index: 10;
-      padding-top: 88px; min-height: 100vh;
+      position: relative;
+      z-index: 10;
+      padding-top: 88px;
+      min-height: 100vh;
     }
 
     /* ══════════════════════════════════════════════════════
        STATE 1 — PRE-DROP (cinematic)
        ══════════════════════════════════════════════════════ */
     #statePreDrop {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
       padding: 3rem 2rem 6rem;
       min-height: calc(100vh - 115px);
@@ -69,119 +89,230 @@
 
     /* Eyebrow pill */
     .ps-pre__eyebrow {
-      display: inline-flex; align-items: center; gap: 0.55rem;
-      font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 600;
-      letter-spacing: 0.28em; text-transform: uppercase;
-      color: rgba(255,255,255,0.3);
-      border: 1px solid rgba(168,85,247,0.18); background: rgba(168,85,247,0.05);
-      padding: 0.35rem 1rem; border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(168, 85, 247, 0.18);
+      background: rgba(168, 85, 247, 0.05);
+      padding: 0.35rem 1rem;
+      border-radius: 999px;
       margin-bottom: 2.2rem;
-      opacity: 0; transform: translateY(16px);
-      animation: psFadeUp 0.7s 0.1s cubic-bezier(0.16,1,0.3,1) forwards;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: psFadeUp 0.7s 0.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-    .ps-pre__eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ps-purple); flex-shrink: 0; animation: ps-blink 2s ease-in-out infinite; }
+
+    .ps-pre__eyebrow-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--ps-purple);
+      flex-shrink: 0;
+      animation: ps-blink 2s ease-in-out infinite;
+    }
 
     /* Hero title */
     .ps-pre__title {
-      font-family: 'Inter', sans-serif; font-weight: 900;
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
       font-size: clamp(3rem, 9vw, 8rem);
-      line-height: 0.88; letter-spacing: -0.05em; text-transform: uppercase;
-      color: #fff; margin-bottom: 0.7rem;
-      opacity: 0; transform: translateY(40px);
-      animation: psFadeUp 0.9s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
+      line-height: 0.88;
+      letter-spacing: -0.05em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 0.7rem;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: psFadeUp 0.9s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
+
     .ps-pre__title-em {
-      display: block; font-family: 'Fraunces', serif; font-style: italic;
-      font-weight: 700; color: rgba(255,255,255,0.28); font-size: 0.9em;
+      display: block;
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.28);
+      font-size: 0.9em;
     }
 
     .ps-pre__subtitle {
-      font-family: 'Italiana', serif; font-style: italic;
+      font-family: 'Italiana', serif;
+      font-style: italic;
       font-size: clamp(1rem, 2.2vw, 1.4rem);
-      color: rgba(255,255,255,0.28); margin-bottom: 4rem;
-      opacity: 0; transform: translateY(24px);
-      animation: psFadeUp 0.8s 0.32s cubic-bezier(0.16,1,0.3,1) forwards;
+      color: rgba(255, 255, 255, 0.28);
+      margin-bottom: 4rem;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: psFadeUp 0.8s 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     /* ── COUNTDOWN (DAYS + HH:MM:SS) ─────────────────────── */
     .ps-countdown {
-      display: flex; align-items: flex-start; gap: 1rem; flex-wrap: wrap;
-      justify-content: center; margin-bottom: 3rem;
-      opacity: 0; transform: translateY(30px);
-      animation: psFadeUp 0.9s 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: psFadeUp 0.9s 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-    .ps-cd-unit { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
-    .ps-cd-digits { display: flex; gap: 4px; }
+
+    .ps-cd-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .ps-cd-digits {
+      display: flex;
+      gap: 4px;
+    }
 
     .ps-cd-digit {
-      width: 80px; height: 120px;
-      background: rgba(255,255,255,0.025);
-      border: 1px solid rgba(168,85,247,0.18);
+      width: 80px;
+      height: 120px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(168, 85, 247, 0.18);
       border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(4rem, 7vw, 5.5rem); font-weight: 400; color: #fff;
+      font-size: clamp(4rem, 7vw, 5.5rem);
+      font-weight: 400;
+      color: #fff;
       letter-spacing: 0;
-      position: relative; overflow: hidden;
-      box-shadow: 0 0 0 1px rgba(168,85,247,0.06), inset 0 1px 0 rgba(255,255,255,0.04), 0 0 24px rgba(168,85,247,0.07);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 0 24px rgba(168, 85, 247, 0.07);
       transition: box-shadow 0.4s;
       perspective: 600px;
     }
+
     .ps-cd-digit::after {
-      content: ''; position: absolute; left: 0; right: 0; top: 50%;
-      height: 1px; background: rgba(0,0,0,0.5);
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.5);
     }
+
     .ps-cd-digit.flip {
-      animation: ps-flip-digit 0.38s cubic-bezier(0.4,0,0.2,1);
+      animation: ps-flip-digit 0.38s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     @keyframes ps-flip-digit {
-      0%   { transform: rotateX(0deg); }
-      45%  { transform: rotateX(-90deg); opacity: 0.4; }
-      55%  { transform: rotateX(-90deg); opacity: 0.4; }
-      100% { transform: rotateX(0deg); }
+      0% {
+        transform: rotateX(0deg);
+      }
+
+      45% {
+        transform: rotateX(-90deg);
+        opacity: 0.4;
+      }
+
+      55% {
+        transform: rotateX(-90deg);
+        opacity: 0.4;
+      }
+
+      100% {
+        transform: rotateX(0deg);
+      }
     }
 
     .ps-cd-sep {
-      font-family: 'Bebas Neue', sans-serif; font-size: 3rem;
-      color: var(--ps-purple); align-self: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--ps-purple);
+      align-self: center;
       padding-bottom: 1.6rem;
       animation: ps-sep-blink 1.1s ease-in-out infinite;
     }
-    @keyframes ps-sep-blink { 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+
+    @keyframes ps-sep-blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.25;
+      }
+    }
 
     .ps-cd-label {
-      font-family: 'Sora', sans-serif; font-size: 0.58rem; font-weight: 600;
-      letter-spacing: 0.28em; text-transform: uppercase;
-      color: rgba(255,255,255,0.22);
+      font-family: 'Sora', sans-serif;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.22);
     }
 
     /* Bottom note */
     .ps-pre__note-block {
-      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-      opacity: 0; transform: translateY(20px);
-      animation: psFadeUp 0.8s 0.55s cubic-bezier(0.16,1,0.3,1) forwards;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: psFadeUp 0.8s 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
+
     .ps-pre__note {
-      font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
-      color: rgba(255,255,255,0.25); line-height: 1.7;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.25);
+      line-height: 1.7;
     }
-    .ps-pre__note em { font-style: normal; color: var(--ps-purple); }
+
+    .ps-pre__note em {
+      font-style: normal;
+      color: var(--ps-purple);
+    }
+
     .ps-pre__pulse {
-      display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem;
-      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
-      color: rgba(168,85,247,0.6); letter-spacing: 0.06em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: rgba(168, 85, 247, 0.6);
+      letter-spacing: 0.06em;
     }
+
     .ps-pre__pulse-dot {
-      width: 6px; height: 6px; border-radius: 50%; background: var(--ps-purple);
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ps-purple);
       animation: ps-blink 1.5s ease-in-out infinite;
     }
 
     /* Decorative grid lines */
     .ps-grid-lines {
-      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
       background-image:
-        linear-gradient(rgba(168,85,247,0.03) 1px, transparent 1px),
-        linear-gradient(to right, rgba(168,85,247,0.03) 1px, transparent 1px);
+        linear-gradient(rgba(168, 85, 247, 0.03) 1px, transparent 1px),
+        linear-gradient(to right, rgba(168, 85, 247, 0.03) 1px, transparent 1px);
       background-size: 50px 50px;
     }
 
@@ -190,374 +321,870 @@
        ══════════════════════════════════════════════════════ */
     #stateActive {
       display: none;
-      padding: 2rem clamp(1rem,4vw,4rem) 6rem;
-      max-width: 1300px; margin: 0 auto;
+      padding: 2rem clamp(1rem, 4vw, 4rem) 6rem;
+      max-width: 1300px;
+      margin: 0 auto;
     }
 
     .ps-auth {
-      display: flex; flex-direction: column; align-items: center;
-      text-align: center; padding: 4rem 2rem;
-      max-width: 500px; margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      max-width: 500px;
+      margin: 0 auto;
     }
 
     .ps-auth__icon {
-      width: 52px; height: 52px; border-radius: 16px;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
       background: linear-gradient(135deg, #6d28d9, #a855f7);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 1.8rem;
-      box-shadow: 0 0 0 8px rgba(168,85,247,0.1), 0 16px 40px rgba(168,85,247,0.25);
+      box-shadow: 0 0 0 8px rgba(168, 85, 247, 0.1), 0 16px 40px rgba(168, 85, 247, 0.25);
     }
 
     .ps-auth__title {
-      font-family: 'Inter', sans-serif; font-weight: 900;
-      font-size: clamp(2rem, 5vw, 3.2rem); line-height: 0.92;
-      letter-spacing: -0.04em; color: #fff; margin-bottom: 0.8rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      color: #fff;
+      margin-bottom: 0.8rem;
     }
+
     .ps-auth__sub {
-      font-family: 'Inter', sans-serif; font-size: 0.84rem; font-weight: 300;
-      color: rgba(255,255,255,0.35); margin-bottom: 2.5rem; line-height: 1.7;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.35);
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
     }
 
     .ps-auth__input {
-      width: 100%; padding: 1.1rem 1.5rem;
+      width: 100%;
+      padding: 1.1rem 1.5rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 1.35rem; font-weight: 500; letter-spacing: 0.15em; text-align: center;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(168,85,247,0.25); border-radius: 14px;
-      color: #fff; outline: none; text-transform: uppercase;
+      font-size: 1.35rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      border-radius: 14px;
+      color: #fff;
+      outline: none;
+      text-transform: uppercase;
       transition: border-color 0.25s, box-shadow 0.25s;
       margin-bottom: 0.7rem;
     }
+
     .ps-auth__input:focus {
       border-color: var(--ps-purple);
-      box-shadow: 0 0 0 3px rgba(168,85,247,0.14), 0 0 40px rgba(168,85,247,0.06);
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.14), 0 0 40px rgba(168, 85, 247, 0.06);
     }
-    .ps-auth__input.error { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.1); }
+
+    .ps-auth__input.error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
 
     .ps-auth__error {
-      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
-      color: #f87171; margin-bottom: 0.8rem; min-height: 1.2em; letter-spacing: 0.04em;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #f87171;
+      margin-bottom: 0.8rem;
+      min-height: 1.2em;
+      letter-spacing: 0.04em;
     }
 
     .ps-auth__btn {
-      width: 100%; padding: 0.95rem;
-      font-family: 'Sora', sans-serif; font-size: 0.88rem; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      background: var(--ps-purple); color: #fff;
-      border: none; border-radius: 12px; cursor: pointer;
-      transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s;
+      width: 100%;
+      padding: 0.95rem;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--ps-purple);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s;
     }
+
     .ps-auth__btn:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 14px 40px rgba(168,85,247,0.4);
+      box-shadow: 0 14px 40px rgba(168, 85, 247, 0.4);
     }
-    .ps-auth__btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
+
+    .ps-auth__btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+    }
 
     .ps-spinner {
-      display: inline-block; width: 15px; height: 15px;
-      border: 2px solid rgba(255,255,255,0.25); border-top-color: #fff;
-      border-radius: 50%; animation: ps-spin 0.65s linear infinite;
-      vertical-align: middle; margin-right: 0.5rem;
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: ps-spin 0.65s linear infinite;
+      vertical-align: middle;
+      margin-right: 0.5rem;
     }
-    @keyframes ps-spin { to { transform: rotate(360deg); } }
+
+    @keyframes ps-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     /* PS Grid */
-    .ps-grid-section { display: none; }
+    .ps-grid-section {
+      display: none;
+    }
+
     .ps-grid-section__heading {
-      font-family: 'Inter', sans-serif; font-weight: 900;
-      font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: -0.04em;
-      color: #fff; text-align: center; margin-bottom: 0.4rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: -0.04em;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 0.4rem;
       text-transform: uppercase;
     }
+
     .ps-grid-section__sub {
-      font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 300;
-      color: rgba(255,255,255,0.3); text-align: center; margin-bottom: 2.5rem;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.3);
+      text-align: center;
+      margin-bottom: 2.5rem;
     }
+
     .ps-grid {
-      display: flex; flex-direction: column;
-      gap: 1.1rem; max-width: 960px; margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      max-width: 960px;
+      margin: 0 auto;
     }
 
     /* ── CARD : horizontal row layout ─────────────────────── */
     .ps-card {
-      background: rgba(255,255,255,0.022); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px; padding: 1.5rem 1.8rem;
-      display: flex; align-items: center; gap: 2rem;
-      position: relative; overflow: hidden;
+      background: rgba(255, 255, 255, 0.022);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 1.5rem 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      position: relative;
+      overflow: hidden;
       transition: border-color 0.3s, box-shadow 0.3s, opacity 0.5s;
     }
+
     .ps-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
       background: linear-gradient(90deg, transparent, var(--ps-purple), transparent);
-      opacity: 0; transition: opacity 0.3s;
+      opacity: 0;
+      transition: opacity 0.3s;
     }
-    .ps-card:hover:not(.is-full) { border-color: rgba(168,85,247,0.3); box-shadow: 0 0 32px rgba(168,85,247,0.07); }
-    .ps-card:hover:not(.is-full)::before { opacity: 1; }
-    .ps-card.is-full { opacity: 0.38; pointer-events: none; }
+
+    .ps-card:hover:not(.is-full) {
+      border-color: rgba(168, 85, 247, 0.3);
+      box-shadow: 0 0 32px rgba(168, 85, 247, 0.07);
+    }
+
+    .ps-card:hover:not(.is-full)::before {
+      opacity: 1;
+    }
+
+    .ps-card.is-full {
+      opacity: 0.38;
+      pointer-events: none;
+    }
 
     /* Left: number badge */
     .ps-card__num {
-      font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.18); white-space: nowrap; flex-shrink: 0; min-width: 4rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.18);
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-width: 4rem;
     }
 
     /* Middle: domain + title + desc — takes all available space */
     .ps-card__body {
-      flex: 1; display: flex; flex-direction: column; gap: 0.45rem; min-width: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      min-width: 0;
     }
+
     .ps-card__domain {
-      display: inline-block; align-self: flex-start;
-      font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; font-weight: 500;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--ps-purple); background: rgba(168,85,247,0.1);
-      border: 1px solid rgba(168,85,247,0.25);
-      padding: 0.18rem 0.7rem; border-radius: 999px;
+      display: inline-block;
+      align-self: flex-start;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ps-purple);
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      padding: 0.18rem 0.7rem;
+      border-radius: 999px;
     }
+
     .ps-card__title {
-      font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700;
-      color: #fff; line-height: 1.3;
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
     }
+
     .ps-card__desc {
-      font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 400;
-      color: rgba(255,255,255,0.45); line-height: 1.6;
-      white-space: pre-wrap; word-break: break-word;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.45);
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     /* Right: slots + button */
     .ps-card__right {
-      flex-shrink: 0; display: flex; flex-direction: column;
-      align-items: flex-end; gap: 0.65rem; min-width: 130px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.65rem;
+      min-width: 130px;
     }
-    .ps-card__slots-row { display: flex; align-items: center; gap: 0.5rem; }
-    .ps-card__dots { display: flex; gap: 4px; }
+
+    .ps-card__slots-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ps-card__dots {
+      display: flex;
+      gap: 4px;
+    }
+
     .ps-card__dot {
-      width: 9px; height: 9px; border-radius: 50%;
-      border: 1px solid rgba(168,85,247,0.35); background: transparent;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      background: transparent;
       transition: background 0.35s, border-color 0.35s;
     }
-    .ps-card__dot.filled { background: var(--ps-purple); border-color: var(--ps-purple); box-shadow: 0 0 5px rgba(168,85,247,0.5); }
-    .ps-card__slot-text {
-      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
-      color: var(--ps-purple); white-space: nowrap;
+
+    .ps-card__dot.filled {
+      background: var(--ps-purple);
+      border-color: var(--ps-purple);
+      box-shadow: 0 0 5px rgba(168, 85, 247, 0.5);
     }
+
+    .ps-card__slot-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--ps-purple);
+      white-space: nowrap;
+    }
+
     .ps-card__btn {
-      padding: 0.55rem 1.4rem; border-radius: 9px;
-      font-family: 'Sora', sans-serif; font-size: 0.72rem; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap;
-      border: 1px solid rgba(255,255,255,0.2); background: transparent; color: #fff; cursor: pointer;
+      padding: 0.55rem 1.4rem;
+      border-radius: 9px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
       transition: background 0.2s, border-color 0.2s, transform 0.2s;
     }
-    .ps-card__btn:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.45); transform: translateY(-1px); }
-    .ps-card__btn:disabled { opacity: 0.25; cursor: not-allowed; transform: none; }
+
+    .ps-card__btn:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .ps-card__btn:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+      transform: none;
+    }
 
     /* Full overlay */
     .ps-card__full-tag {
-      position: absolute; inset: 0; border-radius: 18px;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.2em;
-      color: rgba(255,255,255,0.35); background: rgba(0,0,0,0.2); pointer-events: none;
-      opacity: 0; transition: opacity 0.4s;
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.2em;
+      color: rgba(255, 255, 255, 0.35);
+      background: rgba(0, 0, 0, 0.2);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s;
     }
-    .ps-card.is-full .ps-card__full-tag { opacity: 1; }
+
+    .ps-card.is-full .ps-card__full-tag {
+      opacity: 1;
+    }
+
     .ps-card__flash {
-      position: absolute; inset: 0; border-radius: 18px;
-      background: rgba(168,85,247,0.18); pointer-events: none; opacity: 0;
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      background: rgba(168, 85, 247, 0.18);
+      pointer-events: none;
+      opacity: 0;
     }
+
     /* Legacy — not used in row layout but kept for safety */
-    .ps-card__divider { display: none; }
+    .ps-card__divider {
+      display: none;
+    }
 
     /* Responsive: stack on mobile */
     @media (max-width: 640px) {
-      .ps-card { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1.2rem; }
-      .ps-card__num { font-size: 1.4rem; min-width: auto; }
-      .ps-card__right { align-items: flex-start; width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: space-between; }
+      .ps-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.2rem;
+      }
+
+      .ps-card__num {
+        font-size: 1.4rem;
+        min-width: auto;
+      }
+
+      .ps-card__right {
+        align-items: flex-start;
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
     }
 
     /* ── CONFIRM MODAL ───────────────────────────────────── */
     .ps-modal-bg {
-      position: fixed; inset: 0; z-index: 9000;
-      background: rgba(0,0,0,0.75); backdrop-filter: blur(10px);
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
     }
-    .ps-modal-bg.open { opacity: 1; pointer-events: all; }
+
+    .ps-modal-bg.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
     .ps-modal {
-      background: #0a0a10; border: 1px solid rgba(168,85,247,0.25);
-      border-radius: 24px; padding: 2.5rem; max-width: 460px; width: 90%;
-      box-shadow: 0 0 0 1px rgba(168,85,247,0.06), 0 40px 80px rgba(0,0,0,0.7), 0 0 50px rgba(168,85,247,0.08);
-      transform: scale(0.92); transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+      background: #0a0a10;
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      border-radius: 24px;
+      padding: 2.5rem;
+      max-width: 460px;
+      width: 90%;
+      box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.06), 0 40px 80px rgba(0, 0, 0, 0.7), 0 0 50px rgba(168, 85, 247, 0.08);
+      transform: scale(0.92);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .ps-modal-bg.open .ps-modal { transform: scale(1); }
-    .ps-modal__num { font-family: 'Bebas Neue', sans-serif; font-size: 0.8rem; letter-spacing: 0.22em; color: rgba(255,255,255,0.25); margin-bottom: 0.3rem; }
-    .ps-modal__heading { font-family: 'Inter', sans-serif; font-weight: 900; font-size: clamp(1.6rem,4vw,2.5rem); letter-spacing: -0.04em; text-transform: uppercase; color: #fff; margin-bottom: 0.7rem; line-height: 1; }
-    .ps-modal__ps-name { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 600; color: var(--ps-purple); margin-bottom: 1.2rem; line-height: 1.4; }
+
+    .ps-modal-bg.open .ps-modal {
+      transform: scale(1);
+    }
+
+    .ps-modal__num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.22em;
+      color: rgba(255, 255, 255, 0.25);
+      margin-bottom: 0.3rem;
+    }
+
+    .ps-modal__heading {
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 0.7rem;
+      line-height: 1;
+    }
+
+    .ps-modal__ps-name {
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ps-purple);
+      margin-bottom: 1.2rem;
+      line-height: 1.4;
+    }
 
     /* Team code input inside modal */
-    .ps-modal__code-wrap { margin-bottom: 1.2rem; }
+    .ps-modal__code-wrap {
+      margin-bottom: 1.2rem;
+    }
+
     .ps-modal__code-label {
-      display: block; font-family: 'Sora', sans-serif; font-size: 0.7rem;
-      font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-      color: rgba(255,255,255,0.45); margin-bottom: 0.5rem;
-    }
-    .ps-modal__code-input {
-      width: 100%; padding: 0.7rem 1rem;
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 10px; color: #fff; outline: none;
-      font-family: 'JetBrains Mono', monospace; font-size: 1rem; letter-spacing: 0.1em;
+      display: block;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      transition: border-color 0.2s, box-shadow 0.2s; box-sizing: border-box;
+      color: rgba(255, 255, 255, 0.45);
+      margin-bottom: 0.5rem;
     }
-    .ps-modal__code-input:focus { border-color: var(--ps-purple); box-shadow: 0 0 0 3px rgba(168,85,247,0.15); }
-    .ps-modal__code-input.error { border-color: #f87171; box-shadow: 0 0 0 3px rgba(248,113,113,0.15); }
+
+    .ps-modal__code-input {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      color: #fff;
+      outline: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+    }
+
+    .ps-modal__code-input:focus {
+      border-color: var(--ps-purple);
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+    }
+
+    .ps-modal__code-input.error {
+      border-color: #f87171;
+      box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.15);
+    }
+
     .ps-modal__code-error {
-      font-family: 'Sora', sans-serif; font-size: 0.72rem; color: #f87171;
-      margin-top: 0.45rem; min-height: 1.1em;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.72rem;
+      color: #f87171;
+      margin-top: 0.45rem;
+      min-height: 1.1em;
     }
 
     /* Register-first notice (payment_pending) */
     .ps-modal__register-notice {
       display: none;
-      align-items: flex-start; gap: 0.75rem;
-      background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25);
-      border-radius: 12px; padding: 0.9rem 1rem; margin-bottom: 1.2rem;
+      align-items: flex-start;
+      gap: 0.75rem;
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.2rem;
     }
-    .ps-modal__register-notice.visible { display: flex; }
-    .ps-modal__register-notice__icon { color: #f87171; flex-shrink: 0; margin-top: 1px; }
-    .ps-modal__register-notice__body { flex: 1; }
+
+    .ps-modal__register-notice.visible {
+      display: flex;
+    }
+
+    .ps-modal__register-notice__icon {
+      color: #f87171;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .ps-modal__register-notice__body {
+      flex: 1;
+    }
+
     .ps-modal__register-notice__title {
-      font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 700;
-      color: #f87171; margin-bottom: 0.25rem;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #f87171;
+      margin-bottom: 0.25rem;
     }
+
     .ps-modal__register-notice__sub {
-      font-family: 'Sora', sans-serif; font-size: 0.72rem;
-      color: rgba(255,255,255,0.4); line-height: 1.5;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.4);
+      line-height: 1.5;
     }
+
     .ps-modal__register-notice__link {
-      display: inline-block; margin-top: 0.5rem;
-      font-family: 'Sora', sans-serif; font-size: 0.72rem; font-weight: 700;
-      color: #f87171; text-decoration: none;
-      border: 1px solid rgba(239,68,68,0.3); padding: 0.3rem 0.75rem;
-      border-radius: 6px; transition: background 0.2s;
+      display: inline-block;
+      margin-top: 0.5rem;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #f87171;
+      text-decoration: none;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+      transition: background 0.2s;
     }
-    .ps-modal__register-notice__link:hover { background: rgba(239,68,68,0.1); }
+
+    .ps-modal__register-notice__link:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
 
     .ps-modal__warn {
-      display: flex; align-items: center; gap: 0.6rem;
-      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
-      color: #fb923c; padding: 0.7rem 1rem; border-radius: 8px;
-      background: rgba(251,146,60,0.07); border: 1px solid rgba(251,146,60,0.18);
-      margin-bottom: 1.8rem; line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #fb923c;
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      background: rgba(251, 146, 60, 0.07);
+      border: 1px solid rgba(251, 146, 60, 0.18);
+      margin-bottom: 1.8rem;
+      line-height: 1.5;
     }
-    .ps-modal__btns { display: flex; gap: 0.75rem; }
+
+    .ps-modal__btns {
+      display: flex;
+      gap: 0.75rem;
+    }
+
     .ps-modal__confirm {
-      flex: 1; padding: 0.85rem; border-radius: 10px;
-      font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 700;
-      letter-spacing: 0.08em; background: var(--ps-purple); color: #fff; border: none; cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      flex: 1;
+      padding: 0.85rem;
+      border-radius: 10px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      background: var(--ps-purple);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
     }
-    .ps-modal__confirm:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(168,85,247,0.35); }
-    .ps-modal__confirm:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .ps-modal__confirm:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(168, 85, 247, 0.35);
+    }
+
+    .ps-modal__confirm:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .ps-modal__cancel {
-      flex: 1; padding: 0.85rem; border-radius: 10px;
-      font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 600;
-      background: transparent; border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.55); cursor: pointer;
+      flex: 1;
+      padding: 0.85rem;
+      border-radius: 10px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.55);
+      cursor: pointer;
       transition: background 0.2s, color 0.2s;
     }
-    .ps-modal__cancel:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+    .ps-modal__cancel:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
 
     /* Success step */
     .ps-modal__success-icon {
-      width: 58px; height: 58px; border-radius: 50%;
-      background: rgba(34,197,94,0.1); border: 2px solid rgba(34,197,94,0.3);
-      display: flex; align-items: center; justify-content: center;
-      color: #22c55e; margin: 0 auto 1.2rem;
-      animation: ps-check-pop 0.6s cubic-bezier(0.16,1,0.3,1) both;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: rgba(34, 197, 94, 0.1);
+      border: 2px solid rgba(34, 197, 94, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #22c55e;
+      margin: 0 auto 1.2rem;
+      animation: ps-check-pop 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
+
     .ps-modal__success-label {
-      font-family: 'Sora', sans-serif; font-size: 0.65rem; font-weight: 700;
-      letter-spacing: 0.2em; text-transform: uppercase; color: #22c55e; margin-bottom: 0.6rem;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #22c55e;
+      margin-bottom: 0.6rem;
     }
+
     .ps-modal__success-ps {
-      font-family: 'Inter', sans-serif; font-weight: 800; font-size: 1.2rem;
-      color: #fff; margin-bottom: 0.8rem; line-height: 1.2;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 0.8rem;
+      line-height: 1.2;
     }
+
     .ps-modal__success-note {
-      font-family: 'Sora', sans-serif; font-size: 0.78rem; color: rgba(255,255,255,0.4);
-      margin-bottom: 1.4rem; line-height: 1.6;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 1.4rem;
+      line-height: 1.6;
     }
+
     .ps-modal__dashboard-btn {
-      display: flex; align-items: center; justify-content: center; gap: 0.55rem;
-      width: 100%; padding: 0.85rem; border-radius: 10px;
-      font-family: 'Sora', sans-serif; font-size: 0.85rem; font-weight: 700;
-      letter-spacing: 0.06em; background: var(--ps-purple); color: #fff;
-      text-decoration: none; margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      width: 100%;
+      padding: 0.85rem;
+      border-radius: 10px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      background: var(--ps-purple);
+      color: #fff;
+      text-decoration: none;
+      margin-bottom: 0.75rem;
       transition: transform 0.2s, box-shadow 0.2s;
     }
-    .ps-modal__dashboard-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(168,85,247,0.35); }
+
+    .ps-modal__dashboard-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(168, 85, 247, 0.35);
+    }
 
     /* ══════════════════════════════════════════════════════
        STATE 3 — CLOSED
        ══════════════════════════════════════════════════════ */
     #stateClosed {
-      display: none; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center; min-height: calc(100vh - 115px); padding: 2rem;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: calc(100vh - 115px);
+      padding: 2rem;
     }
+
     .ps-closed__lock {
-      color: rgba(255,255,255,0.12); margin-bottom: 2.5rem;
-      animation: ps-lock-drop 0.7s cubic-bezier(0.16,1,0.3,1) both;
+      color: rgba(255, 255, 255, 0.12);
+      margin-bottom: 2.5rem;
+      animation: ps-lock-drop 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
-    @keyframes ps-lock-drop { from{transform:scale(0.5) rotate(-10deg);opacity:0;} to{transform:scale(1) rotate(0);opacity:1;} }
+
+    @keyframes ps-lock-drop {
+      from {
+        transform: scale(0.5) rotate(-10deg);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1) rotate(0);
+        opacity: 1;
+      }
+    }
+
     .ps-closed__title {
-      font-family: 'Inter', sans-serif; font-weight: 900; text-transform: uppercase;
-      font-size: clamp(2.5rem,9vw,6rem); letter-spacing: -0.05em;
-      color: rgba(255,255,255,0.38); margin-bottom: 1.2rem; line-height: 0.9;
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: clamp(2.5rem, 9vw, 6rem);
+      letter-spacing: -0.05em;
+      color: rgba(255, 255, 255, 0.38);
+      margin-bottom: 1.2rem;
+      line-height: 0.9;
     }
+
     .ps-closed__sub {
-      font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 300;
-      color: rgba(255,255,255,0.28); margin-bottom: 0.5rem;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.28);
+      margin-bottom: 0.5rem;
     }
-    .ps-closed__note { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: rgba(255,255,255,0.18); margin-bottom: 3rem; }
-    .ps-closed__stamp { font-family: 'JetBrains Mono', monospace; font-size: clamp(3rem,9vw,6rem); color: rgba(255,255,255,0.05); letter-spacing: 0.08em; user-select: none; }
+
+    .ps-closed__note {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.18);
+      margin-bottom: 3rem;
+    }
+
+    .ps-closed__stamp {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(3rem, 9vw, 6rem);
+      color: rgba(255, 255, 255, 0.05);
+      letter-spacing: 0.08em;
+      user-select: none;
+    }
 
     /* ══════════════════════════════════════════════════════
        STATE 4 — SELECTED
        ══════════════════════════════════════════════════════ */
     #stateSelected {
-      display: none; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center; min-height: calc(100vh - 115px); padding: 2rem;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: calc(100vh - 115px);
+      padding: 2rem;
     }
+
     .ps-sel__check {
-      width: 60px; height: 60px; border-radius: 50%;
-      background: rgba(34,197,94,0.1); border: 2px solid rgba(34,197,94,0.28);
-      display: flex; align-items: center; justify-content: center;
-      color: #22c55e; margin: 0 auto 2rem;
-      animation: ps-check-pop 0.65s cubic-bezier(0.16,1,0.3,1) both;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(34, 197, 94, 0.1);
+      border: 2px solid rgba(34, 197, 94, 0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #22c55e;
+      margin: 0 auto 2rem;
+      animation: ps-check-pop 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
-    @keyframes ps-check-pop { from{transform:scale(0);opacity:0;} 70%{transform:scale(1.2);} to{transform:scale(1);opacity:1;} }
+
+    @keyframes ps-check-pop {
+      from {
+        transform: scale(0);
+        opacity: 0;
+      }
+
+      70% {
+        transform: scale(1.2);
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
     .ps-sel__label {
-      font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 700;
-      letter-spacing: 0.28em; text-transform: uppercase; color: rgba(255,255,255,0.22);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.22);
       margin-bottom: 1rem;
     }
+
     .ps-sel__title {
-      font-family: 'Inter', sans-serif; font-weight: 900; text-transform: uppercase;
-      font-size: clamp(2.2rem,7vw,5.5rem); letter-spacing: -0.05em;
-      color: #fff; line-height: 0.9; max-width: 860px; margin-bottom: 1.5rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: clamp(2.2rem, 7vw, 5.5rem);
+      letter-spacing: -0.05em;
+      color: #fff;
+      line-height: 0.9;
+      max-width: 860px;
+      margin-bottom: 1.5rem;
     }
-    .ps-sel__time { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: rgba(255,255,255,0.22); margin-bottom: 1.8rem; }
-    .ps-sel__luck { font-family: 'Italiana', serif; font-style: italic; font-size: clamp(1rem,2.5vw,1.35rem); color: rgba(255,255,255,0.3); margin-bottom: 1.5rem; }
-    .ps-sel__code { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; color: var(--ps-purple); padding: 0.45rem 1.2rem; border-radius: 8px; background: rgba(168,85,247,0.07); border: 1px solid rgba(168,85,247,0.18); letter-spacing: 0.12em; }
+
+    .ps-sel__time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.22);
+      margin-bottom: 1.8rem;
+    }
+
+    .ps-sel__luck {
+      font-family: 'Italiana', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      color: rgba(255, 255, 255, 0.3);
+      margin-bottom: 1.5rem;
+    }
+
+    .ps-sel__code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      color: var(--ps-purple);
+      padding: 0.45rem 1.2rem;
+      border-radius: 8px;
+      background: rgba(168, 85, 247, 0.07);
+      border: 1px solid rgba(168, 85, 247, 0.18);
+      letter-spacing: 0.12em;
+    }
 
     /* ── RESPONSIVE ──────────────────────────────────────── */
     @media (max-width: 600px) {
-      .ps-countdown { gap: 0.6rem; }
+      .ps-countdown {
+        gap: 0.6rem;
+      }
     }
 
-    @keyframes psFadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes psFadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
+
 <body>
 
   <div class="cursor-arrow" id="cursorArrow" aria-hidden="true"></div>
@@ -579,37 +1206,75 @@
           <li><a href="/" class="nav-link"><span class="link-text">Home</span></a></li>
           <li><a href="/about.html" class="nav-link"><span class="link-text">About</span></a></li>
           <li><a href="/schedule.html" class="nav-link"><span class="link-text">Schedule</span></a></li>
-          <li><a href="/problem-statement.html" class="nav-link active" id="nav-blogs"><span class="link-text">Problem Statement</span></a></li>
+          <li><a href="/problem-statement.html" class="nav-link active" id="nav-blogs"><span class="link-text">Problem
+                Statement</span></a></li>
           <li class="nav-more-wrap" id="navMoreWrap">
-            <a href="#" class="nav-link nav-more" id="nav-more" role="button" aria-haspopup="menu" aria-expanded="false">
+            <a href="#" class="nav-link nav-more" id="nav-more" role="button" aria-haspopup="menu"
+              aria-expanded="false">
               <span class="link-text">More</span>
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
             </a>
             <div class="more-dropdown" id="moreDropdown" role="menu">
               <div class="md-grid">
                 <a href="/winners.html" class="md-feature" role="menuitem" tabindex="-1">
                   <div class="md-feature__bg-icon" aria-hidden="true">
-                    <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+                    <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                      <path d="M4 22h16" />
+                      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+                      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+                      <path d="M18 2H6v7a6 6 0 0 0 12 0V2z" />
+                    </svg>
                   </div>
                   <span class="md-feature__title">Winner</span>
                   <span class="md-feature__desc">Hackathon winners &amp; achievements</span>
                 </a>
                 <div class="md-items">
                   <a href="/code-of-conduct.html" class="md-item" role="menuitem" tabindex="-1">
-                    <div class="md-item__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
-                    <div class="md-item__body"><span class="md-item__title">Code of Conduct</span><span class="md-item__desc">Rules &amp; Guidelines</span></div>
+                    <div class="md-item__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                      </svg></div>
+                    <div class="md-item__body"><span class="md-item__title">Code of Conduct</span><span
+                        class="md-item__desc">Rules &amp; Guidelines</span></div>
                   </a>
                   <a href="/our-team.html" class="md-item" role="menuitem" tabindex="-1">
-                    <div class="md-item__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-                    <div class="md-item__body"><span class="md-item__title">Our Team</span><span class="md-item__desc">Meet the builders</span></div>
+                    <div class="md-item__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                      </svg></div>
+                    <div class="md-item__body"><span class="md-item__title">Our Team</span><span
+                        class="md-item__desc">Meet the builders</span></div>
                   </a>
                   <a href="/sponsors.html" class="md-item" role="menuitem" tabindex="-1">
-                    <div class="md-item__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="15.5" r="2.5"/><path d="M8 17V5l12-2v12"/></svg></div>
-                    <div class="md-item__body"><span class="md-item__title">Sponsors</span><span class="md-item__desc">Our partners &amp; supporters</span></div>
+                    <div class="md-item__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="5.5" cy="17.5" r="2.5" />
+                        <circle cx="17.5" cy="15.5" r="2.5" />
+                        <path d="M8 17V5l12-2v12" />
+                      </svg></div>
+                    <div class="md-item__body"><span class="md-item__title">Sponsors</span><span
+                        class="md-item__desc">Our partners &amp; supporters</span></div>
                   </a>
                   <a href="/user-dashboard.html" class="md-item" role="menuitem" tabindex="-1">
-                    <div class="md-item__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></div>
-                    <div class="md-item__body"><span class="md-item__title">Team Dashboard</span><span class="md-item__desc">View your assigned PS</span></div>
+                    <div class="md-item__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="9" />
+                        <rect x="14" y="3" width="7" height="5" />
+                        <rect x="14" y="12" width="7" height="9" />
+                        <rect x="3" y="16" width="7" height="5" />
+                      </svg></div>
+                    <div class="md-item__body"><span class="md-item__title">Team Dashboard</span><span
+                        class="md-item__desc">View your assigned PS</span></div>
                   </a>
                 </div>
               </div>
@@ -620,9 +1285,11 @@
         <a href="/register.html" class="btn-cta" id="bookCallBtn">Register</a>
       </div>
       <button class="nav-menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
-        <svg class="menu-toggle-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
-          <path class="mti-path1" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"/>
-          <path d="M7 16 27 16"/>
+        <svg class="menu-toggle-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
+          <path class="mti-path1"
+            d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22" />
+          <path d="M7 16 27 16" />
         </svg>
       </button>
     </div>
@@ -633,7 +1300,8 @@
       </a>
       <div class="mobile-nav-right">
         <a href="/register.html" class="mobile-nav-cta" id="mobileRegisterBtn">Register</a>
-        <button class="mobile-hamburger" id="mobileMenuBtn" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenuDrawer">
+        <button class="mobile-hamburger" id="mobileMenuBtn" aria-label="Open navigation menu" aria-expanded="false"
+          aria-controls="mobileMenuDrawer">
           <span class="mhb-line"></span>
           <span class="mhb-line"></span>
           <span class="mhb-line"></span>
@@ -645,56 +1313,134 @@
     <div class="mobile-menu-drawer" id="mobileMenuDrawer" aria-hidden="true">
       <nav class="mmd-nav" aria-label="Mobile navigation">
         <a href="/" class="mmd-link">
-          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg></span>
           <span class="mmd-link-text">Home</span>
-          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </a>
         <a href="/about.html" class="mmd-link">
-          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg></span>
           <span class="mmd-link-text">About</span>
-          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </a>
         <a href="/schedule.html" class="mmd-link">
-          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg></span>
           <span class="mmd-link-text">Schedule</span>
-          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </a>
         <a href="/problem-statement.html" class="mmd-link mmd-link--active">
-          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg></span>
           <span class="mmd-link-text">Problem Statement</span>
-          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </a>
         <a href="/winners.html" class="mmd-link">
-          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></span>
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6" />
+              <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+            </svg></span>
           <span class="mmd-link-text">Winners</span>
-          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </a>
         <a href="/sponsors.html" class="mmd-link">
-          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="15.5" r="2.5"/><path d="M8 17V5l12-2v12"/></svg></span>
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="5.5" cy="17.5" r="2.5" />
+              <circle cx="17.5" cy="15.5" r="2.5" />
+              <path d="M8 17V5l12-2v12" />
+            </svg></span>
           <span class="mmd-link-text">Sponsors</span>
-          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </a>
         <a href="/user-dashboard.html" class="mmd-link">
-          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></span>
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="9" />
+              <rect x="14" y="3" width="7" height="5" />
+              <rect x="14" y="12" width="7" height="9" />
+              <rect x="3" y="16" width="7" height="5" />
+            </svg></span>
           <span class="mmd-link-text">Team Dashboard</span>
-          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </a>
         <a href="/code-of-conduct.html" class="mmd-link">
-          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg></span>
           <span class="mmd-link-text">Code of Conduct</span>
-          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </a>
         <a href="/our-team.html" class="mmd-link">
-          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg></span>
           <span class="mmd-link-text">Our Team</span>
-          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </a>
-        
-              <a href="/contact.html" class="mmd-link">
-          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+
+        <a href="/contact.html" class="mmd-link">
+          <span class="mmd-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg></span>
           <span class="mmd-link-text">Contact</span>
-          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </a></nav>
+          <svg class="mmd-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </a>
+      </nav>
       <div class="mmd-footer">
         <a href="/register.html" class="mmd-cta-btn">Register Now →</a>
       </div>
@@ -704,28 +1450,34 @@
 
   <!-- Mobile nav hamburger controller -->
   <script>
-    (function() {
+    (function () {
       var btn = document.getElementById('mobileMenuBtn');
       var drawer = document.getElementById('mobileMenuDrawer');
       var pill = document.getElementById('mobileNavPill');
       if (!btn || !drawer) return;
-      function openMenu() { btn.classList.add('is-open'); btn.setAttribute('aria-expanded','true'); drawer.classList.add('is-open'); drawer.setAttribute('aria-hidden','false'); document.body.classList.add('mobile-menu-open'); }
-      function closeMenu() { btn.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); drawer.classList.remove('is-open'); drawer.setAttribute('aria-hidden','true'); document.body.classList.remove('mobile-menu-open'); }
-      btn.addEventListener('click', function() { drawer.classList.contains('is-open') ? closeMenu() : openMenu(); });
-      drawer.querySelectorAll('.mmd-link').forEach(function(l) { l.addEventListener('click', closeMenu); });
-      window.addEventListener('resize', function() { if (window.innerWidth > 768) closeMenu(); });
-      if (pill) { pill.addEventListener('click', function(e) { if (e.target.closest('a, button')) return; window.location.href = '/'; }); }
+      function openMenu() { btn.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true'); drawer.classList.add('is-open'); drawer.setAttribute('aria-hidden', 'false'); document.body.classList.add('mobile-menu-open'); }
+      function closeMenu() { btn.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); drawer.classList.remove('is-open'); drawer.setAttribute('aria-hidden', 'true'); document.body.classList.remove('mobile-menu-open'); }
+      btn.addEventListener('click', function () { drawer.classList.contains('is-open') ? closeMenu() : openMenu(); });
+      drawer.querySelectorAll('.mmd-link').forEach(function (l) { l.addEventListener('click', closeMenu); });
+      window.addEventListener('resize', function () { if (window.innerWidth > 768) closeMenu(); });
+      if (pill) { pill.addEventListener('click', function (e) { if (e.target.closest('a, button')) return; window.location.href = '/'; }); }
     })();
   </script>
 
   <!-- Command palette -->
-  <div id="menuOverlay" class="menu-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div id="menuOverlay" class="menu-overlay" aria-hidden="true" role="dialog" aria-modal="true"
+    aria-label="Command palette">
     <div class="menu-overlay__panel">
       <p class="action-search__label">Search Commands</p>
       <div class="action-search__input-wrap">
-        <input type="text" id="actionSearchInput" class="action-search__input" placeholder="What's up?" autocomplete="off" spellcheck="false" aria-label="Search commands" />
+        <input type="text" id="actionSearchInput" class="action-search__input" placeholder="What's up?"
+          autocomplete="off" spellcheck="false" aria-label="Search commands" />
         <div class="action-search__icon" id="actionSearchIcon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
         </div>
       </div>
       <div class="action-search__results" id="actionSearchResults" role="listbox"></div>
@@ -797,11 +1549,17 @@
       <!-- Auth -->
       <div class="ps-auth" id="psAuthStep">
         <div class="ps-auth__icon" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
         </div>
         <h2 class="ps-auth__title">Enter Your<br>Team Code</h2>
-        <p class="ps-auth__sub">Your Team Code was sent to all registered members.<br>Format: <span style="font-family:'JetBrains Mono',monospace;color:#a855f7;">UDB-XXXX</span></p>
-        <input type="text" id="teamCodeInput" class="ps-auth__input" placeholder="UDB-0000" maxlength="8" autocomplete="off" spellcheck="false" autocapitalize="characters" aria-label="Team Code" />
+        <p class="ps-auth__sub">Your Team Code was sent to all registered members.<br>Format: <span
+            style="font-family:'JetBrains Mono',monospace;color:#a855f7;">UDB-XXXX</span></p>
+        <input type="text" id="teamCodeInput" class="ps-auth__input" placeholder="UDB-0000" maxlength="8"
+          autocomplete="off" spellcheck="false" autocapitalize="characters" aria-label="Team Code" />
         <div class="ps-auth__error" id="authError" role="alert" aria-live="polite"></div>
         <button class="ps-auth__btn" id="verifyBtn">Verify Code</button>
       </div>
@@ -817,9 +1575,10 @@
     <!-- ── STATE 3: CLOSED ───────────────────────────────── -->
     <div id="stateClosed">
       <div class="ps-closed__lock" aria-hidden="true">
-        <svg width="88" height="88" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="11" width="18" height="11" rx="2"/>
-          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        <svg width="88" height="88" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
         </svg>
       </div>
       <h1 class="ps-closed__title">PS Selection<br>Closed</h1>
@@ -831,7 +1590,10 @@
     <!-- ── STATE 4: SELECTED ─────────────────────────────── -->
     <div id="stateSelected">
       <div class="ps-sel__check" aria-label="Selection confirmed">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
       </div>
       <div class="ps-sel__label">Your Problem Statement</div>
       <h1 class="ps-sel__title" id="selPsTitle">—</h1>
@@ -848,25 +1610,39 @@
         <div class="cf-giant-text" id="cfGiantText" aria-hidden="true">UDBHAV'26</div>
         <div class="cf-marquee-wrap" aria-hidden="true">
           <div class="cf-marquee-track">
-            <div class="cf-marquee-item"><span>Creative Engineer</span> <span class="cf-star">✦</span><span>Full Stack Dev</span> <span class="cf-star cf-star--sec">✦</span><span>UI / UX Design</span> <span class="cf-star">✦</span><span>Open to Work</span> <span class="cf-star cf-star--sec">✦</span><span>Based in India</span> <span class="cf-star">✦</span></div>
-            <div class="cf-marquee-item" aria-hidden="true"><span>Creative Engineer</span> <span class="cf-star">✦</span><span>Full Stack Dev</span> <span class="cf-star cf-star--sec">✦</span><span>UI / UX Design</span> <span class="cf-star">✦</span><span>Open to Work</span> <span class="cf-star cf-star--sec">✦</span><span>Based in India</span> <span class="cf-star">✦</span></div>
+            <div class="cf-marquee-item"><span>Creative Engineer</span> <span class="cf-star">✦</span><span>Full Stack
+                Dev</span> <span class="cf-star cf-star--sec">✦</span><span>UI / UX Design</span> <span
+                class="cf-star">✦</span><span>Open to Work</span> <span class="cf-star cf-star--sec">✦</span><span>Based
+                in India</span> <span class="cf-star">✦</span></div>
+            <div class="cf-marquee-item" aria-hidden="true"><span>Creative Engineer</span> <span
+                class="cf-star">✦</span><span>Full Stack Dev</span> <span class="cf-star cf-star--sec">✦</span><span>UI
+                / UX Design</span> <span class="cf-star">✦</span><span>Open to Work</span> <span
+                class="cf-star cf-star--sec">✦</span><span>Based in India</span> <span class="cf-star">✦</span></div>
           </div>
         </div>
         <div class="cf-center" id="cfCenter">
           <h2 class="cf-heading">Ready to begin?</h2>
-          <div class="cf-links"><div class="cf-primary-pills"><a href="/register.html" class="cf-pill cf-pill--primary js-magnetic" id="cfBtnRegister">Register</a></div>
+          <div class="cf-links">
+            <div class="cf-primary-pills"><a href="/register.html" class="cf-pill cf-pill--primary js-magnetic"
+                id="cfBtnRegister">Register</a></div>
             <div class="cf-secondary-pills" style="margin-top:0.75rem;">
               <a href="/legal.html#terms" class="cf-pill cf-pill--ghost js-magnetic">Terms</a>
               <a href="/legal.html#privacy" class="cf-pill cf-pill--ghost js-magnetic">Privacy</a>
               <a href="/legal.html#refund" class="cf-pill cf-pill--ghost js-magnetic">Refund Policy</a>
               <a href="/contact.html" class="cf-pill cf-pill--ghost js-magnetic">Contact Us</a>
-            </div></div>
+            </div>
+          </div>
         </div>
         <div class="cf-bottom-bar">
           <p class="cf-copyright">© 2026 UDBHAV'26. All rights reserved.</p>
-          <div class="cf-badge"><span class="cf-badge-text">Crafted with</span><span class="cf-heart" aria-hidden="true">❤</span><span class="cf-badge-text">by</span><span class="cf-badge-name">UDBHAV'26</span></div>
+          <div class="cf-badge"><span class="cf-badge-text">Crafted with</span><span class="cf-heart"
+              aria-hidden="true">❤</span><span class="cf-badge-text">by</span><span
+              class="cf-badge-name">UDBHAV'26</span></div>
           <button class="cf-pill cf-pill--icon js-magnetic" id="cfBackToTop" aria-label="Back to top">
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+              stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
           </button>
         </div>
       </footer>
@@ -885,26 +1661,35 @@
         <!-- Team code input -->
         <div class="ps-modal__code-wrap">
           <label class="ps-modal__code-label" for="modalTeamCode">Your Team Code</label>
-          <input type="text" id="modalTeamCode" class="ps-modal__code-input"
-            placeholder="UDB-XXXX" maxlength="12" autocomplete="off"
-            spellcheck="false" autocapitalize="characters"
-            aria-label="Team Code" />
+          <input type="text" id="modalTeamCode" class="ps-modal__code-input" placeholder="UDB-XXXX" maxlength="12"
+            autocomplete="off" spellcheck="false" autocapitalize="characters" aria-label="Team Code" />
           <div class="ps-modal__code-error" id="modalCodeError" role="alert" aria-live="polite"></div>
         </div>
 
         <div class="ps-modal__register-notice" id="modalRegisterNotice">
           <span class="ps-modal__register-notice__icon" aria-hidden="true">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
           </span>
           <div class="ps-modal__register-notice__body">
             <div class="ps-modal__register-notice__title">Registration payment not confirmed</div>
-            <div class="ps-modal__register-notice__sub">Your team code is valid, but payment hasn't been received yet. Complete your registration to select a Problem Statement.</div>
+            <div class="ps-modal__register-notice__sub">Your team code is valid, but payment hasn't been received yet.
+              Complete your registration to select a Problem Statement.</div>
             <a href="/register.html" class="ps-modal__register-notice__link" target="_blank">Register Now →</a>
           </div>
         </div>
 
         <div class="ps-modal__warn">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
           This selection is permanent and cannot be changed.
         </div>
         <div class="ps-modal__btns">
@@ -916,13 +1701,22 @@
       <!-- STEP 2: Success -->
       <div id="psModalStep2" style="display:none;text-align:center;">
         <div class="ps-modal__success-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
         </div>
         <div class="ps-modal__success-label">Problem Statement Assigned!</div>
         <div class="ps-modal__success-ps" id="modalSuccessPs">—</div>
         <p class="ps-modal__success-note">Your team has been locked into this PS.<br>Good luck building!</p>
         <a class="ps-modal__dashboard-btn" id="modalDashboardBtn" href="/user-dashboard.html">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="9" />
+            <rect x="14" y="3" width="7" height="5" />
+            <rect x="14" y="12" width="7" height="9" />
+            <rect x="3" y="16" width="7" height="5" />
+          </svg>
           Visit Team Dashboard
         </a>
         <button class="ps-modal__cancel" id="modalSuccessClose" style="margin-top:0.6rem;width:100%;">Close</button>
@@ -937,196 +1731,196 @@
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
   <script>
-  (function() {
-    'use strict';
+    (function () {
+      'use strict';
 
-    // ── STATE ────────────────────────────────────────────────────
-    let verifiedCode = null, pendingPsId = null, pollTimer = null, statusTimer = null;
-    let psListData = []; // fetched from API
-    let currentState = null; // track to avoid re-rendering same state
+      // ── STATE ────────────────────────────────────────────────────
+      let verifiedCode = null, pendingPsId = null, pollTimer = null, statusTimer = null;
+      let psListData = []; // fetched from API
+      let currentState = null; // track to avoid re-rendering same state
 
-    // ── ELEMENTS ─────────────────────────────────────────────────
-    const elPre      = document.getElementById('statePreDrop');
-    const elActive   = document.getElementById('stateActive');
-    const elClosed   = document.getElementById('stateClosed');
-    const elSelected = document.getElementById('stateSelected');
-    const elAuth     = document.getElementById('psAuthStep');
-    const elGrid     = document.getElementById('psGridSection');
-    const elPsGrid   = document.getElementById('psGrid');
-    const elBarLive  = document.getElementById('psBarLive');
-    const elBarClose = document.getElementById('psBarClose');
-    const elBarTime  = document.getElementById('psBarTime');
+      // ── ELEMENTS ─────────────────────────────────────────────────
+      const elPre = document.getElementById('statePreDrop');
+      const elActive = document.getElementById('stateActive');
+      const elClosed = document.getElementById('stateClosed');
+      const elSelected = document.getElementById('stateSelected');
+      const elAuth = document.getElementById('psAuthStep');
+      const elGrid = document.getElementById('psGridSection');
+      const elPsGrid = document.getElementById('psGrid');
+      const elBarLive = document.getElementById('psBarLive');
+      const elBarClose = document.getElementById('psBarClose');
+      const elBarTime = document.getElementById('psBarTime');
 
-    // ── CLOCK (bar removed — skip) ───────────────────────────────
-    function tickClock() {
-      if (elBarTime) elBarTime.textContent = new Date().toLocaleTimeString('en-IN', { hour12: false });
-    }
-    tickClock(); setInterval(tickClock, 1000);
+      // ── CLOCK (bar removed — skip) ───────────────────────────────
+      function tickClock() {
+        if (elBarTime) elBarTime.textContent = new Date().toLocaleTimeString('en-IN', { hour12: false });
+      }
+      tickClock(); setInterval(tickClock, 1000);
 
-    // ── API: POLL STATUS ─────────────────────────────────────────
-    let dropStartTime = null, dropEndTime = null;
+      // ── API: POLL STATUS ─────────────────────────────────────────
+      let dropStartTime = null, dropEndTime = null;
 
-    async function fetchStatus() {
-      try {
-        const res  = await fetch('/api/ps/status');
-        if (!res.ok) throw new Error('status api error');
-        const data = await res.json();
-        dropStartTime = data.startTime ? new Date(data.startTime) : null;
-        dropEndTime   = data.endTime   ? new Date(data.endTime)   : null;
-        const mapped = data.state === 'pre-drop' ? 'pre' : data.state; // 'pre'|'active'|'closed'
-        if (mapped !== currentState) {
-          currentState = mapped;
-          showState(mapped);
+      async function fetchStatus() {
+        try {
+          const res = await fetch('/api/ps/status');
+          if (!res.ok) throw new Error('status api error');
+          const data = await res.json();
+          dropStartTime = data.startTime ? new Date(data.startTime) : null;
+          dropEndTime = data.endTime ? new Date(data.endTime) : null;
+          const mapped = data.state === 'pre-drop' ? 'pre' : data.state; // 'pre'|'active'|'closed'
+          if (mapped !== currentState) {
+            currentState = mapped;
+            showState(mapped);
+          }
+        } catch (err) {
+          console.warn('[ps/status] fetch failed:', err);
         }
-      } catch (err) {
-        console.warn('[ps/status] fetch failed:', err);
-      }
-    }
-
-    // ── PAGE STATE ───────────────────────────────────────────────
-    function showState(s) {
-      [elPre, elActive, elClosed, elSelected].forEach(e => { if(e) e.style.display = 'none'; });
-      if (s === 'pre')      { if(elPre)      { elPre.style.display      = 'flex';  startCountdown(); } }
-      if (s === 'active')   { if(elActive)   { elActive.style.display   = 'block'; initActive(); } }
-      if (s === 'closed')   { if(elClosed)   { elClosed.style.display   = 'flex'; } }
-      if (s === 'selected') { if(elSelected) { elSelected.style.display = 'flex'; } }
-    }
-
-    // ── COUNTDOWN: DD HH MM SS ───────────────────────────────────
-    const dEls = {
-      D0:document.getElementById('cdD0'), D1:document.getElementById('cdD1'),
-      H0:document.getElementById('cdH0'), H1:document.getElementById('cdH1'),
-      M0:document.getElementById('cdM0'), M1:document.getElementById('cdM1'),
-      S0:document.getElementById('cdS0'), S1:document.getElementById('cdS1'),
-    };
-
-    function setDigit(key, val) {
-      const el = dEls[key]; if(!el) return;
-      if (el.textContent !== val) {
-        el.classList.remove('flip');
-        void el.offsetWidth;
-        el.classList.add('flip');
-        el.textContent = val;
-      }
-    }
-
-    let countdownInterval = null;
-    function startCountdown() {
-      if (countdownInterval) clearInterval(countdownInterval);
-
-      // Populate the note text with the real date/time from API
-      if (dropStartTime) {
-        const timeStr = dropStartTime.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' });
-        const dateStr = dropStartTime.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' });
-        const eyebrow = dropStartTime.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' }).toUpperCase();
-        const timeEl   = document.getElementById('preDropTime');
-        const dateEl   = document.getElementById('preDropDate');
-        const eyebrowEl = document.getElementById('preDropEyebrowDate');
-        if (timeEl)    timeEl.textContent    = timeStr + ' IST';
-        if (dateEl)    dateEl.textContent    = dateStr;
-        if (eyebrowEl) eyebrowEl.textContent = eyebrow;
       }
 
-      function tick() {
-        const target = dropStartTime;
-        if (!target) return; // no start time yet from API
-        const diff = target - new Date();
-        if (diff <= 0) { fetchStatus(); return; } // re-check API when reaches 0
-        const d = Math.floor(diff / 86400000);
-        const h = Math.floor((diff % 86400000) / 3600000);
-        const m = Math.floor((diff % 3600000) / 60000);
-        const s = Math.floor((diff % 60000) / 1000);
-        const p = n => String(n).padStart(2,'0');
-        const ds=p(d), hs=p(h), ms=p(m), ss=p(s);
-        setDigit('D0',ds[0]); setDigit('D1',ds[1]);
-        setDigit('H0',hs[0]); setDigit('H1',hs[1]);
-        setDigit('M0',ms[0]); setDigit('M1',ms[1]);
-        setDigit('S0',ss[0]); setDigit('S1',ss[1]);
+      // ── PAGE STATE ───────────────────────────────────────────────
+      function showState(s) {
+        [elPre, elActive, elClosed, elSelected].forEach(e => { if (e) e.style.display = 'none'; });
+        if (s === 'pre') { if (elPre) { elPre.style.display = 'flex'; startCountdown(); } }
+        if (s === 'active') { if (elActive) { elActive.style.display = 'block'; initActive(); } }
+        if (s === 'closed') { if (elClosed) { elClosed.style.display = 'flex'; } }
+        if (s === 'selected') { if (elSelected) { elSelected.style.display = 'flex'; } }
       }
-      tick(); countdownInterval = setInterval(tick, 1000);
-    }
 
-    // ── ACTIVE STATE ─────────────────────────────────────────────
-    function initActive() {
-      if (elBarLive) elBarLive.style.display = 'flex';
-      if (elBarClose) {
-        function tickClose() {
-          const target = dropEndTime;
-          if (!target) return;
+      // ── COUNTDOWN: DD HH MM SS ───────────────────────────────────
+      const dEls = {
+        D0: document.getElementById('cdD0'), D1: document.getElementById('cdD1'),
+        H0: document.getElementById('cdH0'), H1: document.getElementById('cdH1'),
+        M0: document.getElementById('cdM0'), M1: document.getElementById('cdM1'),
+        S0: document.getElementById('cdS0'), S1: document.getElementById('cdS1'),
+      };
+
+      function setDigit(key, val) {
+        const el = dEls[key]; if (!el) return;
+        if (el.textContent !== val) {
+          el.classList.remove('flip');
+          void el.offsetWidth;
+          el.classList.add('flip');
+          el.textContent = val;
+        }
+      }
+
+      let countdownInterval = null;
+      function startCountdown() {
+        if (countdownInterval) clearInterval(countdownInterval);
+
+        // Populate the note text with the real date/time from API
+        if (dropStartTime) {
+          const timeStr = dropStartTime.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' });
+          const dateStr = dropStartTime.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' });
+          const eyebrow = dropStartTime.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' }).toUpperCase();
+          const timeEl = document.getElementById('preDropTime');
+          const dateEl = document.getElementById('preDropDate');
+          const eyebrowEl = document.getElementById('preDropEyebrowDate');
+          if (timeEl) timeEl.textContent = timeStr + ' IST';
+          if (dateEl) dateEl.textContent = dateStr;
+          if (eyebrowEl) eyebrowEl.textContent = eyebrow;
+        }
+
+        function tick() {
+          const target = dropStartTime;
+          if (!target) return; // no start time yet from API
           const diff = target - new Date();
-          if (diff <= 0) { fetchStatus(); return; }
-          const m = Math.floor(diff/60000), s = Math.floor((diff%60000)/1000);
-          const p = n => String(n).padStart(2,'0');
-          elBarClose.textContent = `Closes in ${p(m)}:${p(s)}`;
+          if (diff <= 0) { fetchStatus(); return; } // re-check API when reaches 0
+          const d = Math.floor(diff / 86400000);
+          const h = Math.floor((diff % 86400000) / 3600000);
+          const m = Math.floor((diff % 3600000) / 60000);
+          const s = Math.floor((diff % 60000) / 1000);
+          const p = n => String(n).padStart(2, '0');
+          const ds = p(d), hs = p(h), ms = p(m), ss = p(s);
+          setDigit('D0', ds[0]); setDigit('D1', ds[1]);
+          setDigit('H0', hs[0]); setDigit('H1', hs[1]);
+          setDigit('M0', ms[0]); setDigit('M1', ms[1]);
+          setDigit('S0', ss[0]); setDigit('S1', ss[1]);
         }
-        tickClose(); setInterval(tickClose, 1000);
+        tick(); countdownInterval = setInterval(tick, 1000);
       }
-      loadAndShowGrid();
-    }
 
-    // ── LOAD + SHOW GRID (public, no team code needed) ──────────────
-    async function loadAndShowGrid() {
-      if (elAuth) elAuth.style.display = 'none';
-      if (elGrid) elGrid.style.display = 'block';
-      const subEl = document.getElementById('psGridSub');
-      if (subEl) subEl.textContent = 'Choose your problem domain.';
-
-      try {
-        const res  = await fetch('/api/ps/list');
-        const data = await res.json();
-        if (res.ok && data.psList) {
-          psListData = data.psList.map(ps => ({
-            id:          ps.order,
-            title:       ps.title,
-            description: ps.description || '',
-            domain:      ps.domain      || '',
-            totalSlots:  ps.slotsTotal,
-            slotsTaken:  ps.slotsTaken,
-            isFull:      ps.isFull,
-          }));
+      // ── ACTIVE STATE ─────────────────────────────────────────────
+      function initActive() {
+        if (elBarLive) elBarLive.style.display = 'flex';
+        if (elBarClose) {
+          function tickClose() {
+            const target = dropEndTime;
+            if (!target) return;
+            const diff = target - new Date();
+            if (diff <= 0) { fetchStatus(); return; }
+            const m = Math.floor(diff / 60000), s = Math.floor((diff % 60000) / 1000);
+            const p = n => String(n).padStart(2, '0');
+            elBarClose.textContent = `Closes in ${p(m)}:${p(s)}`;
+          }
+          tickClose(); setInterval(tickClose, 1000);
         }
-      } catch (err) {
-        console.warn('[loadAndShowGrid]', err);
+        loadAndShowGrid();
       }
-      // Always render the grid (shows cards or empty state message)
-      buildGrid();
-      if (psListData.length && typeof gsap !== 'undefined') {
-        gsap.from(elGrid, { y:60, opacity:0, duration:0.65, ease:'power3.out' });
+
+      // ── LOAD + SHOW GRID (public, no team code needed) ──────────────
+      async function loadAndShowGrid() {
+        if (elAuth) elAuth.style.display = 'none';
+        if (elGrid) elGrid.style.display = 'block';
+        const subEl = document.getElementById('psGridSub');
+        if (subEl) subEl.textContent = 'Choose your problem domain.';
+
+        try {
+          const res = await fetch('/api/ps/list');
+          const data = await res.json();
+          if (res.ok && data.psList) {
+            psListData = data.psList.map(ps => ({
+              id: ps.order,
+              title: ps.title,
+              description: ps.description || '',
+              domain: ps.domain || '',
+              totalSlots: ps.slotsTotal,
+              slotsTaken: ps.slotsTaken,
+              isFull: ps.isFull,
+            }));
+          }
+        } catch (err) {
+          console.warn('[loadAndShowGrid]', err);
+        }
+        // Always render the grid (shows cards or empty state message)
+        buildGrid();
+        if (psListData.length && typeof gsap !== 'undefined') {
+          gsap.from(elGrid, { y: 60, opacity: 0, duration: 0.65, ease: 'power3.out' });
+        }
+        startPolling();
       }
-      startPolling();
-    }
 
 
-    // ── HELPERS ──────────────────────────────────────────────
-    function escHtml(str) {
-      return String(str ?? '')
-        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-    }
-
-    // ── BUILD GRID ───────────────────────────────────────────────
-    function buildGrid() {
-      elPsGrid.innerHTML = '';
-      if (!psListData.length) {
-        elPsGrid.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.3);padding:3rem;">No problem statements available yet.</p>';
-        return;
+      // ── HELPERS ──────────────────────────────────────────────
+      function escHtml(str) {
+        return String(str ?? '')
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
       }
-      psListData.forEach(ps => {
-        const taken  = ps.slotsTaken || 0;
-        const isFull = ps.isFull || taken >= ps.totalSlots;
-        const card   = document.createElement('div');
-        card.className = 'ps-card' + (isFull ? ' is-full' : '');
-        card.setAttribute('role','listitem'); card.dataset.psId = ps.id;
 
-        const domainTag = ps.domain
-          ? `<div class="ps-card__domain">${escHtml(ps.domain)}</div>`
-          : '';
-        const descBlock = ps.description
-          ? `<div class="ps-card__desc">${escHtml(ps.description).replace(/\n/g,'<br>')}</div>`
-          : '';
+      // ── BUILD GRID ───────────────────────────────────────────────
+      function buildGrid() {
+        elPsGrid.innerHTML = '';
+        if (!psListData.length) {
+          elPsGrid.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.3);padding:3rem;">No problem statements available yet.</p>';
+          return;
+        }
+        psListData.forEach(ps => {
+          const taken = ps.slotsTaken || 0;
+          const isFull = ps.isFull || taken >= ps.totalSlots;
+          const card = document.createElement('div');
+          card.className = 'ps-card' + (isFull ? ' is-full' : '');
+          card.setAttribute('role', 'listitem'); card.dataset.psId = ps.id;
 
-        card.innerHTML = `
-          <div class="ps-card__num">PS ${String(ps.id).padStart(2,'0')}</div>
+          const domainTag = ps.domain
+            ? `<div class="ps-card__domain">${escHtml(ps.domain)}</div>`
+            : '';
+          const descBlock = ps.description
+            ? `<div class="ps-card__desc">${escHtml(ps.description).replace(/\n/g, '<br>')}</div>`
+            : '';
+
+          card.innerHTML = `
+          <div class="ps-card__num">PS ${String(ps.id).padStart(2, '0')}</div>
           <div class="ps-card__body">
             ${domainTag}
             <div class="ps-card__title">${escHtml(ps.title)}</div>
@@ -1134,7 +1928,7 @@
           </div>
           <div class="ps-card__right">
             <div class="ps-card__slots-row">
-              <div class="ps-card__dots" id="dots-${ps.id}">${mkDots(taken,ps.totalSlots)}</div>
+              <div class="ps-card__dots" id="dots-${ps.id}">${mkDots(taken, ps.totalSlots)}</div>
               <div class="ps-card__slot-text" id="txt-${ps.id}">${taken}/${ps.totalSlots} slots</div>
             </div>
             <button class="ps-card__btn" data-id="${ps.id}" data-title="${escHtml(ps.title)}"
@@ -1143,298 +1937,301 @@
           <div class="ps-card__full-tag" aria-hidden="true">FULL</div>
           <div class="ps-card__flash" id="flash-${ps.id}" aria-hidden="true"></div>`;
 
-        card.querySelector('.ps-card__btn')?.addEventListener('click', e => {
-          const b = e.currentTarget; if (b.disabled) return;
-          openModal(parseInt(b.dataset.id), b.dataset.title);
+          card.querySelector('.ps-card__btn')?.addEventListener('click', e => {
+            const b = e.currentTarget; if (b.disabled) return;
+            openModal(parseInt(b.dataset.id), b.dataset.title);
+          });
+          elPsGrid.appendChild(card);
         });
-        elPsGrid.appendChild(card);
-      });
-    }
-
-    function mkDots(taken, total) {
-      return Array.from({length:total},(_,i)=>
-        `<div class="ps-card__dot${i<taken?' filled':''}" aria-hidden="true"></div>`
-      ).join('');
-    }
-
-    // ── POLLING (public, no team code) ───────────────────────────────
-    function startPolling() {
-      if(pollTimer) clearInterval(pollTimer);
-      pollTimer = setInterval(async () => {
-        try {
-          const res  = await fetch('/api/ps/list');
-          const data = await res.json();
-          if (res.ok && data.psList) {
-            if (psListData.length === 0) {
-              // Grid was empty on first load — rebuild fully now
-              psListData = data.psList.map(ps => ({
-                id:          ps.order,
-                title:       ps.title,
-                description: ps.description || '',
-                domain:      ps.domain      || '',
-                totalSlots:  ps.slotsTotal,
-                slotsTaken:  ps.slotsTaken,
-                isFull:      ps.isFull,
-              }));
-              buildGrid();
-            } else {
-              applySlots(data.psList);
-            }
-          }
-        } catch (err) {
-          console.warn('[poll]', err);
-        }
-      }, 4000);
-    }
-
-    function applySlots(newList) {
-      newList.forEach(ps => {
-        const id     = ps.order || ps.id;
-        const newT   = ps.slotsTaken ?? 0;
-        const total  = ps.slotsTotal || 5;
-        const isFull = ps.isFull || newT >= total;
-        // Update local data
-        const local = psListData.find(p => p.id === id);
-        if (local) { local.slotsTaken = newT; local.isFull = isFull; }
-        const card = elPsGrid.querySelector(`[data-ps-id="${id}"]`); if(!card) return;
-        const oldT = parseInt(document.getElementById(`txt-${id}`)?.textContent) || 0;
-        if (newT !== oldT) {
-          const flash = document.getElementById(`flash-${id}`);
-          if(flash && typeof gsap!=='undefined') gsap.fromTo(flash,{opacity:0.7},{opacity:0,duration:0.55,ease:'power2.out'});
-        }
-        const dotsEl = document.getElementById(`dots-${id}`);
-        const txtEl  = document.getElementById(`txt-${id}`);
-        if (dotsEl) dotsEl.innerHTML = mkDots(newT, total);
-        if (txtEl)  txtEl.textContent = `${newT}/${total} slots`;
-        if(isFull && !card.classList.contains('is-full')) {
-          card.classList.add('is-full');
-          const btn = card.querySelector('.ps-card__btn');
-          if(btn){ btn.disabled=true; btn.textContent='FULL'; }
-        }
-      });
-    }
-
-    // ── MODAL ────────────────────────────────────────────────────
-    const modalBg      = document.getElementById('psModalBg');
-    const modalStep1   = document.getElementById('psModalStep1');
-    const modalStep2   = document.getElementById('psModalStep2');
-    const modalCodeIn  = document.getElementById('modalTeamCode');
-    const modalCodeErr = document.getElementById('modalCodeError');
-
-    function closeModal() {
-      modalBg.classList.remove('open');
-      // Reset to step 1 after animation
-      setTimeout(() => {
-        modalStep1.style.display = '';
-        modalStep2.style.display = 'none';
-        if (modalCodeIn) { modalCodeIn.value = ''; modalCodeIn.classList.remove('error'); }
-        if (modalCodeErr) modalCodeErr.textContent = '';
-        document.getElementById('modalRegisterNotice')?.classList.remove('visible');
-        const btn = document.getElementById('modalConfirmBtn');
-        if (btn) { btn.disabled = false; btn.textContent = 'Confirm Selection'; }
-      }, 350);
-    }
-
-    function showRegisterNotice() {
-      // Hide field error, clear field highlight, show the red notice banner
-      if (modalCodeIn) modalCodeIn.classList.remove('error');
-      if (modalCodeErr) modalCodeErr.textContent = '';
-      document.getElementById('modalRegisterNotice')?.classList.add('visible');
-    }
-
-    document.getElementById('modalCancelBtn')?.addEventListener('click', closeModal);
-    document.getElementById('modalSuccessClose')?.addEventListener('click', closeModal);
-    modalBg?.addEventListener('click', e => { if (e.target === modalBg) closeModal(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-    // Auto-format team code input (uppercase + trim)
-    modalCodeIn?.addEventListener('input', () => {
-      modalCodeIn.value = modalCodeIn.value.toUpperCase().replace(/[^A-Z0-9-]/g,'');
-      modalCodeIn.classList.remove('error');
-      if (modalCodeErr) modalCodeErr.textContent = '';
-    });
-    // Submit on Enter
-    modalCodeIn?.addEventListener('keydown', e => {
-      if (e.key === 'Enter') document.getElementById('modalConfirmBtn')?.click();
-    });
-
-    function openModal(id, title) {
-      pendingPsId = id;
-      document.getElementById('modalPsNum').textContent  = `PS ${String(id).padStart(2,'0')}`;
-      document.getElementById('modalPsName').textContent = title;
-      modalStep1.style.display = '';
-      modalStep2.style.display = 'none';
-      if (modalBg) modalBg.classList.add('open');
-      setTimeout(() => modalCodeIn?.focus(), 350);
-    }
-
-    const CODE_RE = /^UDB-[A-Z0-9]{2,8}$/i;
-
-    document.getElementById('modalConfirmBtn')?.addEventListener('click', async () => {
-      if (!pendingPsId) return;
-
-      const code = (modalCodeIn?.value || '').trim().toUpperCase();
-
-      // Client-side format check
-      if (!code || !CODE_RE.test(code)) {
-        if (modalCodeIn) modalCodeIn.classList.add('error');
-        if (modalCodeErr) modalCodeErr.textContent = 'Invalid format. Expected: UDB-XXXX';
-        modalCodeIn?.focus();
-        return;
       }
 
-      const btn = document.getElementById('modalConfirmBtn');
-      btn.disabled = true;
-      btn.innerHTML = '<span class="ps-spinner"></span>Confirming…';
-      if (modalCodeErr) modalCodeErr.textContent = '';
+      function mkDots(taken, total) {
+        return Array.from({ length: total }, (_, i) =>
+          `<div class="ps-card__dot${i < taken ? ' filled' : ''}" aria-hidden="true"></div>`
+        ).join('');
+      }
 
-      try {
-        const res = await fetch('/api/ps/select', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ teamCode: code, psId: pendingPsId }),
-        });
-        const d = await res.json();
-
-        if (!res.ok) {
-          if (d.error === 'payment_pending') {
-            // Special case: payment not done — show register-first notice
-            showRegisterNotice();
-          } else if (d.error === 'already_selected') {
-            // Team already picked a PS
-            if (modalCodeIn) modalCodeIn.classList.add('error');
-            if (modalCodeErr) modalCodeErr.textContent = d.message || 'Your team has already selected a Problem Statement.';
-          } else {
-            // Generic error (not found, full, etc.)
-            if (modalCodeIn) modalCodeIn.classList.add('error');
-            if (modalCodeErr) modalCodeErr.textContent = d.message || 'Selection failed. Please try again.';
+      // ── POLLING (public, no team code) ───────────────────────────────
+      function startPolling() {
+        if (pollTimer) clearInterval(pollTimer);
+        pollTimer = setInterval(async () => {
+          try {
+            const res = await fetch('/api/ps/list');
+            const data = await res.json();
+            if (res.ok && data.psList) {
+              if (psListData.length === 0) {
+                // Grid was empty on first load — rebuild fully now
+                psListData = data.psList.map(ps => ({
+                  id: ps.order,
+                  title: ps.title,
+                  description: ps.description || '',
+                  domain: ps.domain || '',
+                  totalSlots: ps.slotsTotal,
+                  slotsTaken: ps.slotsTaken,
+                  isFull: ps.isFull,
+                }));
+                buildGrid();
+              } else {
+                applySlots(data.psList);
+              }
+            }
+          } catch (err) {
+            console.warn('[poll]', err);
           }
-          btn.disabled = false;
-          btn.textContent = 'Confirm Selection';
+        }, 4000);
+      }
+
+      function applySlots(newList) {
+        newList.forEach(ps => {
+          const id = ps.order || ps.id;
+          const newT = ps.slotsTaken ?? 0;
+          const total = ps.slotsTotal || 5;
+          const isFull = ps.isFull || newT >= total;
+          // Update local data
+          const local = psListData.find(p => p.id === id);
+          if (local) { local.slotsTaken = newT; local.isFull = isFull; }
+          const card = elPsGrid.querySelector(`[data-ps-id="${id}"]`); if (!card) return;
+          const oldT = parseInt(document.getElementById(`txt-${id}`)?.textContent) || 0;
+          if (newT !== oldT) {
+            const flash = document.getElementById(`flash-${id}`);
+            if (flash && typeof gsap !== 'undefined') gsap.fromTo(flash, { opacity: 0.7 }, { opacity: 0, duration: 0.55, ease: 'power2.out' });
+          }
+          const dotsEl = document.getElementById(`dots-${id}`);
+          const txtEl = document.getElementById(`txt-${id}`);
+          if (dotsEl) dotsEl.innerHTML = mkDots(newT, total);
+          if (txtEl) txtEl.textContent = `${newT}/${total} slots`;
+          if (isFull && !card.classList.contains('is-full')) {
+            card.classList.add('is-full');
+            const btn = card.querySelector('.ps-card__btn');
+            if (btn) { btn.disabled = true; btn.textContent = 'FULL'; }
+          }
+        });
+      }
+
+      // ── MODAL ────────────────────────────────────────────────────
+      const modalBg = document.getElementById('psModalBg');
+      const modalStep1 = document.getElementById('psModalStep1');
+      const modalStep2 = document.getElementById('psModalStep2');
+      const modalCodeIn = document.getElementById('modalTeamCode');
+      const modalCodeErr = document.getElementById('modalCodeError');
+
+      function closeModal() {
+        modalBg.classList.remove('open');
+        // Reset to step 1 after animation
+        setTimeout(() => {
+          modalStep1.style.display = '';
+          modalStep2.style.display = 'none';
+          if (modalCodeIn) { modalCodeIn.value = ''; modalCodeIn.classList.remove('error'); }
+          if (modalCodeErr) modalCodeErr.textContent = '';
+          document.getElementById('modalRegisterNotice')?.classList.remove('visible');
+          const btn = document.getElementById('modalConfirmBtn');
+          if (btn) { btn.disabled = false; btn.textContent = 'Confirm Selection'; }
+        }, 350);
+      }
+
+      function showRegisterNotice() {
+        // Hide field error, clear field highlight, show the red notice banner
+        if (modalCodeIn) modalCodeIn.classList.remove('error');
+        if (modalCodeErr) modalCodeErr.textContent = '';
+        document.getElementById('modalRegisterNotice')?.classList.add('visible');
+      }
+
+      document.getElementById('modalCancelBtn')?.addEventListener('click', closeModal);
+      document.getElementById('modalSuccessClose')?.addEventListener('click', closeModal);
+      modalBg?.addEventListener('click', e => { if (e.target === modalBg) closeModal(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+      // Auto-format team code input (uppercase + trim)
+      modalCodeIn?.addEventListener('input', () => {
+        modalCodeIn.value = modalCodeIn.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+        modalCodeIn.classList.remove('error');
+        if (modalCodeErr) modalCodeErr.textContent = '';
+      });
+      // Submit on Enter
+      modalCodeIn?.addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('modalConfirmBtn')?.click();
+      });
+
+      function openModal(id, title) {
+        pendingPsId = id;
+        document.getElementById('modalPsNum').textContent = `PS ${String(id).padStart(2, '0')}`;
+        document.getElementById('modalPsName').textContent = title;
+        modalStep1.style.display = '';
+        modalStep2.style.display = 'none';
+        if (modalBg) modalBg.classList.add('open');
+        setTimeout(() => modalCodeIn?.focus(), 350);
+      }
+
+      const CODE_RE = /^UDB-[A-Z0-9]{2,8}$/i;
+
+      document.getElementById('modalConfirmBtn')?.addEventListener('click', async () => {
+        if (!pendingPsId) return;
+
+        const code = (modalCodeIn?.value || '').trim().toUpperCase();
+
+        // Client-side format check
+        if (!code || !CODE_RE.test(code)) {
+          if (modalCodeIn) modalCodeIn.classList.add('error');
+          if (modalCodeErr) modalCodeErr.textContent = 'Invalid format. Expected: UDB-XXXX';
+          modalCodeIn?.focus();
           return;
         }
 
-        // ── SUCCESS ────────────────────────────────────────────
-        // Store team code so dashboard can pre-fill
-        try { sessionStorage.setItem('udbhav_team_code', code); } catch(_){}
+        const btn = document.getElementById('modalConfirmBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="ps-spinner"></span>Confirming…';
+        if (modalCodeErr) modalCodeErr.textContent = '';
 
-        // Update dashboard link with code param
-        const dashBtn = document.getElementById('modalDashboardBtn');
-        if (dashBtn) dashBtn.href = `/user-dashboard.html?code=${encodeURIComponent(code)}`;
+        try {
+          const res = await fetch('/api/ps/select', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ teamCode: code, psId: pendingPsId }),
+          });
+          console.log("res hy selection", res);
+          const d = await res.json();
 
-        // Show success step
-        document.getElementById('modalSuccessPs').textContent = d.psTitle || psListData.find(p => p.id === pendingPsId)?.title || '—';
-        modalStep1.style.display = 'none';
-        modalStep2.style.display = '';
+          if (!res.ok) {
+            if (d.error === 'payment_pending') {
+              // Special case: payment not done — show register-first notice
+              showRegisterNotice();
+            } else if (d.error === 'already_selected') {
+              // Team already picked a PS
+              if (modalCodeIn) modalCodeIn.classList.add('error');
+              if (modalCodeErr) modalCodeErr.textContent = d.message || 'Your team has already selected a Problem Statement.';
+            } else {
+              // Generic error (not found, full, etc.)
+              if (modalCodeIn) modalCodeIn.classList.add('error');
+              if (modalCodeErr) modalCodeErr.textContent = d.message || 'Selection failed. Please try again.';
+            }
+            btn.disabled = false;
+            btn.textContent = 'Confirm Selection';
+            return;
+          }
 
-        // Stop polling — selection done
-        if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+          // ── SUCCESS ────────────────────────────────────────────
+          // Store team code so dashboard can pre-fill
+          try { sessionStorage.setItem('udbhav_team_code', code); } catch (_) { }
 
-      } catch (err) {
-        if (modalCodeErr) modalCodeErr.textContent = 'Network error. Please try again.';
-        btn.disabled = false;
-        btn.textContent = 'Confirm Selection';
-      }
-    });
+          // Update dashboard link with code param
+          const dashBtn = document.getElementById('modalDashboardBtn');
+          if (dashBtn) dashBtn.href = `/user-dashboard.html?code=${encodeURIComponent(code)}`;
 
-    // ── INIT ─────────────────────────────────────────────────────
-    // Start by fetching live status from API (not hardcoded dates)
-    fetchStatus();
-    // Poll API every 10 seconds for state changes (admin start/stop drop)
-    statusTimer = setInterval(fetchStatus, 10000);
+          // Show success step
+          document.getElementById('modalSuccessPs').textContent = d.psTitle || psListData.find(p => p.id === pendingPsId)?.title || '—';
+          modalStep1.style.display = 'none';
+          modalStep2.style.display = '';
 
-    // ── LENIS + GSAP ─────────────────────────────────────────────
-    const lenis = new Lenis({duration:1.2,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smooth:true,smoothTouch:false});
-    function raf(t){lenis.raf(t);requestAnimationFrame(raf);} requestAnimationFrame(raf);
+          // Stop polling — selection done
+          if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
 
-    const cursor=document.getElementById('cursorArrow');
-    if(cursor){
-      document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';});
-      document.querySelectorAll('a,button,[role="button"]').forEach(el=>{
-        el.addEventListener('mouseenter',()=>cursor.classList.add('is-hovering'));
-        el.addEventListener('mouseleave',()=>cursor.classList.remove('is-hovering'));
+        } catch (err) {
+          if (modalCodeErr) modalCodeErr.textContent = 'Network error. Please try again.';
+          btn.disabled = false;
+          btn.textContent = 'Confirm Selection';
+        }
       });
-      document.addEventListener('mouseleave',()=>cursor.style.opacity='0');
-      document.addEventListener('mouseenter',()=>cursor.style.opacity='1');
-    }
 
-    if(typeof gsap!=='undefined'&&typeof ScrollTrigger!=='undefined'){
-      gsap.registerPlugin(ScrollTrigger);
-      const wrapper=document.getElementById('cinematicFooterWrapper'),giantTxt=document.getElementById('cfGiantText'),center=document.getElementById('cfCenter');
-      if(wrapper&&giantTxt&&center){
-        gsap.fromTo(giantTxt,{y:'15vh',scale:0.85,opacity:0},{y:'0vh',scale:1,opacity:1,ease:'power1.out',scrollTrigger:{trigger:wrapper,start:'top bottom',end:'top 0%',scrub:1.5}});
-        gsap.fromTo(center,{y:70,opacity:0},{y:0,opacity:1,ease:'power3.out',scrollTrigger:{trigger:wrapper,start:'top 60%',end:'top -20%',scrub:1}});
-      }
-      document.getElementById('cfBackToTop')?.addEventListener('click',()=>lenis.scrollTo(0,{duration:1.2}));
-      document.querySelectorAll('#cinematicFooter .js-magnetic').forEach(el=>{
-        el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2;gsap.to(el,{x:x*.38,y:y*.38,rotationX:-y*.14,rotationY:x*.14,scale:1.06,ease:'power2.out',duration:.4,overwrite:'auto'});});
-        el.addEventListener('mouseleave',()=>gsap.to(el,{x:0,y:0,rotationX:0,rotationY:0,scale:1,ease:'elastic.out(1,.3)',duration:1.2,overwrite:'auto'}));
-      });
-      const navPill=document.getElementById('navPill'),navbar=document.getElementById('navbar');
-      const wipeEls=[document.querySelector('.logo-tagline'),document.querySelector('.tagline-dot'),document.querySelector('.logo-divider')].filter(Boolean);
-      if(navbar&&navPill&&window.innerWidth>768){
-        gsap.set(wipeEls,{clipPath:'inset(0 0% 0 0 round 2px)'});
-        let tx=false;
-        ScrollTrigger.create({trigger:document.body,start:'top top-=80',
-          onEnter:()=>{if(tx)return;tx=true;gsap.to(wipeEls,{clipPath:'inset(0 100% 0 0 round 2px)',duration:.22,ease:'power3.in',stagger:{each:.06,from:'start'}});const nr=navbar.getBoundingClientRect(),pr=navPill.getBoundingClientRect();gsap.to(navPill,{x:(nr.left+nr.width/2)-(pr.left+pr.width/2),duration:.7,ease:'power3.out',delay:.1});},
-          onLeaveBack:()=>{if(!tx)return;tx=false;gsap.to(navPill,{x:0,duration:.6,ease:'power3.inOut'});gsap.to(wipeEls,{clipPath:'inset(0 0% 0 0 round 2px)',duration:.3,ease:'power2.out',stagger:{each:.07,from:'end'},delay:.25});}
+      // ── INIT ─────────────────────────────────────────────────────
+      // Start by fetching live status from API (not hardcoded dates)
+      fetchStatus();
+      // Poll API every 10 seconds for state changes (admin start/stop drop)
+      statusTimer = setInterval(fetchStatus, 10000);
+
+      // ── LENIS + GSAP ─────────────────────────────────────────────
+      const lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true, smoothTouch: false });
+      function raf(t) { lenis.raf(t); requestAnimationFrame(raf); } requestAnimationFrame(raf);
+
+      const cursor = document.getElementById('cursorArrow');
+      if (cursor) {
+        document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+        document.querySelectorAll('a,button,[role="button"]').forEach(el => {
+          el.addEventListener('mouseenter', () => cursor.classList.add('is-hovering'));
+          el.addEventListener('mouseleave', () => cursor.classList.remove('is-hovering'));
         });
+        document.addEventListener('mouseleave', () => cursor.style.opacity = '0');
+        document.addEventListener('mouseenter', () => cursor.style.opacity = '1');
       }
-    }
 
-    // ── DROPDOWN ─────────────────────────────────────────────────
-    (function(){
-      const tr=document.getElementById('nav-more'),dd=document.getElementById('moreDropdown'),wr=document.getElementById('navMoreWrap');
-      if(!tr||!dd)return; let ct=null;
-      const o=()=>{clearTimeout(ct);dd.classList.remove('closing');dd.classList.add('open');tr.setAttribute('aria-expanded','true');};
-      const c=()=>{if(!dd.classList.contains('open'))return;dd.classList.add('closing');tr.setAttribute('aria-expanded','false');ct=setTimeout(()=>dd.classList.remove('open','closing'),160);};
-      tr.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();dd.classList.contains('open')?c():o();});
-      document.addEventListener('click',e=>{if(wr&&!wr.contains(e.target))c();});
-      document.addEventListener('keydown',e=>{if(e.key==='Escape'&&dd.classList.contains('open')){c();tr.focus();}});
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+        const wrapper = document.getElementById('cinematicFooterWrapper'), giantTxt = document.getElementById('cfGiantText'), center = document.getElementById('cfCenter');
+        if (wrapper && giantTxt && center) {
+          gsap.fromTo(giantTxt, { y: '15vh', scale: 0.85, opacity: 0 }, { y: '0vh', scale: 1, opacity: 1, ease: 'power1.out', scrollTrigger: { trigger: wrapper, start: 'top bottom', end: 'top 0%', scrub: 1.5 } });
+          gsap.fromTo(center, { y: 70, opacity: 0 }, { y: 0, opacity: 1, ease: 'power3.out', scrollTrigger: { trigger: wrapper, start: 'top 60%', end: 'top -20%', scrub: 1 } });
+        }
+        document.getElementById('cfBackToTop')?.addEventListener('click', () => lenis.scrollTo(0, { duration: 1.2 }));
+        document.querySelectorAll('#cinematicFooter .js-magnetic').forEach(el => {
+          el.addEventListener('mousemove', e => { const r = el.getBoundingClientRect(), x = e.clientX - r.left - r.width / 2, y = e.clientY - r.top - r.height / 2; gsap.to(el, { x: x * .38, y: y * .38, rotationX: -y * .14, rotationY: x * .14, scale: 1.06, ease: 'power2.out', duration: .4, overwrite: 'auto' }); });
+          el.addEventListener('mouseleave', () => gsap.to(el, { x: 0, y: 0, rotationX: 0, rotationY: 0, scale: 1, ease: 'elastic.out(1,.3)', duration: 1.2, overwrite: 'auto' }));
+        });
+        const navPill = document.getElementById('navPill'), navbar = document.getElementById('navbar');
+        const wipeEls = [document.querySelector('.logo-tagline'), document.querySelector('.tagline-dot'), document.querySelector('.logo-divider')].filter(Boolean);
+        if (navbar && navPill && window.innerWidth > 768) {
+          gsap.set(wipeEls, { clipPath: 'inset(0 0% 0 0 round 2px)' });
+          let tx = false;
+          ScrollTrigger.create({
+            trigger: document.body, start: 'top top-=80',
+            onEnter: () => { if (tx) return; tx = true; gsap.to(wipeEls, { clipPath: 'inset(0 100% 0 0 round 2px)', duration: .22, ease: 'power3.in', stagger: { each: .06, from: 'start' } }); const nr = navbar.getBoundingClientRect(), pr = navPill.getBoundingClientRect(); gsap.to(navPill, { x: (nr.left + nr.width / 2) - (pr.left + pr.width / 2), duration: .7, ease: 'power3.out', delay: .1 }); },
+            onLeaveBack: () => { if (!tx) return; tx = false; gsap.to(navPill, { x: 0, duration: .6, ease: 'power3.inOut' }); gsap.to(wipeEls, { clipPath: 'inset(0 0% 0 0 round 2px)', duration: .3, ease: 'power2.out', stagger: { each: .07, from: 'end' }, delay: .25 }); }
+          });
+        }
+      }
+
+      // ── DROPDOWN ─────────────────────────────────────────────────
+      (function () {
+        const tr = document.getElementById('nav-more'), dd = document.getElementById('moreDropdown'), wr = document.getElementById('navMoreWrap');
+        if (!tr || !dd) return; let ct = null;
+        const o = () => { clearTimeout(ct); dd.classList.remove('closing'); dd.classList.add('open'); tr.setAttribute('aria-expanded', 'true'); };
+        const c = () => { if (!dd.classList.contains('open')) return; dd.classList.add('closing'); tr.setAttribute('aria-expanded', 'false'); ct = setTimeout(() => dd.classList.remove('open', 'closing'), 160); };
+        tr.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); dd.classList.contains('open') ? c() : o(); });
+        document.addEventListener('click', e => { if (wr && !wr.contains(e.target)) c(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && dd.classList.contains('open')) { c(); tr.focus(); } });
+      })();
+
+      // ── COMMAND PALETTE ───────────────────────────────────────────
+      (function () {
+        const btn = document.getElementById('menuBtn'), overlay = document.getElementById('menuOverlay');
+        const inp = document.getElementById('actionSearchInput'), res = document.getElementById('actionSearchResults');
+        const icEl = document.getElementById('actionSearchIcon'), sv = btn?.querySelector('.menu-toggle-icon');
+        if (!btn || !overlay) return;
+        const ACTIONS = [
+          { label: 'Home', icon: 'home', description: 'Back to start', href: '/', color: '#60a5fa' },
+          { label: 'About', icon: 'user', description: "About UDBHAV'26", href: '/about.html', color: '#fb923c' },
+          { label: 'Schedule', icon: 'calendar', description: 'Hackathon timeline', href: '/schedule.html', color: '#a78bfa' },
+          { label: 'Problem Statement', icon: 'file', description: 'PS Drop', href: '/problem-statement.html', color: '#34d399' },
+          { label: 'Winners', icon: 'trophy', description: 'Hackathon results', href: '/winners.html', color: '#fbbf24' },
+          { label: 'Sponsors', icon: 'star', description: 'Our partners', href: '/sponsors.html', color: '#a855f7' },
+          { label: 'Team Dashboard', icon: 'users', description: 'View your assigned PS', href: '/user-dashboard.html', color: '#22c55e' },
+          { label: 'Code of Conduct', icon: 'shield', description: 'Rules & guidelines', href: '/code-of-conduct.html', color: '#c084fc' },
+          { label: 'Our Team', icon: 'users', description: 'Meet the team', href: '/our-team.html', color: '#38bdf8' },
+          { label: 'Register', icon: 'briefcase', description: "Join UDBHAV'26", href: '/register.html', color: '#e879f9' },
+        ];
+        const SV = {
+          home: c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+          user: c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+          calendar: c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+          file: c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
+          trophy: c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>`,
+          star: c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+          shield: c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+          users: c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+          briefcase: c => `<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
+        };
+        const ISQ = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
+        const render = (list, q) => { if (!res) return; if (!list.length) { res.innerHTML = `<div class="action-search__empty">No results for "<em>${q}</em>"</div>`; return; } res.innerHTML = `<ul class="action-search__list">${list.map(a => `<li class="action-item" data-href="${a.href}"><div class="action-item__left"><div class="action-item__icon">${SV[a.icon]?.(a.color) ?? ''}</div><div><div class="action-item__name">${a.label}</div><div class="action-item__desc">${a.description}</div></div></div><div class="action-item__right"><span class="action-item__end">Page</span></div></li>`).join('')}</ul><div class="action-search__footer"><span>Press ⌘K</span><span>ESC to close</span></div>`; res.querySelectorAll('.action-item').forEach(it => it.addEventListener('click', () => { cO(); window.location.href = it.dataset.href; })); };
+        const fr = q => { const s = q.toLowerCase().trim(); render(s ? ACTIONS.filter(a => a.label.toLowerCase().includes(s) || a.description.toLowerCase().includes(s)) : ACTIONS, q); };
+        const oO = () => { overlay.classList.add('open'); overlay.removeAttribute('aria-hidden'); btn.setAttribute('aria-expanded', 'true'); sv?.classList.add('open'); if (icEl) icEl.innerHTML = ISQ; fr(''); setTimeout(() => inp?.focus(), 250); };
+        const cO = () => { overlay.classList.remove('open'); overlay.setAttribute('aria-hidden', 'true'); btn.setAttribute('aria-expanded', 'false'); sv?.classList.remove('open'); if (inp) inp.value = ''; if (res) res.innerHTML = ''; };
+        btn.addEventListener('click', () => overlay.classList.contains('open') ? cO() : oO());
+        document.getElementById('menuBtnMobile')?.addEventListener('click', () => overlay.classList.contains('open') ? cO() : oO());
+        inp?.addEventListener('input', () => fr(inp.value));
+        document.addEventListener('click', e => { if (overlay.classList.contains('open') && !overlay.contains(e.target) && !btn.contains(e.target)) cO(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) { cO(); return; } if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); overlay.classList.contains('open') ? cO() : oO(); } });
+      })();
+
     })();
-
-    // ── COMMAND PALETTE ───────────────────────────────────────────
-    (function(){
-      const btn=document.getElementById('menuBtn'),overlay=document.getElementById('menuOverlay');
-      const inp=document.getElementById('actionSearchInput'),res=document.getElementById('actionSearchResults');
-      const icEl=document.getElementById('actionSearchIcon'),sv=btn?.querySelector('.menu-toggle-icon');
-      if(!btn||!overlay)return;
-      const ACTIONS=[
-        {label:'Home',icon:'home',description:'Back to start',href:'/',color:'#60a5fa'},
-        {label:'About',icon:'user',description:"About UDBHAV'26",href:'/about.html',color:'#fb923c'},
-        {label:'Schedule',icon:'calendar',description:'Hackathon timeline',href:'/schedule.html',color:'#a78bfa'},
-        {label:'Problem Statement',icon:'file',description:'PS Drop',href:'/problem-statement.html',color:'#34d399'},
-        {label:'Winners',icon:'trophy',description:'Hackathon results',href:'/winners.html',color:'#fbbf24'},
-        {label:'Sponsors',icon:'star',description:'Our partners',href:'/sponsors.html',color:'#a855f7'},
-        {label:'Team Dashboard',icon:'users',description:'View your assigned PS',href:'/user-dashboard.html',color:'#22c55e'},
-        {label:'Code of Conduct',icon:'shield',description:'Rules & guidelines',href:'/code-of-conduct.html',color:'#c084fc'},
-        {label:'Our Team',icon:'users',description:'Meet the team',href:'/our-team.html',color:'#38bdf8'},
-        {label:'Register',icon:'briefcase',description:"Join UDBHAV'26",href:'/register.html',color:'#e879f9'},
-      ];
-      const SV={
-        home:c=>`<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
-        user:c=>`<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
-        calendar:c=>`<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
-        file:c=>`<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
-        trophy:c=>`<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>`,
-        star:c=>`<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
-        shield:c=>`<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
-        users:c=>`<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
-        briefcase:c=>`<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
-      };
-      const ISQ=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
-      const render=(list,q)=>{if(!res)return;if(!list.length){res.innerHTML=`<div class="action-search__empty">No results for "<em>${q}</em>"</div>`;return;}res.innerHTML=`<ul class="action-search__list">${list.map(a=>`<li class="action-item" data-href="${a.href}"><div class="action-item__left"><div class="action-item__icon">${SV[a.icon]?.(a.color)??''}</div><div><div class="action-item__name">${a.label}</div><div class="action-item__desc">${a.description}</div></div></div><div class="action-item__right"><span class="action-item__end">Page</span></div></li>`).join('')}</ul><div class="action-search__footer"><span>Press ⌘K</span><span>ESC to close</span></div>`;res.querySelectorAll('.action-item').forEach(it=>it.addEventListener('click',()=>{cO();window.location.href=it.dataset.href;}));};
-      const fr=q=>{const s=q.toLowerCase().trim();render(s?ACTIONS.filter(a=>a.label.toLowerCase().includes(s)||a.description.toLowerCase().includes(s)):ACTIONS,q);};
-      const oO=()=>{overlay.classList.add('open');overlay.removeAttribute('aria-hidden');btn.setAttribute('aria-expanded','true');sv?.classList.add('open');if(icEl)icEl.innerHTML=ISQ;fr('');setTimeout(()=>inp?.focus(),250);};
-      const cO=()=>{overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');btn.setAttribute('aria-expanded','false');sv?.classList.remove('open');if(inp)inp.value='';if(res)res.innerHTML='';};
-      btn.addEventListener('click',()=>overlay.classList.contains('open')?cO():oO());
-      document.getElementById('menuBtnMobile')?.addEventListener('click',()=>overlay.classList.contains('open')?cO():oO());
-      inp?.addEventListener('input',()=>fr(inp.value));
-      document.addEventListener('click',e=>{if(overlay.classList.contains('open')&&!overlay.contains(e.target)&&!btn.contains(e.target))cO();});
-      document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open')){cO();return;}if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();overlay.classList.contains('open')?cO():oO();}});
-    })();
-
-  })();
   </script>
 </body>
+
 </html>
