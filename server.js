@@ -168,7 +168,20 @@ const uploadLimiter = rateLimit({
   message: { success: false, error: 'Too many upload attempts. Please try again later.' },
 });
 
-// Apply general API limiter to all /api/* routes
+// Admin API limiter: very permissive — admins need to poll freely during PS drop
+// Must be mounted BEFORE the general apiLimiter so it takes precedence for /api/admin/*
+const adminApiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 2000,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Admin rate limit exceeded. Please wait a moment.' },
+});
+
+// Apply admin limiter first (higher limit for /api/admin/*)
+app.use('/api/admin/', adminApiLimiter);
+
+// Apply general API limiter to all other /api/* routes
 app.use('/api/', apiLimiter);
 
 // Parse JSON bodies — NOTE: webhook handler needs raw body for signature verification
