@@ -93,7 +93,11 @@ import {
 import submitHandler           from './api/submissions/submit.js';
 import listSubmissionsHandler  from './api/submissions/list.js';
 import getSubmissionHandler    from './api/submissions/get.js';
+import getByTeamHandler        from './api/submissions/get-by-team.js';
+import listHandler   from './api/submissions/list.js';
 import teamAuthHandler         from './api/auth/team.js';
+import scheduleHandler from './api/schedule.js';
+import { getScheduleHandler, updateScheduleHandler } from './api/admin/schedule.js';
 
 // ── Import Mentorship handlers ────────────────────────────────────────────────
 import optMentorshipHandler    from './api/mentorship/opt.js';
@@ -240,7 +244,7 @@ app.get ('/api/payment-status',   mountHandler(paymentStatusHandler));    // Fro
 app.post('/api/register', registerLimiter,    mountHandler(registerHandler));
 app.get ('/api/team',    teamLookupLimiter,  mountHandler(teamHandler));
 app.get ('/api/team-dashboard',mountHandler(teamDashboardHandler));
-
+app.get ('/api/schedule',       mountHandler(scheduleHandler));
 app.all('/api/spotify',        mountHandler(spotifyHandler));
 
 
@@ -261,6 +265,8 @@ app.post  ('/api/admin/ps/stop-drop',  mountHandler(stopDropHandler));
 app.get   ('/api/admin/ps/stats',      mountHandler(statsHandler));
 app.get   ('/api/admin/payments',      mountHandler(paymentsHandler));
 app.get   ('/api/admin/ps-stats',         mountHandler(psStatsHandler));
+app.get   ('/api/admin/schedule',         mountHandler(getScheduleHandler));
+app.post  ('/api/admin/schedule',         mountHandler(updateScheduleHandler));
 
 
 
@@ -300,6 +306,7 @@ app.post('/api/admin/winners/unpublish',  mountHandler(unpublishWinnersHandler))
 app.post('/api/submissions/submit', mountHandler(submitHandler));
 app.get ('/api/submissions/list',   mountHandler(listSubmissionsHandler));
 app.get ('/api/submissions/get',    mountHandler(getSubmissionHandler));
+app.get ('/api/submissions/get-by-team', mountHandler(getByTeamHandler));
 
 app.get ('/api/admin/submissions',  mountHandler(listSubmissionsHandler));
 
