@@ -68,7 +68,6 @@ import {
   teamsUpdateHandler,
   teamsDeleteHandler,
   generateCodesHandler,
-  teamsGetByIdHandler,
   approveMentorshipHandler,
 } from './api/admin/teams.js';
 import {
@@ -289,7 +288,7 @@ app.post  ('/api/admin/teams',                mountHandler(teamsAddHandler));
 app.patch ('/api/admin/teams/:id/payment',    mountHandler(teamPaymentOverrideHandler)); // payment override
 app.patch ('/api/admin/teams/:id/member',     mountHandler(teamMemberEditHandler));       // member edit
 app.patch ('/api/admin/teams/:id/mentor',     mountHandler(teamMentorToggleHandler));     // mentor toggle
-app.get   ('/api/admin/teams/:id',            mountHandler(teamsGetByIdHandler));
+
 app.post  ('/api/admin/teams/:id/approve-mentorship', mountHandler(approveMentorshipHandler));
 app.patch ('/api/admin/teams/:id',            mountHandler(teamsUpdateHandler));
 app.delete('/api/admin/teams/:id',            mountHandler(teamsDeleteHandler));

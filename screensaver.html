@@ -2,7 +2,7 @@
 <meta charset="UTF-8"><title>UDBHAV'26</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;700&family=Syne:wght@400;800&family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
 <style>
-:root{--white:#f5f5f3;--black:#080808;--accent:#e8ff47;--red:#ff3333;--dim:rgba(245,245,243,.15)}
+:root{--white:#f5f5f3;--black:#06040f;--accent:#a855f7;--accent2:#d946ef;--red:#ff3333;--dim:rgba(168,85,247,.15)}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100vw;height:100vh;overflow:hidden;background:var(--black);font-family:'Syne',sans-serif}
 .s{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity 1.3s cubic-bezier(.4,0,.2,1),visibility 0s 1.3s;overflow:hidden;display:grid;pointer-events:none}
@@ -11,26 +11,34 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--black);font-
 #particles{position:fixed;inset:0;z-index:0;pointer-events:none}
 /* UI */
 #ui{position:fixed;bottom:0;left:0;right:0;z-index:99;pointer-events:none;display:flex;flex-direction:column;align-items:center}
+/* LOGO BAR */
+#logo-bar{position:fixed;top:0;left:0;right:0;z-index:98;pointer-events:none;display:flex;align-items:center;justify-content:space-between;padding:18px 32px;background:linear-gradient(to bottom,rgba(6,4,15,.7) 0%,transparent 100%)}
+#logo-bar .logo-side{display:flex;align-items:center}
+#logo-bar .logo-center{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center}
+#logo-bar img{height:clamp(32px,3.5vh,52px);width:auto;object-fit:contain;filter:brightness(1) drop-shadow(0 0 10px rgba(168,85,247,.25))}
+#logo-bar .logo-center img{height:clamp(28px,3vh,44px)}
 #dots{display:flex;justify-content:center;gap:8px;padding:20px;pointer-events:all}
 .d{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.2);cursor:pointer;transition:all .3s;border:none}
 .d.on{width:24px;background:var(--white)}
-#bar{height:2px;background:linear-gradient(90deg,var(--accent),var(--white));width:0%;transition:width .08s linear}
+#bar{height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .08s linear}
 /* NAV ARROWS */
 .nav-arr{position:fixed;top:50%;z-index:99;transform:translateY(-50%);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--white);width:52px;height:52px;border-radius:50%;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;transition:all .3s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.nav-arr:hover{background:rgba(232,255,71,.15);border-color:var(--accent);box-shadow:0 0 20px rgba(232,255,71,.2)}
+.nav-arr:hover{background:rgba(168,85,247,.15);border-color:var(--accent);box-shadow:0 0 20px rgba(168,85,247,.3)}
 #arrL{left:24px}
 #arrR{right:24px}
 /* SLIDE ENTRANCE ANIMS */
 @keyframes fadeSlideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes fadeSlideLeft{from{transform:translateX(60px);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes scaleIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
-@keyframes glitch{0%,100%{text-shadow:none}20%{text-shadow:-3px 0 var(--red),3px 0 cyan}40%{text-shadow:3px 0 var(--red),-3px 0 cyan}60%{text-shadow:-2px 2px var(--accent)}80%{text-shadow:2px -2px var(--red)}}
+@keyframes glitch{0%,100%{text-shadow:none}20%{text-shadow:-3px 0 var(--accent2),3px 0 cyan}40%{text-shadow:3px 0 var(--accent),-3px 0 cyan}60%{text-shadow:-2px 2px var(--accent)}80%{text-shadow:2px -2px var(--accent2)}}
 @keyframes typeFlicker{0%,100%{opacity:1}50%{opacity:0}}
 @keyframes aurora{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .s.on .anim-up{animation:fadeSlideUp .9s cubic-bezier(.22,1,.36,1) both}
 .s.on .anim-up2{animation:fadeSlideUp .9s cubic-bezier(.22,1,.36,1) .15s both}
 .s.on .anim-up3{animation:fadeSlideUp .9s cubic-bezier(.22,1,.36,1) .3s both}
 .s.on .anim-up4{animation:fadeSlideUp .9s cubic-bezier(.22,1,.36,1) .45s both}
+.s.on .anim-up5{animation:fadeSlideUp .9s cubic-bezier(.22,1,.36,1) .6s both}
+.s.on .anim-up6{animation:fadeSlideUp .9s cubic-bezier(.22,1,.36,1) .75s both}
 .s.on .anim-left{animation:fadeSlideLeft .9s cubic-bezier(.22,1,.36,1) .2s both}
 .s.on .anim-scale{animation:scaleIn .8s cubic-bezier(.22,1,.36,1) .1s both}
 /* Shared utilities */
@@ -41,96 +49,127 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--black);font-
 @keyframes slide-up{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* ── S1: IDENTITY — pure black, editorial ── */
-#s1{background:var(--black);place-items:center;text-align:center}
-#s1::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
-#s1 .main{display:flex;flex-direction:column;align-items:center;gap:32px}
-#s1 h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,18vw,340px);color:var(--white);line-height:.85;letter-spacing:.02em}
-#s1 .sub{font-size:clamp(14px,1.4vw,20px);letter-spacing:.35em;color:rgba(245,245,243,.5);text-transform:uppercase;font-weight:400}
-#s1 .pill{display:flex;align-items:center;gap:16px;border:1px solid var(--dim);padding:10px 24px;border-radius:100px;margin-top:8px}
-#s1 .dot-live{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:breathe 2s infinite}
-#s1 .pill span{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.15em;color:rgba(245,245,243,.6)}
+/* S1: HERO */
+#s1{background:var(--black);place-items:center;text-align:center;overflow:hidden}
+#s1::before{content:'';position:absolute;width:70vw;height:70vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.15) 0%,rgba(217,70,239,.05) 40%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:breathe 5s ease-in-out infinite;pointer-events:none}
+#s1::after{content:'';position:absolute;width:50vw;height:50vw;border-radius:50%;border:1px solid rgba(168,85,247,.06);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+#s1 .orb-bl{position:absolute;width:70vw;height:70vw;border-radius:50%;border:1px solid rgba(168,85,247,.03);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+@keyframes accentPulse{0%,100%{opacity:.4;transform:scaleX(.5)}50%{opacity:1;transform:scaleX(1)}}
+#s1 .top-line{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);animation:accentPulse 3s ease-in-out infinite;transform-origin:center}
+#s1 .main{display:flex;flex-direction:column;align-items:center;gap:24px;position:relative;z-index:2}
+#s1 h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(70px,16vw,260px);white-space:nowrap;color:var(--white);line-height:.85;letter-spacing:.06em;filter:drop-shadow(0 0 80px rgba(168,85,247,.5))}
+#s1 .accent-rule{width:clamp(50px,6vw,100px);height:2px;background:var(--accent);border-radius:2px;animation:breathe 2s ease-in-out infinite}
+#s1 .sub{font-size:clamp(11px,1.1vw,15px);letter-spacing:.5em;color:rgba(245,245,243,.35);text-transform:uppercase;font-weight:300}
+#s1 .pill{display:inline-flex;align-items:center;gap:14px;border:1px solid rgba(168,85,247,.18);padding:10px 28px;border-radius:100px;margin-top:8px;background:rgba(168,85,247,.04);backdrop-filter:blur(10px)}
+#s1 .dot-live{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:breathe 1.5s infinite;box-shadow:0 0 12px var(--accent)}
+#s1 .pill span{font-family:'IBM Plex Mono',monospace;font-size:clamp(9px,.8vw,12px);letter-spacing:.18em;color:rgba(245,245,243,.45)}
 
-/* ── S2: QUOTE — large serif on dark ── */
-#s2{background:#0d0d0d;place-items:center}
-#s2 .wrap{max-width:78vw;display:flex;flex-direction:column;gap:48px}
-#s2 .qs{font-family:'DM Serif Display',serif;font-size:clamp(28px,4.5vw,72px);color:var(--white);line-height:1.15;font-style:italic;position:relative}
-#s2 .qs::before{content:'\201C';position:absolute;top:-.4em;left:-.15em;font-size:3em;color:var(--accent);opacity:.25;font-style:normal;line-height:1}
-#s2 .attr{font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,1.1vw,16px);letter-spacing:.2em;color:rgba(245,245,243,.35);text-transform:uppercase;border-top:1px solid var(--dim);padding-top:24px}
+/* S2: QUOTE — dramatic split with giant quote mark */
+#s2{background:#07051a;display:grid;grid-template-columns:auto 1fr;align-items:center;overflow:hidden;padding:0 8vw}
+#s2::before{content:'\201C';position:relative;font-family:'DM Serif Display',serif;font-size:clamp(200px,30vw,500px);color:rgba(168,85,247,.08);line-height:.7;pointer-events:none;user-select:none;z-index:1}
+#s2::after{content:'';position:absolute;width:50vw;height:50vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.07),transparent 70%);bottom:-20%;left:-10%;pointer-events:none}
+#s2 .wrap{display:flex;flex-direction:column;gap:40px;position:relative;z-index:2;padding-left:4vw;border-left:2px solid rgba(168,85,247,.15)}
+#s2 .qs{font-family:'DM Serif Display',serif;font-size:clamp(28px,4.5vw,72px);color:var(--white);line-height:1.12;font-style:italic;position:relative}
+#s2 .qs::before{display:none}
+#s2 .attr{font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,1vw,14px);letter-spacing:.2em;color:rgba(245,245,243,.25);text-transform:uppercase}
 
-/* ── S3: STATS — numbers as graphic ── */
-#s3{background:var(--black);grid-template-rows:1fr auto;padding:8vh 8vw}
-#s3 .grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;flex:1;align-self:start;margin-top:6vh}
-#s3 .cell{padding:6vh 4vw;border:1px solid var(--dim);display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
-#s3 .cell::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--accent),transparent)}
-#s3 .cell-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,9vw,150px);color:var(--white);line-height:1}
-#s3 .cell-lbl{font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,1vw,14px);letter-spacing:.25em;color:rgba(245,245,243,.35);text-transform:uppercase}
-#s3 .cell-accent .cell-num{color:var(--accent)}
-#s3 .header{grid-column:1/-1;padding-bottom:3vh;border-bottom:1px solid var(--dim)}
+/* S3: STATS — frosted glass 2×2 cards */
+#s3{background:#06041a;place-items:center;padding:8vh 8vw;overflow:hidden}
+#s3::before{content:'';position:absolute;width:60vw;height:60vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.1),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+#s3 .header{position:absolute;top:8vh;left:8vw;z-index:2}
+#s3 .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:min(80vw,900px);position:relative;z-index:2}
+#s3 .cell{padding:clamp(30px,5vh,60px) clamp(24px,3vw,48px);display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;background:rgba(168,85,247,.03);border:1px solid rgba(168,85,247,.1);border-radius:16px;backdrop-filter:blur(12px);transition:border-color .4s,box-shadow .4s}
+#s3 .cell::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(168,85,247,.3),transparent)}
+#s3 .cell::after{display:none}
+#s3 .cell-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,10vw,160px);color:var(--white);line-height:1}
+#s3 .cell-lbl{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.9vw,13px);letter-spacing:.3em;color:rgba(245,245,243,.3);text-transform:uppercase}
+#s3 .cell-accent{background:rgba(168,85,247,.06);border-color:rgba(168,85,247,.25);box-shadow:0 0 40px rgba(168,85,247,.06),inset 0 0 30px rgba(168,85,247,.03)}
+#s3 .cell-accent .cell-num{color:var(--accent);filter:drop-shadow(0 0 30px rgba(168,85,247,.4))}
 
-/* ── S4: MEME EDITORIAL — white bg, raw type ── */
-#s4{background:var(--white);color:var(--black);place-items:center}
-#s4 .wrap{width:80vw;display:flex;flex-direction:column;gap:3vh;align-items:flex-start}
-#s4 h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,12vw,220px);line-height:.85;letter-spacing:-.01em;color:var(--black)}
-#s4 .accent-line{width:80px;height:6px;background:var(--red)}
-#s4 p{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(20px,2.5vw,40px);color:#333;max-width:55vw;line-height:1.4}
-#s4 .mono{font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,1.1vw,16px);color:#888;letter-spacing:.1em;margin-top:2vh}
+/* S4: DEV WISDOM — centered editorial */
+#s4{background:#08051a;color:var(--white);place-items:center;overflow:hidden}
+#s4::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(168,85,247,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(168,85,247,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+#s4::after{content:'';position:absolute;width:55vw;height:55vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.08),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+#s4 .wrap{display:flex;flex-direction:column;gap:3vh;align-items:center;text-align:center;position:relative;z-index:2;max-width:85vw}
+#s4 h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,14vw,250px);line-height:.82;letter-spacing:-.01em;color:var(--white);filter:drop-shadow(0 0 60px rgba(168,85,247,.3))}
+#s4 .accent-line{width:clamp(60px,8vw,120px);height:3px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);border-radius:2px}
+#s4 p{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(16px,1.8vw,30px);color:rgba(245,245,243,.5);line-height:1.5;max-width:55vw}
+#s4 .mono{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.9vw,14px);color:rgba(168,85,247,.35);letter-spacing:.15em}
 
-/* ── S5: TERMINAL — premium dark mono ── */
-#s5{background:#0a0a0a;align-items:start;justify-items:start;padding:10vh 8vw}
-#s5 pre{font-family:'IBM Plex Mono',monospace;font-size:clamp(13px,1.4vw,20px);line-height:2;color:rgba(245,245,243,.75);white-space:pre}
+/* S5: TERMINAL — macOS window chrome */
+#s5{background:#030212;padding:6vh 6vw;overflow:hidden;display:flex;align-items:center;justify-content:center}
+#s5::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(168,85,247,.012) 0px,rgba(168,85,247,.012) 1px,transparent 1px,transparent 24px);pointer-events:none}
+#s5::after{content:'';position:absolute;width:70vw;height:70vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.06),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+#s5 .term-card{position:relative;z-index:2;background:rgba(6,4,15,.8);border:1px solid rgba(168,85,247,.15);border-radius:14px;backdrop-filter:blur(20px);box-shadow:0 0 80px rgba(168,85,247,.08),inset 0 0 60px rgba(0,0,0,.3);overflow:hidden;max-width:min(90vw,900px);width:100%}
+#s5 .term-chrome{display:flex;align-items:center;gap:8px;padding:14px 20px;border-bottom:1px solid rgba(168,85,247,.08);background:rgba(168,85,247,.02)}
+#s5 .term-dot{width:12px;height:12px;border-radius:50%}
+#s5 .term-dot.r{background:#ff5f57;box-shadow:0 0 6px rgba(255,95,87,.4)}
+#s5 .term-dot.y{background:#ffbd2e;box-shadow:0 0 6px rgba(255,189,46,.4)}
+#s5 .term-dot.g{background:#28c840;box-shadow:0 0 6px rgba(40,200,64,.4)}
+#s5 .term-title{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(245,245,243,.2);letter-spacing:.15em;text-transform:uppercase;margin-left:auto;margin-right:auto}
+#s5 pre{font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,1.3vw,18px);line-height:2;color:rgba(245,245,243,.75);white-space:pre;padding:28px 36px;margin:0}
 #s5 .ok{color:#4ade80}
 #s5 .err{color:var(--red)}
-#s5 .dim{color:rgba(245,245,243,.25)}
-#s5 .cur{display:inline-block;width:.55em;height:1.2em;background:var(--white);vertical-align:text-bottom;animation:breathe .9s steps(2) infinite}
-#s5 .prompt-line{color:var(--accent);font-weight:700}
+#s5 .dim{color:rgba(245,245,243,.22)}
+#s5 .cur{display:inline-block;width:.55em;height:1.2em;background:var(--accent);vertical-align:text-bottom;animation:breathe .9s steps(2) infinite}
+#s5 .prompt-line{color:var(--accent);font-weight:700;text-shadow:0 0 16px rgba(168,85,247,.7)}
 
 /* ── S6: QUOTE 2 — dark with large number motif ── */
-#s6{background:#0a0a0a;place-items:center}
-#s6 .big{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:45vw;color:rgba(245,245,243,.03);line-height:1;letter-spacing:-.03em;user-select:none;right:-5vw;bottom:-10vh}
+#s6{background:#05031a;place-items:center;overflow:hidden}
+#s6::before{content:'';position:absolute;width:60vw;height:60vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.1) 0%,transparent 70%);bottom:-20%;right:-10%;pointer-events:none}
+#s6 .big{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:50vw;color:rgba(168,85,247,.035);line-height:1;letter-spacing:-.03em;user-select:none;right:-5vw;bottom:-10vh}
 #s6 .content{z-index:2;max-width:65vw;text-align:center;display:flex;flex-direction:column;align-items:center;gap:40px}
 #s6 .tag{font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,.9vw,13px);letter-spacing:.3em;color:var(--accent);text-transform:uppercase}
 #s6 .qs{font-family:'DM Serif Display',serif;font-size:clamp(24px,3.5vw,56px);color:var(--white);line-height:1.2;font-style:italic}
 #s6 .attr{font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,.9vw,13px);letter-spacing:.2em;color:rgba(245,245,243,.3);text-transform:uppercase}
 
-/* ── S7: MARQUEE HYPE — kinetic type ── */
-#s7{background:var(--black);display:flex;flex-direction:column;justify-content:center;overflow:hidden;gap:0}
-#s7 .row{white-space:nowrap;display:flex;width:max-content;padding:8px 0}
-#s7 .row span{font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,13vw,220px);padding:0 40px;color:var(--white);opacity:.08;letter-spacing:.04em}
-#s7 .row.lit span{opacity:.85}
-#s7 .row span.a{color:var(--accent);opacity:1}
-#s7 .row-inner{display:flex;animation:marquee 18s linear infinite}
+/* S7: MARQUEE HYPE — kinetic type with separators */
+#s7{background:var(--black);display:flex;flex-direction:column;justify-content:center;overflow:hidden;gap:0;position:relative}
+#s7::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(168,85,247,.1),transparent 70%);pointer-events:none}
+#s7::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);pointer-events:none}
+#s7 .row{white-space:nowrap;display:flex;width:max-content;padding:12px 0;border-bottom:1px solid rgba(168,85,247,.06)}
+#s7 .row:last-child{border-bottom:none}
+#s7 .row span{font-family:'Bebas Neue',sans-serif;font-size:clamp(70px,12vw,200px);padding:0 36px;color:var(--white);opacity:.06;letter-spacing:.05em}
+#s7 .row span.a{color:var(--accent);opacity:1;text-shadow:0 0 60px rgba(168,85,247,.5),0 0 120px rgba(217,70,239,.2)}
+#s7 .row-inner{display:flex;animation:marquee 20s linear infinite}
+#s7 .row:nth-child(2) .row-inner{animation-duration:24s}
+#s7 .row:nth-child(3) .row-inner{animation-duration:16s}
 #s7 .row.rev .row-inner{animation-direction:reverse}
 
-/* ── S8: SCHEDULE SLIDE — clean dark ── */
-#s8{background:#0d0d0d;align-items:center;justify-items:start;padding:10vh 8vw;grid-template-rows:auto 1fr}
-#s8 .head{display:flex;flex-direction:column;gap:12px;border-bottom:1px solid var(--dim);padding-bottom:4vh;width:100%;grid-column:1/-1}
-#s8 h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,8vw,130px);color:var(--white);line-height:.9}
-#s8 .tl{display:flex;flex-direction:column;gap:0;width:100%;max-width:900px;align-self:center;justify-self:center;margin-top:4vh}
-#s8 .ev{display:grid;grid-template-columns:160px 24px 1fr;align-items:start;gap:0 24px;padding:20px 0;border-bottom:1px solid var(--dim)}
+/* S8: SCHEDULE — neon vertical timeline */
+#s8{background:#05031a;padding:8vh 6vw;overflow:hidden;display:flex;flex-direction:column;gap:4vh}
+#s8::before{content:'';position:absolute;width:50vw;height:80vh;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.07),transparent 70%);top:50%;left:15%;transform:translate(-50%,-50%);pointer-events:none}
+#s8::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);pointer-events:none}
+#s8 .head{display:flex;align-items:baseline;gap:24px;flex-shrink:0;position:relative;z-index:2}
+#s8 h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,7vw,110px);color:var(--white);line-height:1}
+#s8 .tl{display:flex;flex-direction:column;gap:0;width:100%;max-width:800px;margin:0 auto;position:relative;z-index:2;padding-left:40px}
+#s8 .tl::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--accent),rgba(168,85,247,.15),transparent);border-radius:2px}
+#s8 .ev{display:grid;grid-template-columns:1fr;padding:16px 0 16px 32px;position:relative;border:none;gap:0}
+#s8 .ev::before{content:'';position:absolute;left:-28px;top:24px;width:20px;height:1px;background:rgba(168,85,247,.2)}
 #s8 .ev:last-child{border:none}
-#s8 .ev-time{font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,1vw,15px);color:rgba(245,245,243,.3);padding-top:3px;letter-spacing:.1em}
-#s8 .ev-dot{width:10px;height:10px;border-radius:50%;background:var(--dim);border:1px solid rgba(245,245,243,.2);margin-top:5px;flex-shrink:0}
-#s8 .ev.hot .ev-dot{background:var(--accent);border-color:var(--accent);box-shadow:0 0 12px var(--accent)}
-#s8 .ev-name{font-size:clamp(16px,1.5vw,22px);color:var(--white);font-weight:600;letter-spacing:.01em}
-#s8 .ev-sub{font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,.9vw,13px);color:rgba(245,245,243,.3);margin-top:4px;letter-spacing:.05em}
+#s8 .ev-dot{position:absolute;left:-34px;top:18px;width:12px;height:12px;border-radius:50%;background:rgba(168,85,247,.1);border:2px solid rgba(168,85,247,.25);flex-shrink:0}
+#s8 .ev.hot .ev-dot{background:var(--accent);border-color:var(--accent);box-shadow:0 0 12px rgba(168,85,247,.7),0 0 30px rgba(168,85,247,.3);animation:breathe 2s ease-in-out infinite}
+#s8 .ev.hot .ev-name{color:var(--accent)}
+#s8 .ev-time{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.85vw,13px);color:rgba(168,85,247,.45);letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px}
+#s8 .ev-name{font-size:clamp(16px,1.6vw,24px);color:var(--white);font-weight:600;letter-spacing:.01em}
+#s8 .ev-sub{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.85vw,12px);color:rgba(245,245,243,.25);margin-top:4px;letter-spacing:.05em}
 
 /* ── TIMER SLIDES SHARED ── */
-.tmr-slide{place-items:center;text-align:center}
-.tmr-slide .t-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,1vw,14px);letter-spacing:.3em;text-transform:uppercase;margin-bottom:40px}
-.tmr-slide .t-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,6vw,96px);line-height:1;margin-bottom:60px}
-.tmr-units{display:flex;align-items:flex-start;gap:clamp(20px,4vw,60px)}
+.tmr-slide{place-items:center;text-align:center;overflow:hidden}
+.tmr-slide::after{content:'';position:absolute;width:80vw;height:80vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.1) 0%,rgba(217,70,239,.04) 40%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.tmr-slide .t-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,1vw,14px);letter-spacing:.3em;text-transform:uppercase;margin-bottom:40px;position:relative;z-index:2}
+.tmr-slide .t-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,6vw,96px);line-height:1;margin-bottom:60px;position:relative;z-index:2}
+.tmr-units{display:flex;align-items:flex-start;gap:clamp(20px,4vw,60px);position:relative;z-index:2}
 .tmr-unit{display:flex;flex-direction:column;align-items:center;gap:12px}
 .tmr-val{font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,16vw,260px);line-height:.85;letter-spacing:-.02em;min-width:2ch;text-align:center;transition:color .3s}
 .tmr-lbl{font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,1vw,14px);letter-spacing:.3em;text-transform:uppercase}
 .tmr-sep{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,12vw,200px);line-height:.85;padding-top:.05em;opacity:.2}
-.tmr-msg{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(16px,1.8vw,28px);margin-top:50px;max-width:60vw;line-height:1.4}
-.tmr-done .tmr-val{color:var(--accent)}
+.tmr-msg{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(16px,1.8vw,28px);margin-top:50px;max-width:60vw;line-height:1.4;position:relative;z-index:2}
+.tmr-done .tmr-val{color:var(--accent);text-shadow:0 0 40px rgba(168,85,247,.5)}
 
-/* ── S13: HACKATHON TIMER ── */
-#s13{background:#080808}
+#s13{background:#06040f}
 #s13::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
-#s13::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(245,245,243,.1),transparent)}
+#s13::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,85,247,.2),transparent)}
 #s13 .t-eyebrow{color:var(--accent)}
 #s13 .t-title{color:var(--white)}
 #s13 .tmr-val{color:var(--white)}
@@ -139,117 +178,322 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--black);font-
 #s13 .tmr-msg{color:rgba(245,245,243,.5)}
 #s13 .t-bar{position:absolute;bottom:0;left:0;height:1px;background:var(--accent);transition:width 1s linear}
 
-/* ── S14: PS DROP TIMER ── */
-#s14{background:#0d0505}
-#s14::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 80%,rgba(255,51,51,.08),transparent 65%)}
-#s14 .t-eyebrow{color:var(--red)}
+#s14{background:#0d0814}
+#s14::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 80%,rgba(168,85,247,.12),transparent 65%)}
+#s14 .t-eyebrow{color:var(--accent)}
 #s14 .t-title{color:var(--white)}
 #s14 .tmr-val{color:var(--white)}
 #s14 .tmr-lbl{color:rgba(245,245,243,.35)}
-#s14 .tmr-sep{color:var(--red)}
+#s14 .tmr-sep{color:var(--accent)}
 #s14 .tmr-msg{color:rgba(245,245,243,.5)}
-#s14 .t-badge{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(255,51,51,.3);padding:8px 20px;border-radius:100px;margin-bottom:40px}
-#s14 .t-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:breathe 1.2s infinite}
-#s14 .t-badge span{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.2em;color:rgba(255,51,51,.8);text-transform:uppercase}
+#s14 .t-badge{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(168,85,247,.3);padding:8px 20px;border-radius:100px;margin-bottom:40px}
+#s14 .t-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:breathe 1.2s infinite}
+#s14 .t-badge span{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.2em;color:rgba(168,85,247,.8);text-transform:uppercase}
 
-/* ── S9: BENTO MEME GRID ── */
-#s9{background:#0d0d0d;padding:5vh 5vw;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto 1fr 1fr;gap:10px}
-#s9 .b-header{grid-column:1/-1;padding-bottom:3vh;border-bottom:1px solid var(--dim);display:flex;justify-content:space-between;align-items:flex-end}
-#s9 .b-header h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,6vw,90px);color:var(--white);line-height:1}
-.bc{border:1px solid var(--dim);padding:30px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
-.bc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--accent),transparent);opacity:0;transition:.3s}
-.bc .bt{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.8vw,12px);letter-spacing:.2em;color:rgba(245,245,243,.3);text-transform:uppercase;margin-bottom:12px}
-.bc .bh{font-family:'DM Serif Display',serif;font-size:clamp(18px,2vw,30px);color:var(--white);line-height:1.2;font-style:italic}
-.bc .ba{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.8vw,11px);color:rgba(245,245,243,.25);letter-spacing:.15em;margin-top:16px}
+/* S9: BENTO MEME GRID — frosted masonry */
+#s9{background:#06031a;padding:5vh 4vw;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto 1fr 1fr;gap:14px;overflow:hidden}
+#s9::before{content:'';position:absolute;width:60vw;height:60vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.08),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+#s9 .b-header{grid-column:1/-1;padding-bottom:2vh;display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:2}
+#s9 .b-header h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,80px);color:var(--white);line-height:1}
+.bc{border:1px solid rgba(168,85,247,.1);padding:clamp(20px,2.5vw,36px);display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;background:rgba(168,85,247,.02);border-radius:14px;backdrop-filter:blur(8px);transition:border-color .4s,box-shadow .4s}
+.bc::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(168,85,247,.2),transparent)}
+.bc::after{display:none}
+.bc .bt{font-family:'IBM Plex Mono',monospace;font-size:clamp(9px,.75vw,11px);letter-spacing:.25em;color:rgba(168,85,247,.4);text-transform:uppercase;margin-bottom:12px}
+.bc .bh{font-family:'DM Serif Display',serif;font-size:clamp(16px,1.8vw,28px);color:var(--white);line-height:1.25;font-style:italic}
+.bc .ba{font-family:'IBM Plex Mono',monospace;font-size:clamp(9px,.75vw,10px);color:rgba(245,245,243,.2);letter-spacing:.15em;margin-top:14px}
 .bc.wide{grid-column:span 2}
 .bc.tall{grid-row:span 2}
-.bc.hi{background:rgba(232,255,71,.04);border-color:rgba(232,255,71,.2)}
-.bc.hi .bh{color:var(--accent)}
-.bc .bnum{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,8vw,120px);color:var(--white);line-height:1;opacity:.15;position:absolute;bottom:-10px;right:10px}
+.bc.hi{background:rgba(168,85,247,.06);border-color:rgba(168,85,247,.25);box-shadow:0 0 40px rgba(168,85,247,.06),inset 0 0 30px rgba(168,85,247,.03)}
+.bc.hi .bh{color:var(--accent);text-shadow:0 0 25px rgba(168,85,247,.3)}
+.bc .bnum{font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,7vw,100px);color:var(--accent);line-height:1;opacity:.04;position:absolute;bottom:-8px;right:12px}
 
 /* ── S10: BENTO INFO GRID ── */
 #s10{background:var(--black);padding:5vh 5vw;display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:auto 1fr 1fr;gap:10px}
 #s10 .b-header{grid-column:1/-1;padding-bottom:3vh;border-bottom:1px solid var(--dim);display:flex;justify-content:space-between;align-items:flex-end}
 #s10 .b-header h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,6vw,90px);color:var(--white);line-height:1}
-#s10 .bc-main{grid-column:1;grid-row:2/4;border:1px solid var(--dim);padding:40px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(160deg,rgba(232,255,71,.06),transparent)}
+#s10 .bc-main{grid-column:1;grid-row:2/4;border:1px solid var(--dim);padding:40px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(160deg,rgba(168,85,247,.1),transparent)}
 #s10 .bc-main .big-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,16vw,260px);color:var(--accent);line-height:.85;letter-spacing:-.02em}
 #s10 .bc-main .lbl{font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,1vw,16px);letter-spacing:.25em;color:rgba(245,245,243,.4);text-transform:uppercase;margin-top:16px}
 #s10 .bc-main .sub{font-size:clamp(14px,1.3vw,20px);color:rgba(245,245,243,.6);margin-top:8px;font-weight:400}
 
 /* ── S11: MEME — 99 BUGS ── */
-#s11{background:#111;place-items:center;text-align:center}
-#s11 .wrap{display:flex;flex-direction:column;align-items:center;gap:40px;max-width:75vw}
-#s11 .big-meme{font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,9vw,160px);color:var(--white);line-height:.9;letter-spacing:-.01em}
-#s11 .big-meme em{color:var(--accent);font-style:normal}
-#s11 .divider{width:60px;height:3px;background:var(--accent)}
+#s11{background:#05031a;place-items:center;text-align:center;overflow:hidden}
+#s11::before{content:'';position:absolute;width:60vw;height:60vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.1),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+#s11 .wrap{display:flex;flex-direction:column;align-items:center;gap:40px;max-width:75vw;position:relative;z-index:2}
+#s11 .big-meme{font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,10vw,180px);color:var(--white);line-height:.88;letter-spacing:-.01em}
+#s11 .big-meme em{color:var(--accent);font-style:normal;text-shadow:0 0 30px rgba(168,85,247,.4)}
+#s11 .divider{width:60px;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px}
 #s11 .body-text{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(18px,2vw,32px);color:rgba(245,245,243,.65);line-height:1.4}
 #s11 .mono-tag{font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,.9vw,13px);letter-spacing:.25em;color:rgba(245,245,243,.25);text-transform:uppercase}
 
-/* ── S12: MEME — TODO ── */
-#s12{background:var(--white);color:var(--black);padding:8vh 8vw;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:6vw}
+#s12{background:#0a071a;color:var(--white);padding:8vh 8vw;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:6vw;overflow:hidden}
 #s12 .left{display:flex;flex-direction:column;gap:24px}
-#s12 .left .label{color:rgba(8,8,8,.4)}
-#s12 h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,10vw,160px);line-height:.85;color:var(--black)}
-#s12 .red-bar{width:100px;height:8px;background:var(--red)}
-#s12 .right{display:flex;flex-direction:column;gap:32px;border-left:2px solid rgba(8,8,8,.1);padding-left:6vw}
-#s12 .joke{display:flex;flex-direction:column;gap:8px;padding-bottom:32px;border-bottom:1px solid rgba(8,8,8,.1)}
+#s12 .left .label{color:rgba(245,245,243,.4)}
+#s12 h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,10vw,160px);line-height:.85;color:var(--white)}
+#s12 .red-bar{width:100px;height:8px;background:var(--accent)}
+#s12 .right{display:flex;flex-direction:column;gap:32px;border-left:2px solid rgba(168,85,247,.15);padding-left:6vw}
+#s12 .joke{display:flex;flex-direction:column;gap:8px;padding-bottom:32px;border-bottom:1px solid rgba(168,85,247,.1)}
 #s12 .joke:last-child{border:none;padding:0}
-#s12 .joke .q{font-family:'DM Serif Display',serif;font-size:clamp(16px,1.8vw,26px);font-style:italic;line-height:1.3;color:#111}
-#s12 .joke .src{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.8vw,12px);letter-spacing:.15em;color:#999;text-transform:uppercase}
+#s12 .joke .q{font-family:'DM Serif Display',serif;font-size:clamp(16px,1.8vw,26px);font-style:italic;line-height:1.3;color:rgba(245,245,243,.85)}
+#s12 .joke .src{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.8vw,12px);letter-spacing:.15em;color:rgba(245,245,243,.3);text-transform:uppercase}
 /* ── HINGLISH QUOTE SLIDES ── */
 .hq-slide{place-items:center;text-align:center;overflow:hidden}
-.hq-slide::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 120%,rgba(232,255,71,.06),transparent 60%)}
+.hq-slide::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 120%,rgba(168,85,247,.12),transparent 60%)}
+.hq-slide::after{content:'';position:absolute;width:40vw;height:40vw;border-radius:50%;background:radial-gradient(circle,rgba(217,70,239,.07),transparent 70%);top:5%;right:5%;pointer-events:none}
 .hq-slide .hq-wrap{display:flex;flex-direction:column;align-items:center;gap:36px;max-width:75vw;z-index:2;position:relative}
-.hq-slide .hq-emoji{font-size:clamp(50px,8vw,100px);filter:drop-shadow(0 0 20px rgba(232,255,71,.3))}
+.hq-slide .hq-emoji{font-size:clamp(50px,8vw,100px);filter:drop-shadow(0 0 20px rgba(168,85,247,.5))}
 .hq-slide .hq-text{font-family:'Outfit',sans-serif;font-size:clamp(28px,5vw,80px);font-weight:900;color:var(--white);line-height:1.1;letter-spacing:-.01em}
-.hq-slide .hq-text em{color:var(--accent);font-style:normal}
+.hq-slide .hq-text em{color:var(--accent);font-style:normal;text-shadow:0 0 30px rgba(168,85,247,.4)}
 .hq-slide .hq-sub{font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,1.1vw,16px);letter-spacing:.2em;color:rgba(245,245,243,.3);text-transform:uppercase}
-.hq-slide .hq-bg-text{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,30vw,500px);color:rgba(245,245,243,.02);line-height:1;user-select:none;white-space:nowrap}
-#s15{background:#0a0a0a}
-#s16{background:#080810}
-#s17{background:#100808}
-#s18{background:#080808}
-#s19{background:#0a0808}
-#s20{background:#08080a}
+.hq-slide .hq-bg-text{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,30vw,500px);color:rgba(168,85,247,.025);line-height:1;user-select:none;white-space:nowrap}
+#s15{background:#06040f}
+#s16{background:#08060f}
+#s17{background:#0c0614}
+#s18{background:#06040f}
+#s19{background:#08060a}
+#s20{background:#06040f}
 
-/* ── TONTE / ROAST SLIDE ── */
-.tonte-slide{place-items:center;text-align:center}
-.tonte-slide .t-wrap{display:flex;flex-direction:column;align-items:center;gap:32px;max-width:70vw;z-index:2}
+/* ── TONTE / ROAST SLIDES ── */
+.tonte-slide{place-items:center;text-align:center;overflow:hidden}
+.tonte-slide::before{content:'';position:absolute;width:55vw;height:55vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.1),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.tonte-slide .t-wrap{display:flex;flex-direction:column;align-items:center;gap:32px;max-width:70vw;z-index:2;position:relative}
 .tonte-slide .t-icon{font-size:clamp(40px,6vw,80px)}
 .tonte-slide .t-head{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,7vw,120px);color:var(--white);line-height:.9;letter-spacing:.02em}
 .tonte-slide .t-body{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(22px,3vw,50px);color:rgba(245,245,243,.7);line-height:1.3}
-.tonte-slide .t-body em{color:var(--accent);font-style:normal}
-.tonte-slide .t-tag{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.9vw,13px);letter-spacing:.25em;color:rgba(245,245,243,.2);text-transform:uppercase}
-#s21{background:linear-gradient(135deg,#0a0a0a,#0d0808)}
-#s22{background:linear-gradient(135deg,#080a0a,#0a080d)}
+.tonte-slide .t-body em{color:var(--accent);font-style:normal;text-shadow:0 0 25px rgba(168,85,247,.4)}
+.tonte-slide .t-tag{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.9vw,13px);letter-spacing:.25em;color:rgba(168,85,247,.35);text-transform:uppercase}
+#s21{background:linear-gradient(135deg,#06040f,#0d0614)}
+#s22{background:linear-gradient(135deg,#08060f,#0d060f)}
 
 /* ── VIBE CHECK SLIDE ── */
-#s23{background:#080808;place-items:center}
-#s23 .vibe-wrap{display:flex;flex-direction:column;align-items:center;gap:48px;z-index:2}
-#s23 .vibe-title{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(60px,12vw,200px);background:linear-gradient(135deg,var(--accent),#ff6b6b,#4ecdc4,var(--accent));background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:aurora 4s ease infinite;line-height:1}
+#s23{background:#06040f;place-items:center;overflow:hidden}
+#s23::before{content:'';position:absolute;width:80vw;height:80vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.12) 0%,rgba(217,70,239,.05) 40%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:breathe 5s ease-in-out infinite;pointer-events:none}
+#s23 .vibe-wrap{display:flex;flex-direction:column;align-items:center;gap:48px;z-index:2;position:relative}
+#s23 .vibe-title{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(60px,14vw,220px);color:var(--accent);line-height:.95;filter:drop-shadow(0 0 50px rgba(168,85,247,.45))}
 #s23 .vibe-sub{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(18px,2.5vw,40px);color:rgba(245,245,243,.5);max-width:60vw;text-align:center;line-height:1.4}
 #s23 .vibe-tags{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
-#s23 .vibe-tag{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.9vw,13px);letter-spacing:.15em;color:var(--accent);border:1px solid rgba(232,255,71,.2);padding:8px 20px;border-radius:100px;text-transform:uppercase}
+#s23 .vibe-tag{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.9vw,13px);letter-spacing:.15em;color:var(--accent);border:1px solid rgba(168,85,247,.3);padding:8px 20px;border-radius:100px;text-transform:uppercase;background:rgba(168,85,247,.06)}
+
+/* S24: MOTIVATIONAL CLOCK */
+#s24{background:#05031a;place-items:center;text-align:center;overflow:hidden}
+#s24::before{content:'';position:absolute;width:60vw;height:60vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.1),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+#s24::after{content:'';position:absolute;width:35vw;height:35vw;border-radius:50%;border:1px solid rgba(168,85,247,.06);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+#s24 .mc-wrap{display:flex;flex-direction:column;align-items:center;gap:36px;z-index:2;position:relative;max-width:80vw}
+#s24 .mc-time{font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,18vw,300px);color:var(--white);line-height:.85;letter-spacing:.04em;filter:drop-shadow(0 0 60px rgba(168,85,247,.4))}
+#s24 .mc-time .mc-sep{color:var(--accent);opacity:.4;animation:breathe 1s steps(2) infinite}
+#s24 .mc-label{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.9vw,13px);letter-spacing:.3em;color:rgba(168,85,247,.5);text-transform:uppercase}
+#s24 .mc-quote{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(18px,2.5vw,40px);color:rgba(245,245,243,.5);line-height:1.4;max-width:60vw}
+#s24 .mc-attr{font-family:'IBM Plex Mono',monospace;font-size:clamp(9px,.8vw,12px);letter-spacing:.2em;color:rgba(245,245,243,.2);text-transform:uppercase}
+#s24 .mc-divider{width:clamp(40px,5vw,80px);height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+
+/* S25: PRIZE BREAKDOWN */
+#s25{background:#06041a;padding:6vh 6vw;overflow:hidden;display:flex;flex-direction:column;gap:4vh}
+#s25::before{content:'';position:absolute;width:55vw;height:55vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.08),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+#s25::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);pointer-events:none}
+#s25 .pz-head{display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:2}
+#s25 .pz-head h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,7vw,110px);color:var(--white);line-height:1}
+#s25 .pz-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;flex:1;align-items:stretch;position:relative;z-index:2}
+#s25 .pz-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:clamp(24px,4vh,48px) clamp(20px,2vw,36px);background:rgba(168,85,247,.02);border:1px solid rgba(168,85,247,.1);border-radius:16px;backdrop-filter:blur(8px);position:relative;text-align:center;transition:border-color .4s,box-shadow .4s}
+#s25 .pz-card::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(168,85,247,.25),transparent)}
+#s25 .pz-card.gold{border-color:rgba(255,215,0,.25);background:rgba(255,215,0,.03);box-shadow:0 0 40px rgba(255,215,0,.04)}
+#s25 .pz-card.gold .pz-amount{color:#ffd700;filter:drop-shadow(0 0 25px rgba(255,215,0,.4))}
+#s25 .pz-card.gold .pz-icon{filter:drop-shadow(0 0 15px rgba(255,215,0,.5))}
+#s25 .pz-card.silver .pz-amount{color:#c0c0c0;filter:drop-shadow(0 0 20px rgba(192,192,192,.3))}
+#s25 .pz-card.bronze .pz-amount{color:#cd7f32;filter:drop-shadow(0 0 20px rgba(205,127,50,.3))}
+#s25 .pz-icon{font-size:clamp(36px,5vw,64px)}
+#s25 .pz-rank{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.85vw,13px);letter-spacing:.3em;color:rgba(245,245,243,.3);text-transform:uppercase}
+#s25 .pz-amount{font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,8vw,130px);color:var(--accent);line-height:1}
+#s25 .pz-desc{font-family:'IBM Plex Mono',monospace;font-size:clamp(9px,.75vw,11px);letter-spacing:.15em;color:rgba(245,245,243,.25)}
+#s25 .pz-total{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:16px;padding:16px 0;border-top:1px solid rgba(168,85,247,.1)}
+#s25 .pz-total span{font-family:'IBM Plex Mono',monospace;font-size:clamp(11px,1vw,14px);letter-spacing:.2em;color:rgba(168,85,247,.5);text-transform:uppercase}
+#s25 .pz-total strong{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,56px);color:var(--accent);filter:drop-shadow(0 0 20px rgba(168,85,247,.3))}
+
+/* ── EVENT ANNOUNCEMENT POPUP ── */
+@keyframes popIn{from{transform:translate(-50%,-50%) scale(.85);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+@keyframes popOut{from{transform:translate(-50%,-50%) scale(1);opacity:1}to{transform:translate(-50%,-50%) scale(.9);opacity:0}}
+@keyframes ripple{0%{transform:translate(-50%,-50%) scale(0);opacity:.4}100%{transform:translate(-50%,-50%) scale(3);opacity:0}}
+#event-overlay{position:fixed;inset:0;z-index:999;background:rgba(6,4,15,.92);display:none;place-items:center;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+#event-overlay.show{display:grid}
+#event-overlay .ev-popup{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;display:flex;flex-direction:column;align-items:center;gap:32px;max-width:80vw;animation:popIn .6s cubic-bezier(.22,1,.36,1) both}
+#event-overlay .ev-popup.hiding{animation:popOut .4s cubic-bezier(.4,0,1,1) both}
+#event-overlay .ev-ripple{position:absolute;top:50%;left:50%;width:60vw;height:60vw;border-radius:50%;border:2px solid var(--accent);animation:ripple 1.8s ease-out infinite;pointer-events:none}
+#event-overlay .ev-ripple2{animation-delay:.6s}
+#event-overlay .ev-ripple3{animation-delay:1.2s}
+#event-overlay .ev-badge{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.9vw,13px);letter-spacing:.35em;text-transform:uppercase;color:var(--accent);background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);padding:10px 24px;border-radius:100px}
+#event-overlay .ev-emoji{font-size:clamp(60px,10vw,120px);filter:drop-shadow(0 0 30px rgba(168,85,247,.6));animation:breathe 2s ease-in-out infinite}
+#event-overlay .ev-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,12vw,180px);color:var(--white);line-height:.88;letter-spacing:.03em;filter:drop-shadow(0 0 60px rgba(168,85,247,.5))}
+#event-overlay .ev-title .ev-accent{color:var(--accent)}
+#event-overlay .ev-sub{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(18px,2.5vw,40px);color:rgba(245,245,243,.55);line-height:1.3}
+#event-overlay .ev-dismiss{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.85vw,12px);letter-spacing:.2em;color:rgba(245,245,243,.2);text-transform:uppercase;margin-top:16px;animation:breathe 2s ease-in-out infinite}
+#event-overlay .ev-bar{position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width linear}
+
+
+/* ── CLICK RIPPLE ── */
+.click-ripple{position:fixed;pointer-events:none;z-index:9998;border-radius:50%;border:2px solid rgba(168,85,247,.5);animation:clickRipple .7s ease-out forwards}
+@keyframes clickRipple{from{width:0;height:0;opacity:.7;transform:translate(-50%,-50%) scale(0)}to{width:200px;height:200px;opacity:0;transform:translate(-50%,-50%) scale(1)}}
+
+/* ── CARD TILT (3D) ── */
+.bc,.pz-card,.cell{transform-style:preserve-3d;will-change:transform}
+
+/* ── S1 title glitch on hover ── */
+@keyframes glitchH{0%,100%{text-shadow:none;clip-path:none}
+  10%{text-shadow:-4px 0 rgba(168,85,247,.8),4px 0 rgba(217,70,239,.6)}
+  20%{text-shadow:4px 0 rgba(168,85,247,.8),-4px 0 rgba(217,70,239,.6)}
+  30%{text-shadow:none}
+  40%{text-shadow:-3px 2px rgba(168,85,247,.7)}
+  50%{text-shadow:none}}
+#s1 h1{cursor:default}
+#s1 h1:hover{animation:glitchH .5s step-end}
+#s1 h1:hover{filter:drop-shadow(0 0 80px rgba(168,85,247,.8)) drop-shadow(0 0 40px rgba(217,70,239,.4))}
+
+/* ── S7 marquee hover speed ── */
+#s7:hover .row-inner{animation-play-state:running}
+#s7 .row-inner{transition:animation-duration .3s}
+
+/* ── S8 timeline hover card ── */
+#s8 .ev{cursor:default;transition:padding-left .3s,background .3s,border-radius .3s}
+#s8 .ev:hover{padding-left:44px;background:rgba(168,85,247,.04);border-radius:10px}
+#s8 .ev:hover .ev-name{color:var(--accent)}
+
+/* ── Prize card hover ── */
+#s25 .pz-card{cursor:default;transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s,border-color .3s}
+#s25 .pz-card:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 20px 60px rgba(168,85,247,.15)}
+#s25 .pz-card.gold:hover{box-shadow:0 20px 60px rgba(255,215,0,.15)}
+
+/* ── Bento card hover ── */
+.bc{transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s,border-color .3s}
+.bc:hover{transform:translateY(-6px);border-color:rgba(168,85,247,.3);box-shadow:0 16px 50px rgba(168,85,247,.1)}
+.bc.hi:hover{box-shadow:0 16px 50px rgba(168,85,247,.2)}
+
+/* ── Stat cell hover ── */
+#s3 .cell{cursor:default;transition:transform .3s,box-shadow .3s,border-color .3s}
+#s3 .cell:hover{transform:translateY(-8px);box-shadow:0 16px 50px rgba(168,85,247,.1);border-color:rgba(168,85,247,.3)}
+#s3 .cell:hover .cell-num{color:var(--accent);filter:drop-shadow(0 0 30px rgba(168,85,247,.5))}
+
+/* ── S3 count-up ── */
+@keyframes numFlicker{0%{opacity:.2}50%{opacity:1}100%{opacity:1}}
+.cell-num.counting{animation:numFlicker .6s ease-out}
+
+/* ── Floating orb parallax ── */
+#s1::before,#s6::before,#s23::before{transition:transform .1s linear}
+
+/* ── S23 vibe tags hover ── */
+.vibe-tag{cursor:default;transition:all .25s cubic-bezier(.22,1,.36,1)}
+.vibe-tag:hover{background:rgba(168,85,247,.2);border-color:var(--accent);transform:scale(1.08);box-shadow:0 0 20px rgba(168,85,247,.2)}
+
+/* ── Tonte/HQ slides: emoji bounce on hover ── */
+.hq-emoji,.t-icon{cursor:default;display:inline-block;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+.hq-emoji:hover,.t-icon:hover{transform:scale(1.3) rotate(-5deg)}
+
+
+/* S28: ROUND 3 ATTENTION GRABBER */
+#s28{background:#04020f;place-items:center;overflow:hidden;text-align:center}
+#s28::before{content:'3';position:absolute;font-family:'Bebas Neue',sans-serif;font-size:clamp(300px,65vw,900px);color:rgba(168,85,247,.04);line-height:1;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;user-select:none}
+@keyframes urgentPulse{0%,100%{box-shadow:0 0 0 0 rgba(168,85,247,.4)}70%{box-shadow:0 0 0 20px rgba(168,85,247,0)}}
+#s28 .rw{display:flex;flex-direction:column;align-items:center;gap:40px;z-index:2;position:relative;max-width:85vw}
+#s28 .r3-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.9vw,14px);letter-spacing:.5em;color:rgba(168,85,247,.6);text-transform:uppercase}
+#s28 .r3-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(70px,16vw,260px);color:var(--white);line-height:.82;letter-spacing:.04em;filter:drop-shadow(0 0 80px rgba(168,85,247,.5))}
+#s28 .r3-title span{color:var(--accent)}
+#s28 .r3-rule{width:clamp(60px,8vw,120px);height:3px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);border-radius:2px;animation:breathe 2s ease-in-out infinite}
+#s28 .r3-steps{display:flex;align-items:center;gap:0;position:relative}
+#s28 .r3-steps::before{content:'';position:absolute;top:28px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,rgba(168,85,247,.15),rgba(168,85,247,.4),rgba(168,85,247,.15))}
+#s28 .r3-step{display:flex;flex-direction:column;align-items:center;gap:16px;padding:0 clamp(24px,4vw,60px);position:relative}
+#s28 .r3-dot{width:56px;height:56px;border-radius:50%;border:2px solid rgba(168,85,247,.3);background:#04020f;display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;z-index:2;transition:all .3s}
+#s28 .r3-step.hl .r3-dot{background:rgba(168,85,247,.12);border-color:var(--accent);box-shadow:0 0 0 0 rgba(168,85,247,.4);animation:urgentPulse 2s ease-in-out infinite}
+#s28 .r3-step-num{font-family:'IBM Plex Mono',monospace;font-size:clamp(9px,.75vw,11px);letter-spacing:.3em;color:rgba(168,85,247,.35);text-transform:uppercase}
+#s28 .r3-step-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,3.5vw,56px);color:var(--white);line-height:1;letter-spacing:.02em}
+#s28 .r3-step.hl .r3-step-name{color:var(--accent);filter:drop-shadow(0 0 20px rgba(168,85,247,.4))}
+#s28 .r3-step-desc{font-family:'IBM Plex Mono',monospace;font-size:clamp(9px,.75vw,11px);color:rgba(245,245,243,.25);letter-spacing:.08em;max-width:160px;line-height:1.5}
+#s28 .r3-cta{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.9vw,13px);letter-spacing:.2em;color:rgba(245,245,243,.2);text-transform:uppercase}
+#s28 .r3-cta em{color:var(--accent);font-style:normal;opacity:.8}
+
+/* S26: PHASE 3 — centered hero announcement */
+#s26{background:#05031a;place-items:center;text-align:center;overflow:hidden}
+#s26::before{content:'';position:absolute;width:65vw;height:65vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.1),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+#s26::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);pointer-events:none}
+#s26 .ph-wrap{display:flex;flex-direction:column;align-items:center;gap:36px;z-index:2;position:relative;max-width:75vw}
+#s26 .ph-badge{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.9vw,13px);letter-spacing:.35em;text-transform:uppercase;color:var(--accent);background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);padding:10px 28px;border-radius:100px}
+#s26 h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,14vw,220px);color:var(--white);line-height:.85;letter-spacing:.04em;filter:drop-shadow(0 0 60px rgba(168,85,247,.4))}
+#s26 .ph-rule{width:clamp(40px,5vw,80px);height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);border-radius:2px}
+#s26 .ph-desc{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(16px,2.2vw,36px);color:rgba(245,245,243,.5);line-height:1.4;max-width:55vw}
+#s26 .ph-tags{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+#s26 .ph-tag{font-family:'IBM Plex Mono',monospace;font-size:clamp(9px,.75vw,11px);letter-spacing:.1em;color:var(--accent);border:1px solid rgba(168,85,247,.2);padding:7px 18px;border-radius:100px;background:rgba(168,85,247,.04)}
+
+/* S27: PHASE 3 — VIDEO SCRIPT run-sheet */
+#s27{background:#06041a;padding:8vh 8vw;overflow:hidden;display:flex;flex-direction:column;gap:5vh}
+#s27::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);pointer-events:none}
+#s27::after{content:'';position:absolute;width:50vw;height:50vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.06),transparent 70%);bottom:-15%;right:-10%;pointer-events:none}
+#s27 .sc-head{display:flex;align-items:baseline;gap:20px;flex-shrink:0;position:relative;z-index:2}
+#s27 .sc-head h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5.5vw,90px);color:var(--white);line-height:1}
+#s27 .sc-steps{display:flex;gap:0;position:relative;z-index:2;flex:1;align-items:stretch}
+#s27 .sc-steps::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:linear-gradient(90deg,rgba(168,85,247,.2),rgba(168,85,247,.2));transform:translateY(-50%)}
+#s27 .sc-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;padding:0 2vw;text-align:center;position:relative}
+#s27 .sc-num{width:48px;height:48px;border-radius:50%;background:#06041a;border:2px solid rgba(168,85,247,.3);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:14px;color:rgba(168,85,247,.6);flex-shrink:0;z-index:2;position:relative}
+#s27 .sc-step.active .sc-num{background:var(--accent);border-color:var(--accent);color:var(--white);box-shadow:0 0 20px rgba(168,85,247,.5)}
+#s27 .sc-step-icon{font-size:clamp(28px,4vw,50px)}
+#s27 .sc-step-label{font-family:'IBM Plex Mono',monospace;font-size:clamp(8px,.75vw,11px);letter-spacing:.25em;color:rgba(168,85,247,.4);text-transform:uppercase}
+#s27 .sc-step-text{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(13px,1.3vw,20px);color:rgba(245,245,243,.55);line-height:1.4}
+#s27 .sc-footer{display:flex;align-items:center;justify-content:center;gap:12px;flex-shrink:0;position:relative;z-index:2;padding-top:2vh;border-top:1px solid rgba(168,85,247,.08)}
+#s27 .sc-footer span{font-family:'IBM Plex Mono',monospace;font-size:clamp(8px,.75vw,11px);letter-spacing:.15em;color:rgba(168,85,247,.4);text-transform:uppercase}
+#s27 .sc-footer strong{font-family:'IBM Plex Mono',monospace;font-size:clamp(8px,.75vw,11px);color:var(--accent);letter-spacing:.1em}
+
+/* S29: REEL/VLOG HERO */
+#s29{background:#04020f;place-items:center;text-align:center;overflow:hidden}
+#s29::before{content:'🎥';position:absolute;font-size:clamp(200px,40vw,600px);opacity:.04;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;user-select:none;filter:grayscale(1)}
+#s29::after{content:'';position:absolute;width:60vw;height:60vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.12),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+@keyframes prizePop{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+#s29 .rv-wrap{display:flex;flex-direction:column;align-items:center;gap:32px;z-index:2;position:relative;max-width:80vw}
+#s29 .rv-badge{font-family:'IBM Plex Mono',monospace;font-size:clamp(10px,.9vw,13px);letter-spacing:.4em;text-transform:uppercase;color:var(--accent);background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);padding:10px 28px;border-radius:100px}
+#s29 .rv-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(55px,13vw,210px);color:var(--white);line-height:.82;letter-spacing:.03em;filter:drop-shadow(0 0 60px rgba(168,85,247,.4))}
+#s29 .rv-title em{color:var(--accent);font-style:normal}
+#s29 .rv-rule{width:clamp(50px,6vw,100px);height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);border-radius:2px;animation:breathe 2s ease-in-out infinite}
+#s29 .rv-prizes{display:flex;gap:24px;align-items:center;justify-content:center}
+#s29 .rv-prize{display:flex;flex-direction:column;align-items:center;gap:10px;background:rgba(168,85,247,.05);border:1px solid rgba(168,85,247,.2);border-radius:16px;padding:clamp(16px,2.5vw,32px) clamp(24px,4vw,60px);position:relative;overflow:hidden}
+#s29 .rv-prize::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(168,85,247,.4),transparent)}
+#s29 .rv-prize-icon{font-size:clamp(28px,4vw,50px)}
+#s29 .rv-prize-type{font-family:'IBM Plex Mono',monospace;font-size:clamp(9px,.8vw,12px);letter-spacing:.3em;color:rgba(168,85,247,.5);text-transform:uppercase}
+#s29 .rv-prize-amt{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,7vw,110px);color:var(--accent);line-height:1;filter:drop-shadow(0 0 25px rgba(168,85,247,.5));animation:prizePop 3s ease-in-out infinite}
+#s29 .rv-sub{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(14px,1.8vw,28px);color:rgba(245,245,243,.35);line-height:1.4}
+
+/* S30: REEL/VLOG RULES */
+#s30{background:#06031a;padding:7vh 7vw;overflow:hidden;display:flex;flex-direction:column;gap:4vh}
+#s30::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);pointer-events:none}
+#s30::after{content:'';position:absolute;width:45vw;height:45vw;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.06),transparent 70%);bottom:-15%;right:-10%;pointer-events:none}
+#s30 .rr-head{display:flex;align-items:baseline;gap:20px;flex-shrink:0;position:relative;z-index:2}
+#s30 .rr-head h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,100px);color:var(--white);line-height:1}
+#s30 .rr-body{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;flex:1;position:relative;z-index:2}
+#s30 .rr-card{background:rgba(168,85,247,.02);border:1px solid rgba(168,85,247,.1);border-radius:14px;padding:clamp(18px,2.5vw,32px);display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
+#s30 .rr-card::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(168,85,247,.25),transparent)}
+#s30 .rr-card-icon{font-size:clamp(20px,3vw,36px)}
+#s30 .rr-card-title{font-family:'IBM Plex Mono',monospace;font-size:clamp(9px,.8vw,12px);letter-spacing:.25em;color:rgba(168,85,247,.45);text-transform:uppercase}
+#s30 .rr-card-text{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(13px,1.5vw,22px);color:rgba(245,245,243,.6);line-height:1.45}
+#s30 .rr-card-text strong{color:var(--accent);font-style:normal}
+#s30 .rr-tags{display:flex;flex-wrap:wrap;gap:10px;flex-shrink:0;position:relative;z-index:2}
+#s30 .rr-tag{font-family:'IBM Plex Mono',monospace;font-size:clamp(8px,.7vw,11px);letter-spacing:.1em;color:var(--accent);border:1px solid rgba(168,85,247,.2);padding:7px 18px;border-radius:100px;background:rgba(168,85,247,.04)}
 </style>
 </head>
 <body>
 
 <!-- S1: IDENTITY -->
 <div class="s on" id="s1">
+  <div class="top-line"></div>
+  <div class="orb-bl"></div>
   <div class="main">
-    <div class="label anim-up">India's Premier Hackathon</div>
-    <h1 class="anim-up2">UDBHAV<br>'26</h1>
-    <div class="sub anim-up3">25–26 April 2026 &nbsp;·&nbsp; Sage University, Indore</div>
+    <div class="label anim-up" style="letter-spacing:.5em;color:rgba(168,85,247,.7)">Alta School of Technology &nbsp;×&nbsp; Sage University</div>
+    <h1 class="anim-up2">UDBHAV'26</h1>
+    <div class="accent-rule anim-up3"></div>
+    <div class="sub anim-up3">24-Hour Hackathon &nbsp;·&nbsp; 25–26 April 2026 &nbsp;·&nbsp; Indore</div>
     <div class="pill anim-up4">
       <div class="dot-live"></div>
-      <span>₹45,000 Prize Pool &nbsp;·&nbsp; 50 Teams &nbsp;·&nbsp; 24 Hours</span>
+      <span>₹45,000 Prize Pool &nbsp;·&nbsp; 50 Teams &nbsp;·&nbsp; 200+ Hackers</span>
     </div>
   </div>
 </div>
 
-<!-- S2: QUOTE — Kent Beck -->
+<!-- S2: QUOTE -->
 <div class="s" id="s2">
   <div class="wrap">
+    <div class="label anim-up" style="color:var(--accent);opacity:.8">Words to code by</div>
     <div class="qs anim-scale">"First, solve the problem.<br>Then, write the code."</div>
     <div class="attr anim-up3">— John Johnson &nbsp;·&nbsp; Applied to every hackathon, ever</div>
   </div>
@@ -258,20 +502,20 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--black);font-
 <!-- S3: STATS -->
 <div class="s" id="s3">
   <div class="header">
-    <div class="label">Event at a Glance</div>
+    <div class="label" style="color:var(--accent);opacity:.6">UDBHAV'26 — At a Glance</div>
   </div>
   <div class="grid">
-    <div class="cell cell-accent"><div class="cell-num">24</div><div class="cell-lbl">Hours non-stop</div></div>
-    <div class="cell"><div class="cell-num">50</div><div class="cell-lbl">Teams competing</div></div>
-    <div class="cell"><div class="cell-num">200+</div><div class="cell-lbl">Participants</div></div>
-    <div class="cell cell-accent"><div class="cell-num">₹45K</div><div class="cell-lbl">Prize pool</div></div>
+    <div class="cell cell-accent anim-up"><div class="cell-num">24</div><div class="cell-lbl">Hours non-stop</div></div>
+    <div class="cell anim-up2"><div class="cell-num">50</div><div class="cell-lbl">Teams competing</div></div>
+    <div class="cell anim-up3"><div class="cell-num">200+</div><div class="cell-lbl">Participants</div></div>
+    <div class="cell cell-accent anim-up4"><div class="cell-num">₹45K</div><div class="cell-lbl">Prize pool</div></div>
   </div>
 </div>
 
-<!-- S4: MEME — EDITORIAL WHITE -->
+<!-- S4: MEME — DEVELOPER WISDOM -->
 <div class="s" id="s4">
   <div class="wrap">
-    <div class="label anim-up">Developer wisdom</div>
+    <div class="label anim-up" style="color:var(--accent);opacity:.6">Developer wisdom</div>
     <h2 class="anim-up2">It works<br>on my<br>machine.</h2>
     <div class="accent-line anim-up3"></div>
     <p class="anim-up3">"Any fool can write code a computer can understand. Good programmers write code that humans can understand."</p>
@@ -281,11 +525,14 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--black);font-
 
 <!-- S5: TERMINAL -->
 <div class="s" id="s5">
+<div class="term-card">
+  <div class="term-chrome">
+    <div class="term-dot r"></div>
+    <div class="term-dot y"></div>
+    <div class="term-dot g"></div>
+    <span class="term-title">udbhav@hackathon ~ bash</span>
+  </div>
 <pre>
-<span class="dim">─────────────────────────────────────────────</span>
-<span class="dim"> UDBHAV'26 SYSTEM BOOT  //  25 APR 2026</span>
-<span class="dim">─────────────────────────────────────────────</span>
-
 <span class="prompt-line">$</span> checking prerequisites...
 
   <span class="ok">✓</span>  caffeine         <span class="dim">loaded (∞ cups)</span>
@@ -293,20 +540,23 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--black);font-
   <span class="ok">✓</span>  github-copilot   <span class="dim">active</span>
   <span class="err">✗</span>  sleep            <span class="dim">not found — skipping</span>
   <span class="ok">✓</span>  panic-mode       <span class="dim">standby</span>
+  <span class="ok">✓</span>  team-spirit      <span class="dim">maximum</span>
 
-<span class="prompt-line">$</span> starting hackathon in 3... 2... 1...
+<span class="prompt-line">$</span> initializing hackathon...
+<span class="ok">✓</span>  All systems operational. <span class="prompt-line">HACK ON.</span>
 
 <span class="prompt-line">$</span> <span class="cur"></span>
 </pre>
+</div>
 </div>
 
 <!-- S6: QUOTE 2 -->
 <div class="s" id="s6">
   <div class="big">26</div>
   <div class="content">
-    <div class="tag">Hour 01 vs Hour 23</div>
-    <div class="qs">"Hour 1: I can build anything.<br><br>Hour 23: why is Hello World not compiling."</div>
-    <div class="attr">— Every hackathon participant, always</div>
+    <div class="tag anim-up">Hour 01 vs Hour 23</div>
+    <div class="qs anim-scale">"Hour 1: I can build anything.<br><br>Hour 23: why is Hello World not compiling."</div>
+    <div class="attr anim-up3">— Every hackathon participant, always</div>
   </div>
 </div>
 
@@ -332,27 +582,27 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--black);font-
 <!-- S8: SCHEDULE -->
 <div class="s" id="s8">
   <div class="head">
-    <div class="label">25 – 26 April 2026</div>
-    <h2>The Schedule</h2>
+    <div class="label anim-up" style="color:var(--accent);opacity:.6">25 – 26 April 2026</div>
+    <h2 class="anim-up2">The Schedule</h2>
   </div>
   <div class="tl">
-    <div class="ev hot">
+    <div class="ev hot anim-up">
       <div class="ev-time">8:00 AM</div><div class="ev-dot"></div>
       <div><div class="ev-name">Doors Open &amp; Check-In</div><div class="ev-sub">ID verification → kit → room allocation</div></div>
     </div>
-    <div class="ev hot">
+    <div class="ev hot anim-up2">
       <div class="ev-time">10:00 AM</div><div class="ev-dot"></div>
       <div><div class="ev-name">Orientation &amp; PS Drop ⚡</div><div class="ev-sub">Problem statements revealed — sprint begins</div></div>
     </div>
-    <div class="ev">
+    <div class="ev anim-up3">
       <div class="ev-time">1:00 PM</div><div class="ev-dot"></div>
-      <div><div class="ev-name">Lunch</div><div class="ev-sub">Fuel up. Don't stop.</div></div>
+      <div><div class="ev-name">Lunch</div><div class="ev-sub">Fuel up. Don’t stop.</div></div>
     </div>
-    <div class="ev">
+    <div class="ev anim-up4">
       <div class="ev-time">8:00 PM</div><div class="ev-dot"></div>
       <div><div class="ev-name">Power Dinner</div><div class="ev-sub">Mentor walkthrough rounds</div></div>
     </div>
-    <div class="ev hot">
+    <div class="ev hot anim-up5">
       <div class="ev-time">10:00 AM+1</div><div class="ev-dot"></div>
       <div><div class="ev-name">Final Submissions &amp; Judging</div><div class="ev-sub">26 April — 24 hours complete</div></div>
     </div>
@@ -362,31 +612,31 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--black);font-
 <!-- S9: BENTO MEME GRID -->
 <div class="s" id="s9">
   <div class="b-header">
-    <h2>Developer<br>Proverbs</h2>
-    <div class="label">Hackathon survival guide</div>
+    <h2 class="anim-up">Developer<br>Proverbs</h2>
+    <div class="label anim-up2" style="color:var(--accent);opacity:.5">Hackathon survival guide</div>
   </div>
-  <div class="bc wide hi">
+  <div class="bc wide hi anim-up2">
     <div class="bt">Universal truth</div>
     <div class="bh">"Sleep is for the weak.<br>Coffee is for the strong."</div>
     <div class="ba">Attributed to every developer at 3am</div>
     <div class="bnum">01</div>
   </div>
-  <div class="bc">
+  <div class="bc anim-up3">
     <div class="bt">Stack Overflow</div>
     <div class="bh">"If it's down, the hackathon is cancelled."</div>
     <div class="ba">Incident report, 2024</div>
   </div>
-  <div class="bc">
+  <div class="bc anim-up3">
     <div class="bt">Git wisdom</div>
     <div class="bh">"It worked before I touched it."</div>
     <div class="ba">Every developer, twice a day</div>
   </div>
-  <div class="bc">
+  <div class="bc anim-up4">
     <div class="bt">Deployment</div>
     <div class="bh">"Works on my machine" is a valid production environment.</div>
     <div class="ba">DevOps proverb</div>
   </div>
-  <div class="bc wide">
+  <div class="bc wide anim-up4">
     <div class="bt">Powered by</div>
     <div class="bh">"Caffeine, Panic, and Stack Overflow — the holy trinity of hackathons."</div>
     <div class="ba">Attributed to UDBHAV'26 participants</div>
@@ -397,30 +647,30 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--black);font-
 <!-- S10: BENTO INFO GRID -->
 <div class="s" id="s10">
   <div class="b-header">
-    <h2>Why<br>Compete?</h2>
-    <div class="label">UDBHAV'26 · Sage University</div>
+    <h2 class="anim-up">Why<br>Compete?</h2>
+    <div class="label anim-up2" style="color:var(--accent);opacity:.5">UDBHAV'26 · Sage University</div>
   </div>
-  <div class="bc-main">
+  <div class="bc-main anim-up2">
     <div class="big-num">₹45K</div>
     <div class="lbl">Total Prize Pool</div>
     <div class="sub">Cash prizes across 3 categories + certificates, mentorship &amp; industry spotlight.</div>
   </div>
-  <div class="bc">
+  <div class="bc anim-up3">
     <div class="bt">Teams</div>
-    <div class="bh" style="font-style:normal;font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,6vw,90px);color:var(--white);line-height:1">50</div>
+    <div class="bh" style="font-style:normal;font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,6vw,90px);color:var(--accent);line-height:1">50</div>
     <div class="ba">Spots available</div>
   </div>
-  <div class="bc">
+  <div class="bc anim-up3">
     <div class="bt">Duration</div>
-    <div class="bh" style="font-style:normal;font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,6vw,90px);color:var(--white);line-height:1">24H</div>
+    <div class="bh" style="font-style:normal;font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,6vw,90px);color:var(--accent);line-height:1">24H</div>
     <div class="ba">Non-stop building</div>
   </div>
-  <div class="bc hi">
+  <div class="bc hi anim-up4">
     <div class="bt">Date</div>
     <div class="bh">25–26 April 2026</div>
     <div class="ba">Sage University, Indore</div>
   </div>
-  <div class="bc">
+  <div class="bc anim-up4">
     <div class="bt">Mentors</div>
     <div class="bh">Live guidance from industry professionals throughout the event.</div>
     <div class="ba">All tracks covered</div>
@@ -430,31 +680,31 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--black);font-
 <!-- S11: 99 BUGS MEME -->
 <div class="s" id="s11">
   <div class="wrap">
-    <div class="mono-tag">Programmer mathematics</div>
-    <div class="big-meme">99 bugs<br>in the code.<br>fix one.<br><em>127 bugs.</em></div>
-    <div class="divider"></div>
-    <div class="body-text">"The best method for accelerating a computer is the one that boosts it by 9.8 m/s²"</div>
-    <div class="mono-tag">— Unknown engineer, probably correct</div>
+    <div class="mono-tag anim-up">Programmer mathematics</div>
+    <div class="big-meme anim-up2">99 bugs<br>in the code.<br>fix one.<br><em>127 bugs.</em></div>
+    <div class="divider anim-up3"></div>
+    <div class="body-text anim-up3">"The best method for accelerating a computer is the one that boosts it by 9.8 m/s²"</div>
+    <div class="mono-tag anim-up4">— Unknown engineer, probably correct</div>
   </div>
 </div>
 
 <!-- S12: TODO MEME — WHITE SPLIT -->
 <div class="s" id="s12">
   <div class="left">
-    <div class="label">Developer folklore</div>
-    <h2>//TODO:<br>Fix<br>Later.</h2>
-    <div class="red-bar"></div>
+    <div class="label anim-up" style="color:var(--accent);opacity:.5">Developer folklore</div>
+    <h2 class="anim-up2">//TODO:<br>Fix<br>Later.</h2>
+    <div class="red-bar anim-up3"></div>
   </div>
   <div class="right">
-    <div class="joke">
+    <div class="joke anim-up2">
       <div class="q">"That comment was added in 2021. The function it refers to no longer exists."</div>
       <div class="src">git blame — every codebase</div>
     </div>
-    <div class="joke">
+    <div class="joke anim-up3">
       <div class="q">"A user interface is like a joke. If you have to explain it, it's not that good."</div>
       <div class="src">Martin LeBlanc</div>
     </div>
-    <div class="joke">
+    <div class="joke anim-up4">
       <div class="q">"Measuring programming progress by lines of code is like measuring flight progress by fuel consumed."</div>
       <div class="src">Bill Gates</div>
     </div>
@@ -579,6 +829,199 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--black);font-
   </div>
 </div>
 
+
+<!-- S24: MOTIVATIONAL CLOCK -->
+<div class="s" id="s24">
+  <div class="mc-wrap">
+    <div class="mc-label anim-up">Live Clock · Stay Focused</div>
+    <div class="mc-time anim-up2" id="mcClock">--<span class="mc-sep">:</span>--</div>
+    <div class="mc-divider anim-up3"></div>
+    <div class="mc-quote anim-up3">“The only way to do great work is to love what you do.”</div>
+    <div class="mc-attr anim-up4">— Steve Jobs</div>
+  </div>
+</div>
+
+<!-- S25: PRIZE BREAKDOWN -->
+<div class="s" id="s25">
+  <div class="pz-head">
+    <h2 class="anim-up">Prize Pool</h2>
+    <div class="label anim-up2" style="color:var(--accent);opacity:.5">UDBHAV’26 · ₹45,000</div>
+  </div>
+  <div class="pz-grid">
+    <div class="pz-card silver anim-up2">
+      <div class="pz-icon">🥈</div>
+      <div class="pz-rank">2nd Place</div>
+      <div class="pz-amount">₹10K</div>
+      <div class="pz-desc">Runner Up</div>
+    </div>
+    <div class="pz-card gold anim-up">
+      <div class="pz-icon">🏆</div>
+      <div class="pz-rank">1st Place</div>
+      <div class="pz-amount">₹20K</div>
+      <div class="pz-desc">Grand Champion</div>
+    </div>
+    <div class="pz-card bronze anim-up3">
+      <div class="pz-icon">🥉</div>
+      <div class="pz-rank">3rd Place</div>
+      <div class="pz-amount">₹7K</div>
+      <div class="pz-desc">Second Runner Up</div>
+    </div>
+  </div>
+  <div class="pz-total anim-up4">
+    <span>Total Prize Pool</span>
+    <strong>₹45,000</strong>
+    <span>+ Certificates & Mentorship</span>
+  </div>
+</div>
+
+
+<!-- S28: ROUND 3 ATTENTION GRABBER -->
+<div class="s" id="s28">
+  <div class="rw">
+    <div class="r3-eyebrow anim-up">It's time — Final Round</div>
+    <div class="r3-title anim-up2">ROUND<br><span>THREE</span></div>
+    <div class="r3-rule anim-up3"></div>
+    <div class="r3-steps">
+      <div class="r3-step anim-up2">
+        <div class="r3-dot">🏗️</div>
+        <div class="r3-step-num">Step 01</div>
+        <div class="r3-step-name">Build</div>
+        <div class="r3-step-desc">Complete your project &amp; demo</div>
+      </div>
+      <div class="r3-step hl anim-up3">
+        <div class="r3-dot">🎬</div>
+        <div class="r3-step-num">Step 02</div>
+        <div class="r3-step-name">Record</div>
+        <div class="r3-step-desc">Film your solution video under 5 mins</div>
+      </div>
+      <div class="r3-step anim-up4">
+        <div class="r3-dot">📤</div>
+        <div class="r3-step-num">Step 03</div>
+        <div class="r3-step-name">Upload</div>
+        <div class="r3-step-desc">Post on LinkedIn with mandatory hashtags</div>
+      </div>
+    </div>
+    <div class="r3-cta anim-up5">See next slides for <em>full script &amp; guidelines →</em></div>
+  </div>
+</div>
+
+<!-- S26: PHASE 3 OVERVIEW -->
+<div class="s" id="s26">
+  <div class="ph-wrap">
+    <div class="ph-badge anim-up">Phase 3 · Final Round</div>
+    <h2 class="anim-up2">LinkedIn<br>Video</h2>
+    <div class="ph-rule anim-up3"></div>
+    <div class="ph-desc anim-up3">Record a short video explaining your solution with a live demo — then upload it to LinkedIn. Under 5 minutes. Landscape mode.</div>
+    <div class="ph-tags anim-up4">
+      <span class="ph-tag">#UDBHAV26</span>
+      <span class="ph-tag">#ALTAschooloftechnology</span>
+      <span class="ph-tag">#SAGEUniversity</span>
+      <span class="ph-tag">#Hackathon</span>
+      <span class="ph-tag">#BuildInPublic</span>
+    </div>
+  </div>
+</div>
+
+<!-- S27: PHASE 3 VIDEO SCRIPT -->
+<div class="s" id="s27">
+  <div class="sc-head">
+    <h2 class="anim-up">Script Structure</h2>
+    <div class="label anim-up2" style="color:var(--accent);opacity:.5">Phase 3 · 4 Sections · Under 5 min</div>
+  </div>
+  <div class="sc-steps">
+    <div class="sc-step anim-up">
+      <div class="sc-step-icon">👥</div>
+      <div class="sc-num">01</div>
+      <div class="sc-step-label">Intro</div>
+      <div class="sc-step-text">Team name, all members, event name &amp; venue</div>
+    </div>
+    <div class="sc-step anim-up2">
+      <div class="sc-step-icon">🧩</div>
+      <div class="sc-num">02</div>
+      <div class="sc-step-label">Problem</div>
+      <div class="sc-step-text">State your PS clearly in 1–2 sentences + real-world impact</div>
+    </div>
+    <div class="sc-step active anim-up3">
+      <div class="sc-step-icon">💡</div>
+      <div class="sc-num">03</div>
+      <div class="sc-step-label">Solution</div>
+      <div class="sc-step-text">Project name, what it does, how it works + tech stack</div>
+    </div>
+    <div class="sc-step anim-up4">
+      <div class="sc-step-icon">🖥️</div>
+      <div class="sc-num">04</div>
+      <div class="sc-step-label">Demo</div>
+      <div class="sc-step-text">Live screen recording · 2 to 3 minutes · show key features</div>
+    </div>
+  </div>
+  <div class="sc-footer anim-up5">
+    <span>Tag</span>
+    <strong>@Alta School of Technology</strong>
+    <span>&</span>
+    <strong>@Sage University</strong>
+    <span>on LinkedIn</span>
+    <span style="opacity:.3">·</span>
+    <span>Landscape</span>
+    <span style="opacity:.3">·</span>
+    <span>Speak confidently</span>
+    <span style="opacity:.3">·</span>
+    <span>Demo screen visible</span>
+  </div>
+</div>
+
+
+<!-- S29: REEL/VLOG COMPETITION HERO -->
+<div class="s" id="s29">
+  <div class="rv-wrap">
+    <div class="rv-badge anim-up">🎬 Creative Competition · UDBHAV'26</div>
+    <div class="rv-title anim-up2">REEL &<br><em>VLOG</em></div>
+    <div class="rv-rule anim-up3"></div>
+    <div class="rv-prizes">
+      <div class="rv-prize anim-up3">
+        <div class="rv-prize-icon">🎞️</div>
+        <div class="rv-prize-type">Reel Winner</div>
+        <div class="rv-prize-amt">₹2,100</div>
+      </div>
+      <div class="rv-prize anim-up4">
+        <div class="rv-prize-icon">📹</div>
+        <div class="rv-prize-type">Vlog Winner</div>
+        <div class="rv-prize-amt">₹2,100</div>
+      </div>
+    </div>
+    <div class="rv-sub anim-up5">Separate winners · Rewards by 28th April · Grab your phone &amp; get creative 🚀</div>
+  </div>
+</div>
+
+<!-- S30: REEL/VLOG RULES -->
+<div class="s" id="s30">
+  <div class="rr-head">
+    <h2 class="anim-up">How to Participate</h2>
+    <div class="label anim-up2" style="color:var(--accent);opacity:.5">Submit by 27th April</div>
+  </div>
+  <div class="rr-body">
+    <div class="rr-card anim-up2">
+      <div class="rr-card-icon">📋</div>
+      <div class="rr-card-title">Submit</div>
+      <div class="rr-card-text">A Google Form will be released — paste the <strong>link of your reel or vlog</strong> in the form. Deadline: <strong>27th April</strong></div>
+    </div>
+    <div class="rr-card anim-up3">
+      <div class="rr-card-icon">🏷️</div>
+      <div class="rr-card-title">Tag</div>
+      <div class="rr-card-text">Tag <strong>@ALTASchoolofTechnology</strong> and <strong>@SAGEUniversity</strong> in your post on Instagram / LinkedIn</div>
+    </div>
+    <div class="rr-card anim-up4">
+      <div class="rr-card-icon">🏆</div>
+      <div class="rr-card-title">Reward</div>
+      <div class="rr-card-text"><strong>₹2,100</strong> each — Reel &amp; Vlog are separate categories with <strong>separate winners</strong>. Handed over by 28th April.</div>
+    </div>
+  </div>
+  <div class="rr-tags anim-up5">
+    <span class="rr-tag">#ALTAschooloftechnology</span>
+    <span class="rr-tag">#SAGEuniversityindore</span>
+    <span class="rr-tag">#UDBHAV26</span>
+  </div>
+</div>
+
 <!-- S23: VIBE CHECK -->
 <div class="s" id="s23">
   <div class="vibe-wrap">
@@ -589,20 +1032,50 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--black);font-
       <span class="vibe-tag">#Udbhav26</span>
       <span class="vibe-tag">#24HoursOfChaos</span>
       <span class="vibe-tag">#JugaadTech</span>
+      <span class="vibe-tag">#PurpleVibes</span>
     </div>
   </div>
 </div>
 
+
+<!-- EVENT ANNOUNCEMENT OVERLAY -->
+<div id="event-overlay">
+  <div class="ev-ripple"></div>
+  <div class="ev-ripple ev-ripple2"></div>
+  <div class="ev-ripple ev-ripple3"></div>
+  <div class="ev-popup" id="evPopup">
+    <div class="ev-badge" id="evBadge">Live Announcement</div>
+    <div class="ev-emoji" id="evEmoji">⚡</div>
+    <div class="ev-title" id="evTitle">IT'S<br><span class="ev-accent">LIVE!</span></div>
+    <div class="ev-sub" id="evSub">The moment you've been waiting for.</div>
+    <div class="ev-dismiss">Tap anywhere to dismiss · auto-closing in <span id="evCountdown">10</span>s</div>
+    <div class="ev-bar" id="evBar" style="width:0%"></div>
+  </div>
+</div>
 <canvas id="particles"></canvas>
 <button class="nav-arr" id="arrL">&#8592;</button>
 <button class="nav-arr" id="arrR">&#8594;</button>
+
+<!-- FIXED LOGO BAR -->
+<div id="logo-bar">
+  <div class="logo-side">
+    <img src="/alta-logo.svg" alt="ALTA School of Technology" id="altaLogo">
+  </div>
+  <div class="logo-center">
+    <img src="/logo.png" alt="UDBHAV'26" id="mainLogo">
+  </div>
+  <div class="logo-side">
+    <img src="/sage-logo.svg" alt="SAGE University" id="sageLogo">
+  </div>
+</div>
+
 <div id="ui">
   <div id="dots"></div>
   <div id="bar"></div>
 </div>
 
 <script>
-var DUR=15000,TICK=80,cur=0,elapsed=0,tmr=null;
+var DUR=300000,TICK=80,cur=0,elapsed=0,tmr=null;
 var ss=document.querySelectorAll('.s'),bar=document.getElementById('bar'),dw=document.getElementById('dots');
 ss.forEach(function(_,i){var d=document.createElement('div');d.className='d'+(i===0?' on':'');d.onclick=function(){go(i);};dw.appendChild(d);});
 
@@ -653,7 +1126,7 @@ document.addEventListener('keydown',function(e){
       if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;
       if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;
       ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle='rgba(232,255,71,'+p.o+')';ctx.fill();
+      ctx.fillStyle='rgba(168,85,247,'+p.o+')';ctx.fill();
     }
     // Connect nearby
     for(var i=0;i<pts.length;i++){
@@ -661,7 +1134,7 @@ document.addEventListener('keydown',function(e){
         var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
         if(d<150){
           ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);
-          ctx.strokeStyle='rgba(232,255,71,'+(0.04*(1-d/150))+')';ctx.stroke();
+          ctx.strokeStyle='rgba(168,85,247,'+(0.06*(1-d/150))+')';ctx.stroke();
         }
       }
     }
@@ -719,6 +1192,244 @@ countdown(
   'Problem Statements are LIVE. Choose your battlefield.',
   null,null
 );
+
+/* MOTIVATIONAL CLOCK */
+(function(){
+  var el=document.getElementById('mcClock');
+  if(!el)return;
+  var quotes=[
+    ['"The only way to do great work is to love what you do."','Steve Jobs'],
+    ['"Talk is cheap. Show me the code."','Linus Torvalds'],
+    ['"Move fast and break things."','Mark Zuckerberg'],
+    ['"Stay hungry, stay foolish."','Steve Jobs'],
+    ['"Simplicity is the soul of efficiency."','Austin Freeman'],
+    ['"First, solve the problem. Then, write the code."','John Johnson']
+  ];
+  var qi=0;
+  function tick(){
+    var now=new Date();
+    var h=String(now.getHours()).padStart(2,'0');
+    var m=String(now.getMinutes()).padStart(2,'0');
+    el.innerHTML=h+'<span class="mc-sep">:</span>'+m;
+  }
+  tick();setInterval(tick,1000);
+  // Rotate quotes every 30s
+  var qEl=document.querySelector('#s24 .mc-quote');
+  var aEl=document.querySelector('#s24 .mc-attr');
+  if(qEl&&aEl){setInterval(function(){qi=(qi+1)%quotes.length;qEl.textContent=quotes[qi][0];aEl.textContent='\u2014 '+quotes[qi][1];},30000);}
+})();
+
+/* ── EVENT POPUP SYSTEM ── */
+(function(){
+  var overlay=document.getElementById('event-overlay');
+  var popup=document.getElementById('evPopup');
+  var badge=document.getElementById('evBadge');
+  var emoji=document.getElementById('evEmoji');
+  var title=document.getElementById('evTitle');
+  var sub=document.getElementById('evSub');
+  var bar=document.getElementById('evBar');
+  var cdEl=document.getElementById('evCountdown');
+  var shown={};
+  var dismissTimer=null;
+  var barAnim=null;
+
+  function dismiss(){
+    clearInterval(dismissTimer);
+    clearInterval(barAnim);
+    popup.classList.add('hiding');
+    setTimeout(function(){
+      overlay.classList.remove('show');
+      popup.classList.remove('hiding');
+    },450);
+  }
+
+  overlay.addEventListener('click',dismiss);
+
+  function showEvent(cfg){
+    if(shown[cfg.id])return;
+    shown[cfg.id]=true;
+    badge.textContent=cfg.badge;
+    emoji.textContent=cfg.emoji;
+    title.innerHTML=cfg.title;
+    sub.textContent=cfg.sub;
+    bar.style.width='0%';
+    overlay.classList.add('show');
+    var secs=12,elapsed=0;
+    cdEl.textContent=secs;
+    var tick=100;
+    barAnim=setInterval(function(){
+      elapsed+=tick;
+      bar.style.width=Math.min(100,(elapsed/(secs*1000))*100)+'%';
+    },tick);
+    dismissTimer=setInterval(function(){
+      secs--;cdEl.textContent=secs;
+      if(secs<=0){clearInterval(dismissTimer);clearInterval(barAnim);dismiss();}
+    },1000);
+  }
+
+  // Poll every second to check if events just became live
+  var psTime=new Date('2026-04-25T05:15:00Z').getTime();
+  var hackTime=new Date('2026-04-25T04:30:00Z').getTime();
+
+  setInterval(function(){
+    var now=Date.now();
+    // Trigger within first 60s after start time
+    if(now>=hackTime && now<hackTime+60000){
+      showEvent({
+        id:'hack',
+        badge:'🚀 Hackathon has started',
+        emoji:'🔥',
+        title:'BUILD.<br><span class="ev-accent">NOW.</span>',
+        sub:'The 24-hour sprint begins. Your clock is ticking — go build something incredible!'
+      });
+    }
+    if(now>=psTime && now<psTime+60000){
+      showEvent({
+        id:'ps',
+        badge:'⚡ Problem Statements are LIVE',
+        emoji:'💡',
+        title:'PS<br><span class="ev-accent">DROPPED!</span>',
+        sub:'10 problem statements. 5 teams per PS. 15 minutes to choose your battlefield.'
+      });
+    }
+  },1000);
+})();
+
+/* ── CLICK RIPPLE ── */
+document.addEventListener('click',function(e){
+  if(e.target.closest('#event-overlay,.nav-arr,.d'))return;
+  var r=document.createElement('div');r.className='click-ripple';
+  r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';
+  document.body.appendChild(r);
+  setTimeout(function(){r.remove();},750);
+});
+
+/* ── 3D TILT ON CARDS ── */
+(function(){
+  var cards=document.querySelectorAll('.bc,.pz-card');
+  cards.forEach(function(card){
+    card.addEventListener('mousemove',function(e){
+      var rect=card.getBoundingClientRect();
+      var x=(e.clientX-rect.left)/rect.width-.5;
+      var y=(e.clientY-rect.top)/rect.height-.5;
+      card.style.transform='translateY(-6px) rotateX('+(y*-10)+'deg) rotateY('+(x*10)+'deg) scale(1.02)';
+    });
+    card.addEventListener('mouseleave',function(){
+      card.style.transform='';
+    });
+  });
+})();
+
+/* ── S3 COUNT-UP ON SLIDE ENTER ── */
+(function(){
+  var targets={'24':24,'50':50,'200':200,'45':45};
+  var done=false;
+  var s3=document.getElementById('s3');
+  var origGo=go;
+  // Watch for s3 becoming active
+  var obs=new MutationObserver(function(){
+    if(s3.classList.contains('on')&&!done){
+      done=true;
+      var nums=s3.querySelectorAll('.cell-num');
+      nums.forEach(function(el){
+        var raw=el.textContent.replace(/[^d]/g,'');
+        var target=parseInt(raw)||0;
+        if(!target)return;
+        var prefix=el.textContent.match(/^[^d]*/)[0];
+        var suffix=el.textContent.match(/[^d]*$/)[0];
+        var start=0,dur=1200,startTime=null;
+        function step(ts){
+          if(!startTime)startTime=ts;
+          var prog=Math.min((ts-startTime)/dur,1);
+          var ease=1-Math.pow(1-prog,3);
+          el.textContent=prefix+Math.round(target*ease)+suffix;
+          if(prog<1)requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    }
+    if(!s3.classList.contains('on'))done=false;
+  });
+  obs.observe(s3,{attributes:true,attributeFilter:['class']});
+})();
+
+/* ── S7 MARQUEE SPEED ON HOVER ── */
+(function(){
+  var s7=document.getElementById('s7');
+  if(!s7)return;
+  s7.addEventListener('mouseenter',function(){
+    s7.querySelectorAll('.row-inner').forEach(function(r){
+      var dur=parseFloat(getComputedStyle(r).animationDuration)||20;
+      r.style.animationDuration=(dur*0.4)+'s';
+    });
+  });
+  s7.addEventListener('mouseleave',function(){
+    s7.querySelectorAll('.row-inner').forEach(function(r){
+      r.style.animationDuration='';
+    });
+  });
+})();
+
+/* ── S8 SEQUENTIAL TIMELINE PULSE ── */
+(function(){
+  var s8=document.getElementById('s8');
+  if(!s8)return;
+  var obs=new MutationObserver(function(){
+    if(s8.classList.contains('on')){
+      var dots=s8.querySelectorAll('.ev-dot');
+      dots.forEach(function(d,i){
+        setTimeout(function(){
+          d.style.transform='scale(1.6)';
+          d.style.boxShadow='0 0 20px rgba(168,85,247,.8)';
+          setTimeout(function(){d.style.transform='';d.style.boxShadow='';},400);
+        },i*300+600);
+      });
+    }
+  });
+  obs.observe(s8,{attributes:true,attributeFilter:['class']});
+})();
+
+/* ── PARALLAX ORB on MOUSEMOVE ── */
+(function(){
+  document.addEventListener('mousemove',function(e){
+    var xp=(e.clientX/innerWidth-.5)*20;
+    var yp=(e.clientY/innerHeight-.5)*20;
+    ['s1','s6','s23'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el&&el.classList.contains('on')){
+        el.style.setProperty('--ox',xp+'px');
+        el.style.setProperty('--oy',yp+'px');
+      }
+    });
+  });
+})();
+
+/* ── S1 TITLE PARTICLES ON CLICK ── */
+(function(){
+  var h1=document.querySelector('#s1 h1');
+  if(!h1)return;
+  h1.addEventListener('click',function(e){
+    for(var i=0;i<12;i++){
+      var p=document.createElement('div');
+      p.style.cssText='position:fixed;pointer-events:none;z-index:9999;width:'+(Math.random()*8+4)+'px;height:'+(Math.random()*8+4)+'px;border-radius:50%;background:rgba(168,85,247,'+(Math.random()*.5+.3)+');left:'+e.clientX+'px;top:'+e.clientY+'px;';
+      document.body.appendChild(p);
+      var angle=Math.random()*Math.PI*2;
+      var speed=Math.random()*120+60;
+      var dx=Math.cos(angle)*speed,dy=Math.sin(angle)*speed-60;
+      var start=null;
+      (function(el,dx,dy){
+        requestAnimationFrame(function step(ts){
+          if(!start)start=ts;
+          var t=(ts-start)/1000;
+          el.style.transform='translate('+dx*t+'px,'+(dy*t+60*t*t)+'px)';
+          el.style.opacity=Math.max(0,1-t*2);
+          if(t<1)requestAnimationFrame(step);else el.remove();
+        });
+      })(p,dx,dy);
+    }
+  });
+})();
 </script>
 </body></html>
+
 

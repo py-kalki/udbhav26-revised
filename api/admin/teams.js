@@ -246,22 +246,6 @@ export async function teamsDeleteHandler(req, res) {
   }
 }
 
-/** GET /api/admin/teams/:id - fetch one team with PS details */
-export async function teamsGetHandler(req, res) {
-// ── GET ONE  GET /api/admin/teams/:id ────────────────────────────────────────
-export async function teamsGetByIdHandler(req, res) {
-  if (!authGuard(req, res)) return;
-  try {
-    await connectDB();
-    const { id } = req.params;
-    const team = await Team.findById(id);
-    if (!team) return res.status(404).json({ success: false, error: 'Team not found.' });
-    return res.status(200).json({ success: true, team });
-  } catch (err) {
-    console.error('[admin/teams] get error:', err);
-    return res.status(500).json({ success: false, error: err.message });
-  }
-}
 
 // ── APPROVE MENTORSHIP POST /api/admin/teams/:id/approve-mentorship ──────────
 export async function approveMentorshipHandler(req, res) {
