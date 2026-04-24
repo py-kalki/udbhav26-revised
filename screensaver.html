@@ -1127,6 +1127,50 @@ html,body{width:100vw;height:100vh;overflow:hidden;font-family:'Syne',sans-serif
 ══════════════════════════════════════════ */
 #s15,#s16,#s17,#s18,#s19,#s20 { background: transparent; }
 #s21,#s22 { background: transparent; }
+
+/* ══════════════════════════════════════════
+   S15: POSTER QUOTES
+══════════════════════════════════════════ */
+#s15 { place-items: center; background: transparent; }
+.poster-content {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4vh; width: 85vw; height: 85vh;
+  background: rgba(10, 10, 20, 0.4);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  padding: 60px; position: relative; overflow: hidden;
+}
+.poster-content::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle at center, rgba(0,240,255,0.05), transparent 60%);
+  animation: spinSlow 30s linear infinite; pointer-events: none;
+}
+.sponsor-row { display: flex; align-items: center; gap: 60px; }
+.alta-logo { height: 100px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(255,255,255,0.2)); }
+.vite-logo { height: 100px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(255,255,255,0.2)); }
+.poster-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(80px, 12vw, 180px);
+  color: var(--white); line-height: 0.85; text-align: center;
+  text-shadow: 0 0 60px rgba(255,255,255,0.1); margin-bottom: 2vh;
+}
+.qc-container {
+  display: flex; align-items: center; gap: 30px; width: 100%; max-width: 1200px;
+  background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 20px; padding: 40px 60px; position: relative; z-index: 2;
+}
+.qc-arr {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  color: var(--white); width: 60px; height: 60px; border-radius: 50%;
+  font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s; flex-shrink: 0;
+}
+.qc-arr:hover { background: rgba(0,240,255,0.2); border-color: var(--accent2); box-shadow: 0 0 20px rgba(0,240,255,0.3); }
+.qc-display { flex: 1; text-align: center; min-height: 180px; display: flex; flex-direction: column; justify-content: center; }
+.qc-text { font-family: 'Outfit', sans-serif; font-size: clamp(28px, 4vw, 56px); font-weight: 800; color: var(--white); line-height: 1.2; margin-bottom: 16px; }
+.qc-text em { color: var(--accent2); font-style: normal; text-shadow: 0 0 20px rgba(0,240,255,0.4); }
+.qc-sub { font-family: 'IBM Plex Mono', monospace; font-size: clamp(12px, 1.2vw, 16px); color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.2em; }
+
 </style>
 </head>
 <body>
@@ -1480,11 +1524,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;font-family:'Syne',sans-serif
         <div class="qc-sub">— Every hackathon participant at 3AM</div>
       </div>
       <div class="q-item">
-        <div class="qc-text">Innovation nahi mila toh <em>Jugaad</em> laga do, yahi toh India hai.</div>
+        <div class="qc-text">Innovation nahi mila toh <em>Jugaad laga do</em>, yahi toh India hai.</div>
         <div class="qc-sub">— Proudly desi engineering</div>
       </div>
       <div class="q-item">
-        <div class="qc-text">Ek aur <em>chai</em> piyo, phir sab theek ho jayega.</div>
+        <div class="qc-text">Ek aur <em>chai piyo</em>, phir sab theek ho jayega.</div>
         <div class="qc-sub">— Universal Indian debugging technique</div>
       </div>
       <div class="q-item">
@@ -1492,8 +1536,8 @@ html,body{width:100vw;height:100vh;overflow:hidden;font-family:'Syne',sans-serif
         <div class="qc-sub">— Proven by every student, always</div>
       </div>
       <div class="q-item">
-        <div class="qc-text">Internet slow nahi hai bhai, tera <em>infinite loop</em> CPU ki jaan le raha hai.</div>
-        <div class="qc-sub">— Debugging truths</div>
+        <div class="qc-text">WiFi slow hai ya <em>mera code heavy hai?</em> Ye toh ab research ka topic ban gaya hai.</div>
+        <div class="qc-sub">— Deep thoughts during compiling</div>
       </div>
       <div class="q-item">
         <div class="qc-text">Demo mein <em>confidence</em> rakh, judge ko bug dikhna nahi chahiye.</div>
@@ -1874,11 +1918,19 @@ function run() {
 }
 run();
 
-document.getElementById('arrL').onclick = function() { go((cur - 1 + ss.length) % ss.length); };
-document.getElementById('arrR').onclick = function() { go((cur + 1) % ss.length); };
+function handlePrev() {
+  if (ss[cur].id === 's15') { showQc(qcIdx - 1); elapsed = 0; bar.style.width = '0%'; }
+  else { go((cur - 1 + ss.length) % ss.length); }
+}
+function handleNext() {
+  if (ss[cur].id === 's15') { showQc(qcIdx + 1); elapsed = 0; bar.style.width = '0%'; }
+  else { go((cur + 1) % ss.length); }
+}
+document.getElementById('arrL').onclick = handlePrev;
+document.getElementById('arrR').onclick = handleNext;
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'ArrowLeft') go((cur - 1 + ss.length) % ss.length);
-  if (e.key === 'ArrowRight') go((cur + 1) % ss.length);
+  if (e.key === 'ArrowLeft') handlePrev();
+  if (e.key === 'ArrowRight') handleNext();
 });
 
 /* ══════════════════════════
