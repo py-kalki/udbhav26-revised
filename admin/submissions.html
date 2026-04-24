@@ -124,6 +124,8 @@
     .badge--project { background: rgba(74,222,128,0.12); color: var(--clr-green); border: 1px solid rgba(74,222,128,0.2); }
     .badge--mentor  { background: rgba(167,139,250,0.12); color: var(--clr-purple); border: 1px solid rgba(167,139,250,0.2); }
     .badge--other   { background: rgba(255,255,255,0.08); color: var(--clr-grey); border: 1px solid rgba(255,255,255,0.1); }
+    .badge--final   { background: rgba(74,222,128,0.12); color: var(--clr-green); border: 1px solid rgba(74,222,128,0.2); }
+    .badge--draft   { background: rgba(251,191,36,0.12); color: var(--clr-amber); border: 1px solid rgba(251,191,36,0.2); }
 
     .action-btn {
       display: inline-flex; align-items: center; justify-content: center;
@@ -224,8 +226,7 @@
         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         Bulk Emails
       </a>
-
-      
+      <a href="/admin/schedule" class="sidebar-link">
     </nav>
     <div class="sidebar-footer">
       <button class="sidebar-logout" id="logoutBtn">Logout</button>
@@ -255,13 +256,14 @@
             <tr>
               <th>Team ID</th>
               <th>Type</th>
+              <th>Status</th>
               <th>Submission Link</th>
               <th>Submitted At</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody id="tableBody">
-            <tr><td colspan="5" class="table-empty">Loading submissions...</td></tr>
+            <tr><td colspan="6" class="table-empty">Loading submissions...</td></tr>
           </tbody>
         </table>
       </div>
@@ -325,14 +327,19 @@
 
       function render(items) {
         if (items.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" class="table-empty">No submissions found</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="6" class="table-empty">No submissions found</td></tr>';
           return;
         }
 
-        tbody.innerHTML = items.map(s => `
+        tbody.innerHTML = items.map(s => {
+          const statusBadge = s.finalSubmitted
+            ? '<span class="status-badge badge--final">Final</span>'
+            : '<span class="status-badge badge--draft">Draft</span>';
+          return `
           <tr>
             <td class="td-team">${s.teamId}</td>
             <td>${SubmissionStore.getTypeBadge(s.type)}</td>
+            <td>${statusBadge}</td>
             <td><a href="${s.submissionLink}" target="_blank" class="td-link">View File ↗</a></td>
             <td>${AdminUI.formatDate(s.createdAt)} <small style="opacity:0.4">${AdminUI.formatTime(s.createdAt)}</small></td>
             <td>
@@ -341,7 +348,7 @@
               </button>
             </td>
           </tr>
-        `).join('');
+        `}).join('');
       }
 
       render(submissions);

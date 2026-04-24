@@ -212,6 +212,7 @@ const cleanRoutes = {
   '/admin/ps-stats':           'admin/ps-stats.html',
   '/admin/winners':            'admin/winners.html',
   '/admin/submissions':        'admin/submissions.html',
+  '/admin/schedule':           'admin/schedule.html',
   '/admin/teams':              'admin/team.html',
   '/admin/team':               'admin/team.html',
   '/admin/emails':             'admin/emails.html',
@@ -239,7 +240,9 @@ app.get ('/api/payment-status',   mountHandler(paymentStatusHandler));    // Fro
 app.post('/api/register', registerLimiter,    mountHandler(registerHandler));
 app.get ('/api/team',    teamLookupLimiter,  mountHandler(teamHandler));
 app.get ('/api/team-dashboard',mountHandler(teamDashboardHandler));
+
 app.all('/api/spotify',        mountHandler(spotifyHandler));
+
 
 // ── PS Drop Public API ────────────────────────────────────────────────────────
 app.get ('/api/ps/status',      mountHandler(psStatusHandler));
@@ -258,6 +261,8 @@ app.post  ('/api/admin/ps/stop-drop',  mountHandler(stopDropHandler));
 app.get   ('/api/admin/ps/stats',      mountHandler(statsHandler));
 app.get   ('/api/admin/payments',      mountHandler(paymentsHandler));
 app.get   ('/api/admin/ps-stats',         mountHandler(psStatsHandler));
+
+
 
 // ── Admin Registrations API (reads from registrations collection) ─────────────
 app.get   ('/api/admin/registrations',        mountHandler(registrationsListHandler));
@@ -295,6 +300,7 @@ app.post('/api/admin/winners/unpublish',  mountHandler(unpublishWinnersHandler))
 app.post('/api/submissions/submit', mountHandler(submitHandler));
 app.get ('/api/submissions/list',   mountHandler(listSubmissionsHandler));
 app.get ('/api/submissions/get',    mountHandler(getSubmissionHandler));
+
 app.get ('/api/admin/submissions',  mountHandler(listSubmissionsHandler));
 
 // ── Winners Public API ────────────────────────────────────────────────────────
