@@ -24,7 +24,10 @@ const ScheduleConfigSchema = new mongoose.Schema(
     ],
 
     // Target date for countdown
-    targetDate: { type: Date, default: () => new Date('2026-04-25T08:00:00+05:30') }
+    targetDate: { type: Date, default: () => new Date('2026-04-25T08:00:00+05:30') },
+
+    // Manual start/stop for final project submissions
+    submissionsOpen: { type: Boolean, default: false }
   },
   {
     timestamps: true,

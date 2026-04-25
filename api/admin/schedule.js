@@ -27,11 +27,11 @@ export async function getScheduleHandler(req, res) {
 export async function updateScheduleHandler(req, res) {
   if (!requireAdmin(req, res)) return;
   try {
-    const { links, timelineStages, targetDate } = req.body;
+    const { links, timelineStages, targetDate, submissionsOpen } = req.body;
     await connectDB();
     const config = await ScheduleConfig.findOneAndUpdate(
       { _id: 'singleton' },
-      { links, timelineStages, targetDate },
+      { links, timelineStages, targetDate, submissionsOpen },
       { upsert: true, new: true }
     );
     res.json({ success: true, config });

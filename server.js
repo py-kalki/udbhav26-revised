@@ -91,6 +91,7 @@ import {
 
 // ── Import Submissions handlers ───────────────────────────────────────
 import submitHandler           from './api/submissions/submit.js';
+import submitProjectHandler    from './api/submissions/submit-project.js';
 import listSubmissionsHandler  from './api/submissions/list.js';
 import getSubmissionHandler    from './api/submissions/get.js';
 import getByTeamHandler        from './api/submissions/get-by-team.js';
@@ -336,6 +337,7 @@ app.post('/api/admin/winners/unpublish',  mountHandler(unpublishWinnersHandler))
 
 // ── Submissions API ───────────────────────────────────────────────────────────
 app.post('/api/submissions/submit', mountHandler(submitHandler));
+app.post('/api/submissions/submit-project', mountHandler(submitProjectHandler));
 app.get ('/api/submissions/list',   mountHandler(listSubmissionsHandler));
 app.get ('/api/submissions/get',    mountHandler(getSubmissionHandler));
 app.get ('/api/submissions/get-by-team', mountHandler(getByTeamHandler));

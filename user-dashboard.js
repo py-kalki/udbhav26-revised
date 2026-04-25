@@ -10,10 +10,7 @@ const Dashboard = {
     // Command Center Actions (Dynamic Injection)
     commandActions: [
         { id: "resources", title: "Resources", subtitle: "Assets & Briefs", icon: "folder-kanban", visibleAfter: "2026-04-25T11:00:00" },
-        { id: "mentorship", title: "Mentor", subtitle: "See your Mentor", icon: "users", visibleAfter: "2000-01-01T00:00:00" },
-        { id: "github-submission", title: "Github Link", subtitle: "Submit your Github Link", icon: "users", visibleAfter: "2026-04-26T01:00:00" },
-        { id: "ppt-submission", title: "PPT Submission", subtitle: "Submit your PPT", icon: "users", visibleAfter: "2026-04-26T07:00:00" },
-        { id: "project-submission", title: "Project Submission", subtitle: "Submit your project Drive Link", icon: "users", visibleAfter: "2026-04-26T07:00:00" }
+        { id: "mentorship", title: "Mentor", subtitle: "See your Mentor", icon: "users", visibleAfter: "2000-01-01T00:00:00" }
     ],
 
     // Timeline Stages Data
@@ -74,10 +71,7 @@ const Dashboard = {
                 if (config.links) {
                     const mapping = {
                         'resources': config.links.resources,
-                        'mentorship': config.links.mentorship,
-                        'github-submission': config.links.githubSubmission,
-                        'ppt-submission': config.links.pptSubmission,
-                        'project-submission': config.links.projectSubmission
+                        'mentorship': config.links.mentorship
                     };
 
                     document.querySelectorAll('[data-action]').forEach(el => {
@@ -88,6 +82,9 @@ const Dashboard = {
                         }
                     });
                 }
+
+                // 4. Check unified submissions open state and inject cards
+                this.submissionsOpen = config.submissionsOpen;
             }
 
             if (psData && psData.state) {
@@ -320,6 +317,68 @@ const Dashboard = {
                 finalSubmitBtn.disabled = !confirmCheck.checked;
             });
         }
+
+        // Unified Submission Form
+        const unifiedForm = document.getElementById('unified-submit-form');
+        const unifiedConfirm = document.getElementById('unified-confirm-check');
+        const unifiedSubmitBtn = document.getElementById('unified-submit-btn');
+
+        if (unifiedConfirm && unifiedSubmitBtn) {
+            unifiedConfirm.addEventListener('change', () => {
+                unifiedSubmitBtn.disabled = !unifiedConfirm.checked;
+            });
+        }
+
+        if (unifiedForm) {
+            unifiedForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const github = document.getElementById('submit-github').value.trim();
+                const deployed = document.getElementById('submit-deployed').value.trim();
+                const video = document.getElementById('submit-video').value.trim();
+
+                if (!github || !deployed || !video) {
+                    this.showToast('Please provide all three links.', 'error');
+                    return;
+                }
+
+                unifiedSubmitBtn.disabled = true;
+                const originalHtml = unifiedSubmitBtn.innerHTML;
+                unifiedSubmitBtn.innerHTML = 'Submitting...';
+
+                try {
+                    const res = await fetch('/api/submissions/submit-project', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            teamId: this.teamId,
+                            github,
+                            deployed,
+                            video
+                        })
+                    });
+                    
+                    const data = await res.json();
+                    if (data.success) {
+                        this.showToast('Project submitted successfully!', 'success');
+                        
+                        document.getElementById('submit-github').disabled = true;
+                        document.getElementById('submit-deployed').disabled = true;
+                        document.getElementById('submit-video').disabled = true;
+                        unifiedConfirm.disabled = true;
+                        unifiedSubmitBtn.innerHTML = 'Submitted ✓';
+                        unifiedSubmitBtn.classList.remove('bg-white', 'text-black');
+                        unifiedSubmitBtn.classList.add('bg-green-500/20', 'text-green-500', 'border', 'border-green-500/50');
+                    } else {
+                        throw new Error(data.error || 'Submission failed');
+                    }
+                } catch (err) {
+                    this.showToast(err.message, 'error');
+                    unifiedSubmitBtn.disabled = false;
+                    unifiedSubmitBtn.innerHTML = originalHtml;
+                }
+            });
+        }
     },
 
     closeActiveModal() {
@@ -380,7 +439,7 @@ const Dashboard = {
     },
 
     closeActiveModal() {
-        const modals = ['submission-modal', 'mentor-modal'];
+        const modals = ['submission-modal', 'mentor-modal', 'unified-submission-modal'];
         modals.forEach(id => {
             const m = document.getElementById(id);
             if (m) {
@@ -714,6 +773,65 @@ const Dashboard = {
                     }
                 }
             });
+
+            // Inject the manual Start/Stop submission cards if submissionsOpen is true
+            if (this.submissionsOpen) {
+                const manualCards = [
+                    { id: "final-submission", title: "Final Submission", subtitle: "Project Links", icon: "rocket" }
+                ];
+                manualCards.forEach(action => {
+                    const existingEl = document.getElementById(`cmd-${action.id}`);
+                    if (!existingEl) {
+                        const el = document.createElement('div');
+                        el.id = `cmd-${action.id}`;
+                        el.className = "group login-card !p-6 rounded-2xl cursor-pointer !opacity-100 !transform-none border-white/5 hover:border-white/20 transition-all";
+                        el.setAttribute('data-action', 'unified-submission');
+                        el.innerHTML = `
+                            <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-5 transition-transform group-hover:scale-110 border border-white/5">
+                                <i data-lucide="${action.icon}" class="w-5 h-5 text-white/60"></i>
+                            </div>
+                            <h4 class="text-sm font-bold font-heading mb-1 text-white">${action.title}</h4>
+                            <p class="text-[9px] text-white/30 uppercase tracking-widest">${action.subtitle}</p>
+                        `;
+                        // Open the unified submission modal
+                        el.addEventListener('click', () => {
+                            const modal = document.getElementById('unified-submission-modal');
+                            if (modal) {
+                                // Auto-fill and lock if already submitted
+                                if (this.currentTeamData && this.currentTeamData.projectSubmissions && this.currentTeamData.projectSubmissions.submittedAt) {
+                                    const ps = this.currentTeamData.projectSubmissions;
+                                    const git = document.getElementById('submit-github');
+                                    const dep = document.getElementById('submit-deployed');
+                                    const vid = document.getElementById('submit-video');
+                                    const chk = document.getElementById('unified-confirm-check');
+                                    const btn = document.getElementById('unified-submit-btn');
+
+                                    if (git) { git.value = ps.github || ''; git.disabled = true; }
+                                    if (dep) { dep.value = ps.deployed || ''; dep.disabled = true; }
+                                    if (vid) { vid.value = ps.video || ''; vid.disabled = true; }
+                                    if (chk) { chk.checked = true; chk.disabled = true; }
+                                    if (btn) {
+                                        btn.innerHTML = 'Submitted ✓';
+                                        btn.disabled = true;
+                                        btn.classList.remove('bg-white', 'text-black');
+                                        btn.classList.add('bg-green-500/20', 'text-green-500', 'border', 'border-green-500/50');
+                                    }
+                                }
+                                modal.classList.remove('hidden');
+                                modal.style.display = 'flex';
+                            }
+                        });
+                        commandGrid.appendChild(el);
+                        this.initializeIcons();
+                    }
+                });
+            } else {
+                // Remove them if they exist but submissions are closed
+                ['final-submission', 'final-github', 'final-deployed', 'final-video'].forEach(id => {
+                    const el = document.getElementById(`cmd-${id}`);
+                    if (el) el.remove();
+                });
+            }
         }
 
         this.initializeIcons();

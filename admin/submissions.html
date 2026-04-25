@@ -255,11 +255,11 @@
           <thead>
             <tr>
               <th>Team ID</th>
-              <th>Type</th>
               <th>Status</th>
-              <th>Submission Link</th>
+              <th>GitHub</th>
+              <th>Deployed Project</th>
+              <th>Video</th>
               <th>Submitted At</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="tableBody">
@@ -338,15 +338,11 @@
           return `
           <tr>
             <td class="td-team">${s.teamId}</td>
-            <td>${SubmissionStore.getTypeBadge(s.type)}</td>
             <td>${statusBadge}</td>
-            <td><a href="${s.submissionLink}" target="_blank" class="td-link">View File ↗</a></td>
+            <td>${s.githubLink ? `<a href="${s.githubLink}" target="_blank" class="td-link">GitHub ↗</a>` : '-'}</td>
+            <td>${s.projectLink ? `<a href="${s.projectLink}" target="_blank" class="td-link">Deployed ↗</a>` : '-'}</td>
+            <td>${s.videoLink ? `<a href="${s.videoLink}" target="_blank" class="td-link">Video ↗</a>` : '-'}</td>
             <td>${AdminUI.formatDate(s.createdAt)} <small style="opacity:0.4">${AdminUI.formatTime(s.createdAt)}</small></td>
-            <td>
-              <button class="action-btn" title="View details" onclick="openDetail('${s.teamId} Details', \`${(s.description || '').replace(/`/g, "\\`").replace(/\$/g, "\\$")}\`)">
-                <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
-            </td>
           </tr>
         `}).join('');
       }

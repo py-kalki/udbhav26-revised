@@ -234,6 +234,8 @@
                 </div>
             </section>
 
+
+
             <!-- Command & Roadmap Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 <div class="lg:col-span-2 space-y-6">
@@ -328,6 +330,46 @@
                 <p class="text-white/40 text-sm mb-6">Direct access starts April 25.</p>
                 <button class="modal-close px-8 py-3 bg-white text-black font-bold rounded-xl uppercase">Ok</button>
             </div>
+        </div>
+    </div>
+
+    <div id="unified-submission-modal" class="modal-overlay fixed inset-0 flex items-center justify-center p-4 hidden z-[100]">
+        <div class="absolute inset-0 modal-close"></div>
+        <div class="relative w-full max-w-2xl glass-dark border-white/10 rounded-3xl p-8 shadow-2xl">
+            <button class="modal-close absolute top-6 right-6 p-2 text-white/20 hover:text-white transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="flex items-center gap-3 mb-6">
+                <i data-lucide="rocket" class="w-6 h-6 text-primary animate-pulse"></i>
+                <h3 class="text-2xl font-black font-heading uppercase tracking-tight text-white">Final Project Submission</h3>
+            </div>
+            <p class="text-white/60 text-sm mb-6">Submit all your final project links here. All fields are required to be filled out properly. This form must be completed before the deadline.</p>
+            
+            <form id="unified-submit-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest">GitHub Repository Link <span class="text-red-500">*</span></label>
+                        <input type="url" id="submit-github" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:border-primary/40 focus:outline-none transition-colors" placeholder="https://github.com/...">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Deployed Project Link <span class="text-red-500">*</span></label>
+                        <input type="url" id="submit-deployed" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:border-primary/40 focus:outline-none transition-colors" placeholder="https://...">
+                    </div>
+                    <div class="flex flex-col gap-2 md:col-span-2">
+                        <label class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Reel / Vlog Video Link <span class="text-red-500">*</span></label>
+                        <input type="url" id="submit-video" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:border-primary/40 focus:outline-none transition-colors" placeholder="https://youtube.com/...">
+                    </div>
+                </div>
+
+                <div class="p-4 bg-primary/10 rounded-xl border border-primary/20 flex gap-3 text-xs text-white/60">
+                    <input type="checkbox" id="unified-confirm-check" class="mt-0.5 accent-primary">
+                    <span>I confirm these are our final submission links. <strong class="text-white/80">This action cannot be undone.</strong></span>
+                </div>
+
+                <button type="submit" id="unified-submit-btn" class="w-full h-14 bg-white text-black font-black rounded-xl hover:scale-[1.01] transition-all uppercase text-sm flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                    <i data-lucide="send" class="w-4 h-4"></i> Submit Final Project
+                </button>
+            </form>
         </div>
     </div>
 

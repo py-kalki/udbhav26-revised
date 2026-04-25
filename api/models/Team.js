@@ -83,6 +83,14 @@ const TeamSchema = new mongoose.Schema(
       default: 'not_requested' 
     },
     mentorshipReceiptUrl: { type: String, default: null },
+
+    // ── Unified Project Submissions ───────────────────────────────────────
+    projectSubmissions: {
+      github: { type: String, default: null },
+      deployed: { type: String, default: null },
+      video: { type: String, default: null },
+      submittedAt: { type: Date, default: null }
+    },
   },
   {
     timestamps: true,
