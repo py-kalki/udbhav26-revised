@@ -81,6 +81,7 @@ export default defineConfig({
         userDashboard:      resolve(__dirname, 'user-dashboard.html'),
         contact:            resolve(__dirname, 'contact.html'),
         paymentStatus:      resolve(__dirname, 'payment-status.html'),
+        screensaver:        resolve(__dirname, 'screensaver.html'),
         
         // Legal
         legal:              resolve(__dirname, 'legal.html'),

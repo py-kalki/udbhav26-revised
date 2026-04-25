@@ -227,6 +227,7 @@ const cleanRoutes = {
   '/dashboard':         'user-dashboard.html',
   '/user-dashboard':    'user-dashboard.html',
   '/contact':            'contact.html',
+  '/screensaver':        'screensaver.html',
   
   // Portfolio/Personal Pages
   '/work':              'work.html',
